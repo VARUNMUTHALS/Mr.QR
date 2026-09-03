@@ -1,0 +1,2486 @@
+Absolutely. Since you want **only two core features — Static QR and Dynamic QR**, the PRD should be deliberately focused. The sophistication should come from **quality, editing, analytics, reliability, security, and UX**, not from adding dozens of QR types.
+
+# Product Requirements Document — Dynamic & Static QR Platform
+
+**Working product name:** QR Platform
+**Document version:** 1.0
+**Product type:** Web SaaS
+**Primary features:**
+
+1. Static QR Generator
+2. Dynamic QR Generator + Analytics
+
+**Core principle:**
+
+> **Static QR = generate once, works forever.**
+> **Dynamic QR = edit anytime, track every scan.**
+
+---
+
+# 1. Executive Summary
+
+The product is a web-based QR platform that allows users to create two kinds of QR codes:
+
+### Static QR
+
+The user's information is encoded directly into the QR code.
+
+```text
+User enters destination
+        ↓
+QR generated
+        ↓
+Information encoded directly
+        ↓
+Download / share
+```
+
+Once generated, the encoded information cannot be changed.
+
+### Dynamic QR
+
+The QR contains a platform-managed redirect URL.
+
+```text
+User enters destination
+        ↓
+Platform creates unique QR
+        ↓
+QR contains platform redirect
+        ↓
+User scans
+        ↓
+Platform records scan
+        ↓
+Platform resolves destination
+        ↓
+User redirected
+```
+
+The destination can subsequently be changed without reprinting the QR.
+
+---
+
+# 2. Product Vision
+
+> **Make QR creation extremely simple while making dynamic QR codes measurable, editable, reliable, and secure.**
+
+The product should not attempt to become:
+
+* A website builder
+* A marketing automation platform
+* A CRM
+* A payment platform
+* A social media tool
+* A huge QR-type marketplace
+
+The product has one job:
+
+> **Create QR codes and, for dynamic QR codes, give users control and useful analytics.**
+
+---
+
+# 3. Product Goals
+
+## Primary goals
+
+### G1 — Extremely simple QR creation
+
+A first-time user should be able to create a QR in less than one minute.
+
+### G2 — High-quality QR generation
+
+Generated QR codes must be:
+
+* Scan reliable
+* High resolution
+* Exportable
+* Customizable
+* Print friendly
+
+### G3 — Reliable dynamic QR infrastructure
+
+Dynamic QR links must:
+
+* Resolve quickly
+* Remain stable
+* Support destination editing
+* Handle high traffic
+* Record scan events reliably
+
+### G4 — Useful analytics
+
+Users should understand:
+
+* How many times the QR was scanned
+* When it was scanned
+* Approximate geographic distribution
+* Device information
+* Unique vs total scans
+* Scan trends
+
+### G5 — Complete edit history
+
+Users should know:
+
+* What changed
+* When it changed
+* Who changed it
+* Previous value
+* Current value
+
+---
+
+# 4. Non-Goals
+
+For V1, explicitly **do not build**:
+
+* Coupon-specific QR types
+* PDF-specific QR types
+* vCard-specific QR types
+* Wi-Fi QR wizard
+* Multi-URL QR
+* A/B testing
+* AI campaign generation
+* Landing-page builder
+* Team collaboration
+* White-label
+* API marketplace
+* Payment collection
+* CRM
+* Email marketing
+* Social media management
+
+Users can still encode **any text or URL supported by the QR standard** into a static or dynamic QR.
+
+---
+
+# 5. Target Users
+
+## Persona 1 — Individual
+
+Needs a QR quickly.
+
+Examples:
+
+* Portfolio
+* Website
+* Resume
+* Social profile
+* Contact information
+
+Primary requirement:
+
+> **Fast and simple.**
+
+---
+
+## Persona 2 — Small Business
+
+Examples:
+
+* Restaurant
+* Shop
+* Freelancer
+* Event organizer
+* Local business
+
+Needs:
+
+* Editable QR
+* Scan count
+* Analytics
+* Branding
+* Print/download
+
+Primary requirement:
+
+> **"I want to know whether people are actually scanning this."**
+
+---
+
+## Persona 3 — Marketing User
+
+Needs multiple dynamic QR codes.
+
+Requirements:
+
+* Campaign naming
+* Scan analytics
+* History
+* Export
+* QR organization
+
+Primary requirement:
+
+> **"I want to measure offline traffic."**
+
+---
+
+# 6. Core Product Model
+
+There are only two creation modes.
+
+```text
+                  QR PLATFORM
+                       │
+              ┌────────┴────────┐
+              │                 │
+          STATIC QR         DYNAMIC QR
+              │                 │
+       Direct encoding     Redirect URL
+              │                 │
+       No tracking          Tracking
+       No editing           Editable
+       No account*          Account
+```
+
+`*` Static QR can optionally be generated without an account, depending on the final product strategy.
+
+---
+
+# 7. Feature 1 — Static QR
+
+## 7.1 Purpose
+
+Allow a user to encode information directly into a QR code.
+
+---
+
+## 7.2 Input
+
+Primary field:
+
+**Content**
+
+Example:
+
+```text
+https://example.com
+```
+
+But the field should also accept arbitrary text:
+
+```text
+Hello, welcome to our store.
+```
+
+The system should not artificially restrict the user to URLs.
+
+---
+
+# 8. Static QR User Flow
+
+```text
+Landing Page
+     ↓
+Create QR
+     ↓
+Select "Static"
+     ↓
+Enter content
+     ↓
+Customize
+     ↓
+Preview
+     ↓
+Generate
+     ↓
+Download
+```
+
+---
+
+# 9. Static QR Customization
+
+The user should be able to customize the visual appearance without compromising scan reliability.
+
+### QR pattern
+
+Options:
+
+* Square
+* Rounded
+* Dot
+
+### Eye/frame style
+
+Options:
+
+* Square
+* Rounded
+* Circle
+
+### Colors
+
+* Foreground
+* Background
+
+### Gradient
+
+Optional.
+
+### Logo
+
+Upload logo.
+
+### Logo controls
+
+* Size
+* Padding
+* Position
+
+### Frame
+
+Optional:
+
+```text
+SCAN ME
+```
+
+### Margin
+
+Control quiet zone.
+
+---
+
+# 10. Static QR Export
+
+Required formats:
+
+### PNG
+
+Options:
+
+* 512 × 512
+* 1024 × 1024
+* 2048 × 2048
+* Custom
+
+### SVG
+
+Vector format.
+
+### PDF
+
+Print-oriented export can be added if needed, but isn't necessary for the initial MVP.
+
+---
+
+# 11. Static QR Validation
+
+Before allowing download, the system should validate:
+
+### Content
+
+* Not empty
+* Valid UTF-8
+* Reasonable maximum length
+
+### QR
+
+* Valid encoding
+* Correct error correction
+* Adequate quiet zone
+
+### Design
+
+Warn when:
+
+* Contrast is too low
+* Logo is too large
+* Foreground/background are too similar
+* Quiet zone is insufficient
+
+Example:
+
+> ⚠️ Your logo is too large and may reduce scan reliability.
+
+Do not prevent customization unnecessarily, but provide a strong warning.
+
+---
+
+# 12. Static QR Data Model
+
+A static QR doesn't need a redirect infrastructure.
+
+Conceptually:
+
+```text
+static_qr
+─────────
+id
+content
+content_type
+design_config
+created_at
+```
+
+The actual QR can be generated client-side or server-side.
+
+---
+
+# 13. Feature 2 — Dynamic QR
+
+This is the primary SaaS feature.
+
+## Purpose
+
+Allow users to create a QR whose destination can be changed later while maintaining the same printed QR.
+
+---
+
+# 14. Dynamic QR Architecture
+
+```text
+             QR CODE
+                │
+                ▼
+    qr.yourdomain.com/x8K29
+                │
+                ▼
+        Redirect Service
+                │
+        ┌───────┴────────┐
+        ▼                ▼
+   Record Scan       Resolve URL
+                         │
+                         ▼
+                    Destination
+```
+
+The actual destination should **never be encoded directly** into the dynamic QR.
+
+---
+
+# 15. Dynamic QR Creation
+
+User enters:
+
+### QR Name
+
+```text
+Summer Sale Poster
+```
+
+### Destination
+
+```text
+https://example.com/summer-sale
+```
+
+Then:
+
+**Create Dynamic QR**
+
+System generates:
+
+```text
+https://qr.yourdomain.com/x8K29
+```
+
+That URL is encoded into the QR.
+
+---
+
+# 16. Dynamic QR URL Requirements
+
+The generated identifier must be:
+
+* Unique
+* Non-sequential
+* Unpredictable
+* URL-safe
+* Short enough for practical QR encoding
+
+Example:
+
+```text
+qr.example.com/a8Kx92
+```
+
+Avoid:
+
+```text
+qr.example.com/12345
+```
+
+because predictable identifiers create unnecessary enumeration risk.
+
+---
+
+# 17. Dynamic QR Editing
+
+The user can edit:
+
+### Destination URL
+
+Before:
+
+```text
+https://example.com/offer
+```
+
+After:
+
+```text
+https://example.com/new-offer
+```
+
+The QR image remains unchanged.
+
+---
+
+# 18. Dynamic QR Lifecycle
+
+Each dynamic QR has a state.
+
+```text
+ACTIVE
+   │
+   ├── EDIT
+   │
+   ├── PAUSE
+   │
+   ├── RESUME
+   │
+   └── ARCHIVE
+```
+
+### Active
+
+Redirect works normally.
+
+### Paused
+
+QR displays a configurable fallback message or platform-managed inactive page.
+
+### Archived
+
+QR is no longer actively managed.
+
+---
+
+# 19. Dynamic QR Dashboard
+
+Every dynamic QR gets an overview.
+
+```text
+Summer Sale
+──────────────────────────────
+
+STATUS
+● Active
+
+DESTINATION
+example.com/summer-sale
+
+TOTAL SCANS
+12,842
+
+UNIQUE SCANS
+8,421
+
+CREATED
+03 Sep 2026
+
+LAST SCAN
+03 Sep 2026, 18:42
+```
+
+Actions:
+
+```text
+[ Edit ]
+[ Analytics ]
+[ Download ]
+[ Copy QR URL ]
+[ Pause ]
+```
+
+---
+
+# 20. Analytics Requirements
+
+Analytics are the key differentiator between static and dynamic.
+
+## Required metrics
+
+### Total scans
+
+Every successfully processed scan event.
+
+Example:
+
+```text
+12,842
+Total scans
+```
+
+---
+
+## Unique scans
+
+Estimate distinct scanners using privacy-conscious identification.
+
+Important:
+
+> The system should label this as **unique scanners/visitors estimate**, not claim to know the exact number of unique humans.
+
+---
+
+# 21. Scan Timestamp
+
+Every scan should record:
+
+```text
+2026-09-03 18:42:17
+```
+
+Dashboard should support:
+
+* Today
+* 7 days
+* 30 days
+* 90 days
+* Custom range
+
+---
+
+# 22. Scan Timeline
+
+Example:
+
+```text
+Scans
+
+1500 │
+     │             ╭──╮
+1000 │       ╭─────╯  ╰───╮
+     │  ╭────╯             ╰
+ 500 │──╯
+     │
+     └────────────────────────
+       Mon Tue Wed Thu Fri Sat
+```
+
+Hovering over a point shows:
+
+```text
+September 3
+
+Scans: 1,284
+Unique: 921
+```
+
+---
+
+# 23. Device Analytics
+
+Capture, where reliably available:
+
+* Device category
+* Operating system
+* Browser
+
+Example:
+
+```text
+Device
+
+Android       48%
+iPhone        46%
+Other          6%
+```
+
+---
+
+# 24. Geographic Analytics
+
+Capture approximate geographic information from available request metadata.
+
+### Country
+
+```text
+India       8,421
+USA         1,921
+UK            721
+UAE           412
+```
+
+### City
+
+Where sufficiently reliable:
+
+```text
+Bengaluru
+Mysuru
+Mumbai
+Delhi
+```
+
+The UI must clearly state:
+
+> Location is approximate and may be inferred from network information.
+
+Do not claim GPS-level accuracy.
+
+---
+
+# 25. Time Analytics
+
+Display:
+
+### Scans by hour
+
+```text
+12 AM
+ 2 AM
+ 4 AM
+ 6 AM
+ 8 AM
+10 AM
+12 PM
+ 2 PM
+ 4 PM
+ 6 PM
+ 8 PM
+10 PM
+```
+
+And:
+
+> **Peak scanning period: 6 PM–9 PM**
+
+---
+
+# 26. Referrer Analytics
+
+Where available, capture the referring source.
+
+Examples:
+
+```text
+Direct             5,421
+Google               821
+Instagram            421
+Other                 98
+```
+
+However, don't assume referrer data is always present.
+
+---
+
+# 27. Scan Event Model
+
+Conceptually:
+
+```text
+scan_event
+──────────
+id
+qr_id
+timestamp
+country
+region
+city
+device_type
+os
+browser
+referrer
+user_agent
+ip_hash
+```
+
+Avoid storing raw IP indefinitely.
+
+---
+
+# 28. Privacy Requirements
+
+This is important.
+
+The platform should implement:
+
+### Data minimization
+
+Only collect analytics necessary for the feature.
+
+### IP handling
+
+Prefer:
+
+```text
+IP
+ ↓
+derive approximate location
+ ↓
+hash/anonymize
+ ↓
+discard or limit retention
+```
+
+### Retention
+
+Allow configurable retention eventually.
+
+For MVP:
+
+```text
+Analytics retention: 12 months
+```
+
+can be a reasonable starting policy, but this should be reviewed legally for your target markets.
+
+---
+
+# 29. Edit History
+
+Every dynamic QR must have an audit trail.
+
+Example:
+
+```text
+ACTIVITY
+
+Sep 03, 18:42
+Destination changed
+
+Previous:
+example.com/offer
+
+New:
+example.com/summer-sale
+
+By:
+Va Mu
+```
+
+---
+
+# 30. Versioning
+
+Every destination update creates a version.
+
+```text
+Version 1
+example.com/offer
+
+Version 2
+example.com/summer-sale
+
+Version 3
+example.com/sale-final
+```
+
+Current:
+
+**Version 3**
+
+---
+
+# 31. Restore Version
+
+User can select:
+
+```text
+Version 2
+
+[ Restore ]
+```
+
+System creates a **new version**, rather than deleting history.
+
+For example:
+
+```text
+V1
+V2
+V3
+V4 ← restored V2
+```
+
+This preserves an immutable audit trail.
+
+---
+
+# 32. Design History
+
+If QR visual customization is editable, design changes should also be tracked.
+
+Example:
+
+```text
+18:32
+Logo changed
+
+17:42
+Foreground color changed
+
+16:21
+Frame changed
+```
+
+---
+
+# 33. QR Analytics vs QR Editing
+
+Keep these as separate concepts.
+
+### Analytics
+
+Answers:
+
+> **What happened?**
+
+### Activity
+
+Answers:
+
+> **What changed?**
+
+This distinction should be reflected in the UI.
+
+---
+
+# 34. Dynamic QR Analytics Page
+
+Recommended layout:
+
+```text
+┌─────────────────────────────────────────────────────┐
+│ Summer Sale                              ● ACTIVE   │
+│                                                     │
+│ [Edit] [Download] [Copy Link] [Pause]              │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│ 12,842          8,421          +23%                 │
+│ Total scans    Unique         Growth                │
+│                                                     │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│ SCAN ACTIVITY                                       │
+│                                                     │
+│       ╭────────────╮                                │
+│   ╭───╯            ╰────╮                           │
+│ ──╯                      ╰──                        │
+│                                                     │
+├──────────────────────────┬──────────────────────────┤
+│ DEVICE                   │ LOCATION                 │
+│                          │                          │
+│ Android 48%             │ India  65%              │
+│ iPhone  46%             │ USA    15%              │
+│ Other    6%             │ UK      7%              │
+├──────────────────────────┴──────────────────────────┤
+│                                                     │
+│ ACTIVITY HISTORY                                    │
+│                                                     │
+│ 18:32 Destination changed                           │
+│ 17:42 QR design changed                             │
+│ 16:21 QR created                                    │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+# 35. QR Builder UX
+
+The builder should be the central experience.
+
+## Step 1
+
+### Choose QR type
+
+```text
+┌───────────────────────────────┐
+│                               │
+│       Create QR Code          │
+│                               │
+│   ○ Static                    │
+│   ○ Dynamic                   │
+│                               │
+└───────────────────────────────┘
+```
+
+---
+
+# 36. Step 2 — Content
+
+Static:
+
+```text
+CONTENT
+
+┌─────────────────────────────┐
+│ Enter URL or any text...   │
+└─────────────────────────────┘
+```
+
+Dynamic:
+
+```text
+QR NAME
+
+┌─────────────────────────────┐
+│ Summer Sale Poster          │
+└─────────────────────────────┘
+
+DESTINATION
+
+┌─────────────────────────────┐
+│ https://example.com/sale    │
+└─────────────────────────────┘
+```
+
+---
+
+# 37. Step 3 — Design
+
+Use a two-column layout.
+
+```text
+┌─────────────────┬────────────────────────────┐
+│                 │                            │
+│   DESIGN        │          QR PREVIEW        │
+│                 │                            │
+│ Color           │                            │
+│ [████████]      │         ████████           │
+│                 │         ██    ██           │
+│ Pattern         │         ██ QR ██           │
+│ [Rounded ▼]     │         ██    ██           │
+│                 │         ████████           │
+│ Logo            │                            │
+│ [Upload]        │                            │
+│                 │                            │
+│ Frame           │                            │
+│ [Classic ▼]     │                            │
+└─────────────────┴────────────────────────────┘
+```
+
+Preview should update instantly.
+
+---
+
+# 38. Step 4 — Validate
+
+Before generating:
+
+```text
+SCAN TEST
+
+✓ Content valid
+✓ Contrast acceptable
+✓ Quiet zone acceptable
+✓ Error correction acceptable
+✓ Logo size acceptable
+```
+
+If problematic:
+
+```text
+⚠ QR may be difficult to scan.
+
+Increase contrast or reduce logo size.
+```
+
+---
+
+# 39. Step 5 — Generate
+
+For static:
+
+```text
+✓ Static QR created
+
+[Download PNG]
+[Download SVG]
+```
+
+For dynamic:
+
+```text
+✓ Dynamic QR created
+
+Your QR URL:
+
+qr.yourdomain.com/a8K29
+
+[Download PNG]
+[Download SVG]
+[Open Analytics]
+```
+
+---
+
+# 40. Homepage
+
+The homepage should communicate the distinction immediately.
+
+```text
+              CREATE YOUR QR
+
+     Simple QR codes. Powerful tracking.
+
+        ┌───────────────┐
+        │ STATIC QR     │
+        │               │
+        │ Generate once │
+        │ No tracking   │
+        │               │
+        │ [Create]      │
+        └───────────────┘
+
+        ┌───────────────┐
+        │ DYNAMIC QR    │
+        │               │
+        │ Edit anytime  │
+        │ Track scans   │
+        │               │
+        │ [Create]      │
+        └───────────────┘
+```
+
+---
+
+# 41. User Account
+
+Dynamic QR requires an account because the user needs persistent management.
+
+Required:
+
+* Email/password or passwordless authentication
+* Email verification
+* Password reset
+* Session management
+
+Social login can be added later.
+
+---
+
+# 42. Dashboard Navigation
+
+Keep it minimal.
+
+```text
+Dashboard
+│
+├── QR Codes
+│
+├── Create QR
+│
+├── Analytics
+│
+└── Settings
+```
+
+Don't introduce unnecessary navigation.
+
+---
+
+# 43. QR List
+
+```text
+QR CODE                 TYPE       SCANS      STATUS
+
+Summer Sale             Dynamic    12,842     ● Active
+Website                 Static     —          —
+Restaurant              Dynamic     8,421     ● Active
+Business Card           Static     —          —
+```
+
+Search:
+
+```text
+Search QR codes...
+```
+
+Filters:
+
+* Static
+* Dynamic
+* Active
+* Paused
+
+---
+
+# 44. QR Naming
+
+Dynamic QR names should be required.
+
+Examples:
+
+```text
+Summer Sale Poster
+Restaurant Table 01
+Product Package A
+Instagram Campaign
+```
+
+Static QR names can be optional if accounts are supported.
+
+---
+
+# 45. Download Requirements
+
+Downloads must preserve the configured design.
+
+### PNG
+
+Suitable for:
+
+* Digital
+* Social
+* Basic print
+
+### SVG
+
+Preferred for:
+
+* Professional printing
+* Large-format applications
+
+The system should generate QR assets with sufficient resolution and preserve the quiet zone.
+
+---
+
+# 46. QR Scannability
+
+This is a **critical non-functional requirement**.
+
+The platform must prioritize:
+
+> **Scan reliability over visual customization.**
+
+Implement:
+
+* QR error correction
+* Contrast validation
+* Quiet zone enforcement
+* Logo-size limits/warnings
+* Encoding validation
+
+Do not allow a beautiful QR to become unusable.
+
+---
+
+# 47. Dynamic Redirect Performance
+
+This is another critical requirement.
+
+When a user scans:
+
+```text
+QR
+ ↓
+Dynamic redirect
+ ↓
+Destination
+```
+
+the redirect service must add minimal latency.
+
+Target:
+
+> **p95 redirect processing < 150 ms**, excluding network latency outside your infrastructure.
+
+Analytics should not block the redirect unnecessarily.
+
+Preferred architecture:
+
+```text
+Scan
+ │
+ ├────► Event queue
+ │
+ └────► Resolve destination
+             │
+             ▼
+          Redirect
+```
+
+---
+
+# 48. Analytics Architecture
+
+Don't make analytics processing part of the critical redirect path.
+
+```text
+                 SCAN
+                   │
+                   ▼
+             Redirect API
+              /         \
+             /           \
+            ▼             ▼
+      Event Queue      Destination
+            │
+            ▼
+      Analytics Worker
+            │
+            ▼
+        PostgreSQL
+```
+
+This makes the system faster and more resilient.
+
+---
+
+# 49. Recommended Technical Architecture
+
+For the initial production version:
+
+```text
+Frontend
+────────
+Next.js
+TypeScript
+Tailwind CSS
+shadcn/ui
+
+Backend
+───────
+Next.js API / NestJS
+
+Database
+────────
+PostgreSQL
+
+ORM
+───
+Prisma
+
+Cache / Queue
+─────────────
+Redis
+
+Storage
+───────
+S3-compatible object storage
+
+Authentication
+──────────────
+Secure session-based auth
+
+QR Engine
+─────────
+QR generation library supporting
+SVG + PNG + error correction
+```
+
+You don't necessarily need microservices.
+
+---
+
+# 50. Recommended System Architecture
+
+```text
+                         INTERNET
+                             │
+                             ▼
+                     ┌─────────────┐
+                     │ CDN / WAF   │
+                     └──────┬──────┘
+                            │
+             ┌──────────────┴──────────────┐
+             │                             │
+             ▼                             ▼
+       Web Application               Redirect API
+             │                             │
+             ▼                             ▼
+        Application API                Redis
+             │                             │
+             │                             ▼
+             │                         Event Queue
+             │                             │
+             ▼                             ▼
+        PostgreSQL                  Analytics Worker
+             │                             │
+             └──────────────┬──────────────┘
+                            ▼
+                       Analytics DB
+```
+
+For an MVP, PostgreSQL can handle both application and analytics data. You can introduce a dedicated analytics store later if volume demands it.
+
+---
+
+# 51. Database Schema
+
+A production-oriented simplified schema:
+
+```text
+users
+─────
+id
+email
+name
+password_hash
+email_verified_at
+created_at
+updated_at
+
+
+qr_codes
+────────
+id
+user_id
+type
+name
+slug
+status
+created_at
+updated_at
+
+
+qr_destinations
+───────────────
+id
+qr_id
+url
+version
+is_current
+created_by
+created_at
+
+
+qr_designs
+──────────
+id
+qr_id
+version
+config
+created_by
+created_at
+
+
+scan_events
+───────────
+id
+qr_id
+timestamp
+country
+region
+city
+device_type
+os
+browser
+referrer
+ip_hash
+
+
+activity_logs
+────────────
+id
+user_id
+qr_id
+action
+metadata
+created_at
+```
+
+---
+
+# 52. Important Database Rule
+
+Never overwrite important historical information.
+
+Bad:
+
+```text
+qr.destination = new_url
+```
+
+with no history.
+
+Better:
+
+```text
+qr_destinations
+
+V1 → old URL
+V2 → new URL
+V3 → another URL
+```
+
+Current destination points to V3.
+
+This enables auditability.
+
+---
+
+# 53. Security Requirements
+
+## Authentication
+
+* Secure password hashing
+* Session expiration
+* Secure cookies
+* CSRF protection where applicable
+* Email verification
+* Password reset tokens
+* Login rate limiting
+
+---
+
+# 54. Dynamic Redirect Security
+
+This is extremely important.
+
+Because your infrastructure will effectively host:
+
+```text
+qr.yourdomain.com/*
+```
+
+you must prevent abuse.
+
+Implement:
+
+### URL validation
+
+Accept:
+
+```text
+https://example.com
+```
+
+Reject:
+
+```text
+javascript:...
+data:...
+file:...
+```
+
+and other unsafe schemes.
+
+### HTTPS preference
+
+Warn or restrict HTTP destinations depending on product policy.
+
+### Abuse detection
+
+Monitor:
+
+* suspicious domains
+* phishing URLs
+* malware indicators
+* excessive QR creation
+* unusual redirect activity
+
+---
+
+# 55. SSRF Protection
+
+The backend must **not blindly fetch arbitrary user URLs**.
+
+For example, if you implement URL metadata previews or destination verification, protect against:
+
+```text
+localhost
+127.0.0.1
+private IP ranges
+cloud metadata endpoints
+internal services
+```
+
+This is especially important if your server ever performs outbound HTTP requests based on user input.
+
+---
+
+# 56. Rate Limiting
+
+Apply rate limits to:
+
+### Authentication
+
+```text
+Login attempts
+Password reset
+```
+
+### QR creation
+
+Prevent automated abuse.
+
+### Dynamic redirects
+
+Protect infrastructure from abuse.
+
+### Analytics endpoints
+
+Prevent scraping.
+
+---
+
+# 57. Abuse Reporting
+
+Provide:
+
+**Report QR**
+
+for publicly accessible dynamic QR URLs.
+
+Possible reasons:
+
+* Phishing
+* Malware
+* Scam
+* Spam
+* Illegal content
+* Other abuse
+
+This is important for protecting your redirect domain.
+
+---
+
+# 58. Reliability Requirements
+
+### Availability
+
+Target:
+
+**99.9% uptime** for the redirect service.
+
+### Backups
+
+Database:
+
+* Daily full backup
+* Point-in-time recovery where supported
+
+### Monitoring
+
+Monitor:
+
+* Redirect latency
+* Redirect failures
+* Database health
+* Queue failures
+* QR generation failures
+* Scan ingestion failures
+
+---
+
+# 59. Failure Handling
+
+If analytics infrastructure is temporarily unavailable:
+
+```text
+SCAN
+ ↓
+Analytics unavailable
+ ↓
+REDIRECT MUST STILL WORK
+```
+
+Analytics failure should **not cause the customer's QR destination to fail**.
+
+This should be a hard architectural requirement.
+
+---
+
+# 60. Dynamic QR Failure Page
+
+If the QR is:
+
+### Paused
+
+Show:
+
+> This QR code is temporarily unavailable.
+
+### Deleted/archived
+
+Show:
+
+> This QR code is no longer active.
+
+### Destination invalid
+
+Show:
+
+> The destination is temporarily unavailable.
+
+Never expose:
+
+* stack traces
+* database errors
+* internal IDs
+* server information
+
+---
+
+# 61. Analytics Data Quality
+
+The system should distinguish:
+
+### Scan request
+
+A request reached the redirect service.
+
+### Successful redirect
+
+The destination was resolved and redirect returned.
+
+### Unique scanner estimate
+
+An analytics-derived approximation.
+
+Don't present these as identical metrics.
+
+---
+
+# 62. Bot Detection
+
+The analytics engine should attempt to filter obvious:
+
+* Crawlers
+* Monitoring bots
+* Security scanners
+* Automated requests
+
+Otherwise users may see:
+
+```text
+1,000 scans
+```
+
+when much of the traffic is automated.
+
+Create:
+
+```text
+raw_events
+```
+
+and:
+
+```text
+analytics_events
+```
+
+where filtering occurs.
+
+---
+
+# 63. Analytics Dashboard Filters
+
+Required:
+
+### Time
+
+* Today
+* 7 days
+* 30 days
+* 90 days
+* Custom
+
+### Metrics
+
+* Total
+* Unique
+
+### Dimensions
+
+* Country
+* City
+* Device
+* OS
+* Browser
+
+---
+
+# 64. Analytics Export
+
+This is a high-value feature even in V1.
+
+Allow:
+
+**Export CSV**
+
+Example:
+
+```text
+timestamp,country,city,device,os,browser
+2026-09-03 18:42,India,Mysuru,Mobile,Android,Chrome
+```
+
+Don't overbuild PDF reports initially.
+
+---
+
+# 65. Static vs Dynamic Comparison
+
+The UI should make the distinction extremely clear.
+
+| Capability              | Static | Dynamic |
+| ----------------------- | -----: | ------: |
+| Generate QR             |      ✓ |       ✓ |
+| Encode URL/text         |      ✓ |       ✓ |
+| Customize               |      ✓ |       ✓ |
+| PNG                     |      ✓ |       ✓ |
+| SVG                     |      ✓ |       ✓ |
+| Edit destination        |      ✕ |       ✓ |
+| Scan analytics          |      ✕ |       ✓ |
+| Unique scan estimate    |      ✕ |       ✓ |
+| Device analytics        |      ✕ |       ✓ |
+| Location analytics      |      ✕ |       ✓ |
+| Activity history        |      ✕ |       ✓ |
+| Version history         |      ✕ |       ✓ |
+| Pause                   |      ✕ |       ✓ |
+| Redirect infrastructure |      ✕ |       ✓ |
+
+This table effectively defines your product.
+
+---
+
+# 66. UX Principles
+
+## Principle 1 — One screen whenever possible
+
+Don't make users navigate five pages to create a QR.
+
+## Principle 2 — Preview immediately
+
+Every design change should appear instantly.
+
+## Principle 3 — Explain Static vs Dynamic
+
+Users should understand what they're buying/using.
+
+## Principle 4 — Never sacrifice scan reliability
+
+Visual customization comes second.
+
+## Principle 5 — Analytics must be understandable
+
+Don't dump raw technical information on users.
+
+---
+
+# 67. Accessibility
+
+The application should target:
+
+**WCAG 2.2 AA**
+
+Requirements include:
+
+* Keyboard navigation
+* Visible focus states
+* Screen-reader labels
+* Proper form labels
+* Sufficient UI contrast
+* Accessible charts
+* Accessible modal dialogs
+* Error messages associated with fields
+* Don't use color as the only status indicator
+
+---
+
+# 68. Responsive Design
+
+The application must work on:
+
+### Desktop
+
+Primary dashboard experience.
+
+### Tablet
+
+Builder and analytics usable.
+
+### Mobile
+
+Users should be able to:
+
+* Create QR
+* Edit dynamic QR
+* View basic analytics
+* Download/share QR
+
+The QR preview should never become unusably small.
+
+---
+
+# 69. Performance
+
+### Public redirect
+
+Highest priority.
+
+Target:
+
+**p95 application processing <150ms**
+
+### Dashboard
+
+Target:
+
+**LCP <2.5 seconds** under reasonable conditions.
+
+### QR generation
+
+Target:
+
+**<1 second** for normal QR generation.
+
+---
+
+# 70. SEO
+
+Public marketing pages should target:
+
+* QR code generator
+* Static QR code generator
+* Dynamic QR code generator
+* QR code analytics
+* Editable QR code
+* Trackable QR code
+* Free QR generator
+
+But the actual logged-in application should not depend on SEO.
+
+---
+
+# 71. Monetization
+
+You can postpone billing until the product is validated.
+
+Potential model:
+
+### Free
+
+Static:
+
+Unlimited or generous usage.
+
+Dynamic:
+
+Limited number of active dynamic QRs.
+
+### Pro
+
+More:
+
+* Dynamic QR codes
+* Analytics history
+* CSV export
+* Advanced customization
+* Higher limits
+
+### Business
+
+Later:
+
+* More QR codes
+* Longer analytics retention
+* Teams
+* Custom domains
+* API
+
+Don't put artificial limits on basic QR generation merely to force upgrades.
+
+The **dynamic infrastructure and analytics** are what should drive monetization.
+
+---
+
+# 72. MVP Definition
+
+Your true MVP should contain:
+
+## Static
+
+* Create
+* URL/text input
+* Customize
+* Preview
+* PNG
+* SVG
+
+## Dynamic
+
+* Create
+* URL input
+* Unique redirect
+* Customize
+* PNG
+* SVG
+* Edit destination
+* Pause
+* Analytics
+* Total scans
+* Unique estimate
+* Timestamp
+* Device
+* Country
+* Approximate city
+* Activity history
+* Destination version history
+
+## Platform
+
+* Authentication
+* Dashboard
+* QR management
+* Search
+* Security
+* Rate limiting
+* Monitoring
+* Backup
+
+That's enough.
+
+---
+
+# 73. V1 User Journey
+
+```text
+                LANDING PAGE
+                     │
+                     ▼
+              CREATE QR CODE
+                     │
+              ┌──────┴──────┐
+              ▼             ▼
+           STATIC        DYNAMIC
+              │             │
+              ▼             ▼
+           CONTENT       CONTENT
+              │             │
+              └──────┬──────┘
+                     ▼
+                  DESIGN
+                     │
+                     ▼
+                  PREVIEW
+                     │
+                     ▼
+                 VALIDATE
+                     │
+                     ▼
+                  CREATE
+                     │
+             ┌───────┴────────┐
+             ▼                ▼
+          DOWNLOAD         DASHBOARD
+                              │
+                              ▼
+                           ANALYTICS
+                              │
+                              ▼
+                         EDIT / HISTORY
+```
+
+---
+
+# 74. Success Metrics
+
+Don't measure success by:
+
+> Number of QR codes generated.
+
+That can be a vanity metric.
+
+Track:
+
+### Activation
+
+**% of users who successfully generate their first QR**
+
+Target:
+
+> > 70%
+
+### Dynamic activation
+
+**% of dynamic QR creators who receive their first scan**
+
+Target:
+
+> > 50%
+
+### Retention
+
+**% of dynamic QR users returning after 30 days**
+
+Target:
+
+> > 30%
+
+### Paid conversion
+
+Eventually:
+
+> 3–8% free → paid
+
+depending on pricing and acquisition channel.
+
+### QR reliability
+
+> > 99.9% successful redirect availability
+
+---
+
+# 75. North Star Metric
+
+I'd choose:
+
+> **Active Dynamic QR Campaigns Receiving Meaningful Scans**
+
+rather than total QR codes created.
+
+Why?
+
+Because:
+
+```text
+100,000 generated QR codes
+```
+
+means very little.
+
+But:
+
+```text
+12,000 active QR codes
+×
+real users scanning them
+```
+
+means the platform is actually being used.
+
+---
+
+# 76. Product KPIs
+
+### Acquisition
+
+* Visitors
+* Signups
+* Signup conversion
+
+### Activation
+
+* First QR created
+* First dynamic QR created
+* First scan received
+
+### Engagement
+
+* QR edits
+* Analytics visits
+* Downloads
+* Repeat sessions
+
+### Retention
+
+* Active dynamic QRs
+* Returning users
+* Monthly active accounts
+
+### Revenue
+
+* Free → paid
+* MRR
+* ARPU
+* Churn
+
+### Infrastructure
+
+* Redirect latency
+* Redirect success rate
+* Scan ingestion success
+* QR generation failures
+
+---
+
+# 77. Acceptance Criteria
+
+## Static QR
+
+A static QR feature is complete when:
+
+* User can enter valid text/URL.
+* QR generates successfully.
+* Preview is accurate.
+* User can customize supported design parameters.
+* QR remains scannable under supported configurations.
+* PNG downloads successfully.
+* SVG downloads successfully.
+* Generated QR contains exactly the supplied content.
+* No server redirect is required.
+
+---
+
+# 78. Dynamic QR Acceptance Criteria
+
+Dynamic QR is complete when:
+
+* User can create a dynamic QR.
+* System generates a unique slug.
+* QR contains the platform redirect URL.
+* Scanning redirects to the configured destination.
+* Scan event is recorded.
+* User can edit destination.
+* Existing printed QR continues to work after editing.
+* Scan counts update.
+* Analytics can be filtered by date.
+* Device information is displayed where available.
+* Approximate geography is displayed where available.
+* Activity history records edits.
+* Destination versions are retained.
+* User can restore an earlier destination version.
+* Pausing disables normal redirect behavior.
+* Analytics failure does not prevent redirect.
+* Malicious/invalid schemes cannot be stored.
+
+---
+
+# 79. Critical Edge Cases
+
+The development team must test:
+
+### Destination
+
+* Empty URL
+* Invalid URL
+* Very long URL
+* Unicode URL
+* Redirect chain
+* HTTP URL
+* HTTPS URL
+* Malicious URL
+* Deleted destination
+
+### QR
+
+* Very dense content
+* Huge logo
+* Low contrast
+* Gradient
+* Long content
+* Large/small export
+* SVG rendering
+
+### Dynamic
+
+* QR deleted
+* QR paused
+* Destination changed during scan
+* High concurrent scans
+* Analytics database unavailable
+* Redis unavailable
+* Duplicate slug
+* Expired session
+* Unauthorized edit
+
+---
+
+# 80. Load Testing
+
+Before launch, simulate:
+
+```text
+1,000 scans/minute
+5,000 scans/minute
+10,000 scans/minute
+```
+
+for the redirect endpoint.
+
+The critical test:
+
+> **Does the QR still redirect correctly when analytics is under heavy load?**
+
+---
+
+# 81. Abuse Testing
+
+Test:
+
+```text
+100,000 QR creations
+rapid QR creation
+redirect spam
+malicious URLs
+credential stuffing
+slug enumeration
+analytics scraping
+large file/logo uploads
+```
+
+The platform should degrade gracefully.
+
+---
+
+# 82. Recommended Development Phases
+
+## Phase 1 — Foundation
+
+* Repository
+* Database
+* Authentication
+* UI system
+* Environment configuration
+* Logging
+* Error handling
+
+## Phase 2 — Static QR
+
+* Builder
+* QR engine
+* Customization
+* Preview
+* PNG
+* SVG
+
+## Phase 3 — Dynamic QR
+
+* QR records
+* Slugs
+* Redirect engine
+* Destination editing
+* Pause/resume
+
+## Phase 4 — Analytics
+
+* Event ingestion
+* Queue
+* Analytics processing
+* Dashboard
+* Charts
+* Filters
+
+## Phase 5 — History
+
+* Activity log
+* Destination versions
+* Restore
+
+## Phase 6 — Security
+
+* Rate limits
+* Abuse protection
+* URL validation
+* Monitoring
+* Security testing
+
+## Phase 7 — Production
+
+* Load testing
+* Backup
+* Observability
+* Deployment
+* Error monitoring
+
+---
+
+# 83. What "done" looks like
+
+A user should be able to arrive at the website and within approximately **60 seconds** do this:
+
+```text
+"Create Dynamic QR"
+        ↓
+Enter:
+https://mybusiness.com/sale
+        ↓
+Customize
+        ↓
+Generate
+        ↓
+Download
+        ↓
+Print QR
+        ↓
+Someone scans it
+        ↓
+QR redirects
+        ↓
+Dashboard:
+"1 scan"
+        ↓
+Later:
+Change destination
+        ↓
+Old QR still works
+        ↓
+Dashboard:
+"147 scans"
+        ↓
+View:
+Device
+Location
+Time
+History
+```
+
+That is the complete core product.
+
+---
+
+# 84. Final Product Definition
+
+The entire V1 can be summarized in one diagram:
+
+```text
+                         QR PLATFORM
+                              │
+                 ┌────────────┴────────────┐
+                 │                         │
+                 ▼                         ▼
+             STATIC QR                DYNAMIC QR
+                 │                         │
+                 │                    Unique URL
+                 │                         │
+                 │                         ▼
+                 │                    REDIRECT
+                 │                         │
+                 │                 ┌───────┴───────┐
+                 │                 │               │
+                 │                 ▼               ▼
+                 │              ANALYTICS       DESTINATION
+                 │                 │               │
+                 │                 │               │
+                 │                 ▼               ▼
+                 │              DASHBOARD        EDIT
+                 │                 │               │
+                 │                 ▼               ▼
+                 │              INSIGHTS        VERSION
+                 │                                 │
+                 │                                 ▼
+                 │                              RESTORE
+                 │
+                 └──────────────┬──────────────────┘
+                                ▼
+                         QR DESIGN STUDIO
+                                │
+                ┌───────────────┼───────────────┐
+                ▼               ▼               ▼
+              Color           Logo            Frame
+                │               │               │
+                └───────────────┼───────────────┘
+                                ▼
+                         SCANNABLE QR
+                                │
+                         ┌──────┴──────┐
+                         ▼             ▼
+                       PNG           SVG
+```
+
+## The strategic decision I'd lock into the PRD
+
+**Don't expand the number of QR types. Expand the quality of these two.**
+
+Your differentiation becomes:
+
+> **Static: Beautiful, reliable, instantly downloadable.**
+
+> **Dynamic: Beautiful, editable, trackable, versioned, secure and fast.**
+
+That gives you a clean product that is significantly easier to build, test and launch than the broader QR platforms you initially referenced—while still leaving a strong path toward a serious SaaS product later.
+Skip to main content
+QR Platform
+spar

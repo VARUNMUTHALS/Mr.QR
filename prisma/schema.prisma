@@ -1,0 +1,101 @@
+// Prisma schema for QR Studio.
+// SQLite is used (project default). JSON-like fields are stored as String
+// and parsed on the server.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  qrCodes      QrCode[]
+  activity     ActivityLog[]
+}
+
+model QrCode {
+  id           String          @id @default(cuid())
+  userId       String
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         String          // "STATIC" | "DYNAMIC"
+  name         String
+  slug          String?        @unique // dynamic redirect slug
+  status       String          @default("ACTIVE") // ACTIVE | PAUSED | ARCHIVED
+  content      String?         // static QR encoded content
+  designConfig String          // JSON of QrDesignConfig
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  destinations QrDestination[]
+  designs      QrDesign[]
+  scans        ScanEvent[]
+  activity     ActivityLog[]
+
+  @@index([userId])
+  @@index([slug])
+}
+
+model QrDestination {
+  id        String   @id @default(cuid())
+  qrId      String
+  qrCode    QrCode   @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  url       String
+  version   Int
+  isCurrent Boolean  @default(false)
+  createdBy String?
+  createdAt DateTime @default(now())
+
+  @@index([qrId])
+}
+
+model QrDesign {
+  id        String   @id @default(cuid())
+  qrId      String
+  qrCode    QrCode   @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  config    String   // JSON
+  version   Int
+  createdAt DateTime @default(now())
+
+  @@index([qrId])
+}
+
+model ScanEvent {
+  id         String   @id @default(cuid())
+  qrId       String
+  qrCode     QrCode   @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  timestamp  DateTime @default(now())
+  country    String?
+  region     String?
+  city       String?
+  deviceType String?
+  os         String?
+  browser    String?
+  referrer   String?
+  ipHash     String?
+  userAgent  String?
+  simulated  Boolean  @default(false)
+
+  @@index([qrId, timestamp])
+  @@index([ipHash])
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  qrId      String
+  qrCode    QrCode   @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  action    String   // CREATED | DESTINATION_CHANGED | DESIGN_UPDATED | STATUS_CHANGED | VERSION_RESTORED | NAME_CHANGED
+  metadata  String?  // JSON
+  createdAt DateTime @default(now())
+
+  @@index([qrId, createdAt])
+}

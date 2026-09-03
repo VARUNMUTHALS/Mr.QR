@@ -1,0 +1,2597 @@
+Below is a complete `design.md` you can place directly into the project. It combines the **product design direction**, the **two-feature scope**, and the **exact ThreeUI integration requirement** into one implementation-ready design specification.
+
+````md
+# QR Platform — Design Specification
+
+Version: 1.0
+Status: Implementation Ready
+
+---
+
+# 1. Product
+
+A focused QR platform with exactly two core product features:
+
+1. Static QR
+2. Dynamic QR
+
+The product should feel like a tactile editorial design studio rather than a generic SaaS dashboard.
+
+Core product promise:
+
+> Static QR — Encode once.
+>
+> Dynamic QR — Change anytime. Measure every scan.
+
+The application must prioritize:
+
+- Simplicity
+- Scan reliability
+- Beautiful QR output
+- Fast creation
+- Dynamic destination editing
+- Useful scan analytics
+- Version history
+- Security
+- Responsive behavior
+
+Do NOT expand the product into a large QR marketplace or marketing automation platform.
+
+---
+
+# 2. Design Direction
+
+The frontend visual language is inspired by the supplied ThreeUI
+`MengToSketchbookLandingPage` implementation.
+
+The reference provides:
+
+- Tactile sketchbook atmosphere
+- Editorial typography
+- Botanical/paper visual texture
+- Illustrated surfaces
+- Layered compositions
+- Page-turn interactions
+- Subtle motion
+- Hand-crafted visual character
+- Strong editorial hierarchy
+- Responsive interactions
+
+However:
+
+IMPORTANT:
+
+Do not copy the Singapore portfolio's content, text, information
+architecture, or portfolio semantics.
+
+Use the supplied implementation as the exact visual/interaction
+foundation where applicable and transform the experience into a QR
+creation and analytics product.
+
+The result should feel like:
+
+> An editorial QR design studio.
+
+Not:
+
+> A generic admin dashboard.
+
+---
+
+# 3. Design Personality
+
+## Tone
+
+- Quiet
+- Tactile
+- Premium
+- Editorial
+- Intelligent
+- Minimal
+- Human
+- Slightly experimental
+
+## Visual characteristics
+
+Use:
+
+- Warm paper surfaces
+- Ink-like typography
+- Muted botanical tones
+- Thin borders
+- Editorial rules
+- Subtle texture
+- Organic spacing
+- Soft shadows
+- Slightly imperfect visual details
+- Illustrated accents
+- Restrained animation
+
+Avoid:
+
+- Neon gradients
+- Excessive glassmorphism
+- Generic blue SaaS UI
+- Excessive cards
+- Heavy drop shadows
+- Overly rounded UI
+- Loud dashboards
+- Excessive animations
+- Decorative elements that interfere with usability
+
+---
+
+# 4. Core Product Structure
+
+The application contains only two QR creation modes.
+
+```text
+QR PLATFORM
+│
+├── STATIC QR
+│   ├── Content
+│   ├── Design
+│   ├── Preview
+│   └── Download
+│
+└── DYNAMIC QR
+    ├── Content
+    ├── Design
+    ├── Preview
+    ├── Publish
+    ├── Analytics
+    └── Version History
+````
+
+---
+
+# 5. Static QR Definition
+
+Static QR encodes the supplied content directly into the QR.
+
+Example:
+
+```text
+User input
+    ↓
+https://example.com
+    ↓
+QR encoding
+    ↓
+Static QR
+```
+
+The QR does not require a platform redirect.
+
+The encoded content cannot be changed after generation.
+
+Static QR should be usable with:
+
+* URLs
+* Plain text
+* Other valid QR-compatible text content
+
+Do not build separate QR-type wizards for V1.
+
+---
+
+# 6. Dynamic QR Definition
+
+Dynamic QR contains a platform-controlled redirect URL.
+
+Example:
+
+```text
+QR
+ ↓
+qr.yourdomain.com/a8K29
+ ↓
+Redirect service
+ ↓
+Analytics event
+ ↓
+Current destination
+ ↓
+User destination
+```
+
+The destination can be changed without changing the printed QR.
+
+Dynamic QR requires an authenticated account.
+
+---
+
+# 7. Homepage
+
+The homepage is the primary entry point.
+
+It should immediately communicate the two product choices.
+
+Hero copy:
+
+> Make a QR.
+> Make it useful.
+
+Supporting copy:
+
+> Create a beautiful QR code in seconds. Choose static for something permanent, or dynamic when you want to change and measure it later.
+
+Primary choices:
+
+```text
+STATIC QR
+
+Encode once.
+Keep forever.
+
+[ Create Static QR ]
+```
+
+and:
+
+```text
+DYNAMIC QR
+
+Change anytime.
+Measure every scan.
+
+[ Create Dynamic QR ]
+```
+
+The two options should feel like editorial "plates" or pages in a
+sketchbook.
+
+---
+
+# 8. Homepage Composition
+
+Recommended structure:
+
+```text
+┌─────────────────────────────────────────────┐
+│ QR STUDIO                         About      │
+├─────────────────────────────────────────────┤
+│                                             │
+│             MAKE A QR.                      │
+│             MAKE IT USEFUL.                 │
+│                                             │
+│ Create beautiful QR codes that work.        │
+│                                             │
+│                                             │
+│ ┌────────────────────┐ ┌─────────────────┐ │
+│ │                    │ │                 │ │
+│ │     STATIC / 01    │ │  DYNAMIC / 02  │ │
+│ │                    │ │                 │ │
+│ │ Encode once.       │ │ Change anytime.│ │
+│ │ Keep forever.      │ │ Track scans.   │ │
+│ │                    │ │                 │ │
+│ │ [ CREATE ]         │ │ [ CREATE ]     │ │
+│ └────────────────────┘ └─────────────────┘ │
+│                                             │
+└─────────────────────────────────────────────┘
+```
+
+---
+
+# 9. Static QR Builder
+
+The Static QR builder should feel like an editorial worksheet.
+
+Header:
+
+> STATIC QR / 01
+
+Main question:
+
+> WHAT SHOULD THIS QR CONTAIN?
+
+Input:
+
+```text
+┌─────────────────────────────────────┐
+│ Enter a URL or any text...          │
+└─────────────────────────────────────┘
+```
+
+Below:
+
+> The information is stored directly inside the QR code.
+
+Then:
+
+```text
+[ Generate QR ]
+```
+
+---
+
+# 10. Static QR Design Panel
+
+Controls:
+
+## Pattern
+
+* Square
+* Rounded
+* Dot
+
+## Eye style
+
+* Square
+* Rounded
+* Circle
+
+## Foreground
+
+Color picker.
+
+## Background
+
+Color picker.
+
+## Logo
+
+Upload logo.
+
+## Logo size
+
+Slider.
+
+## Logo padding
+
+Slider.
+
+## Frame
+
+Options:
+
+* None
+* Simple
+* Scan Me
+
+## Quiet zone
+
+Slider or controlled preset.
+
+---
+
+# 11. Static QR Preview
+
+Preview must update live.
+
+Use a large editorial preview area.
+
+Example:
+
+```text
+┌──────────────────────────────┐
+│                              │
+│                              │
+│          QR PREVIEW          │
+│                              │
+│         ██████████           │
+│         ██      ██           │
+│         ██  QR  ██           │
+│         ██      ██           │
+│         ██████████           │
+│                              │
+│                              │
+└──────────────────────────────┘
+```
+
+The preview should appear as a physical printed object on paper.
+
+---
+
+# 12. QR Validation
+
+Before download:
+
+Validate:
+
+* Content exists
+* Content can be encoded
+* QR generation succeeds
+* Contrast is sufficient
+* Quiet zone is sufficient
+* Logo does not cover too much of the QR
+* Design does not create obvious scan risks
+
+Show warnings rather than unnecessarily blocking customization.
+
+Example:
+
+> Your logo is large enough to reduce scan reliability.
+
+Provide:
+
+> Fix automatically
+
+where possible.
+
+---
+
+# 13. Static QR Download
+
+Primary actions:
+
+```text
+[ Download PNG ]
+[ Download SVG ]
+```
+
+PNG resolutions:
+
+* 512px
+* 1024px
+* 2048px
+* Custom
+
+SVG must be vector-based.
+
+Downloaded assets must preserve:
+
+* Pattern
+* Colors
+* Logo
+* Frame
+* Quiet zone
+* Error correction
+
+---
+
+# 14. Dynamic QR Builder
+
+Header:
+
+> DYNAMIC QR / 01
+
+Input:
+
+```text
+QR NAME
+
+Summer Sale Poster
+```
+
+Destination:
+
+```text
+WHERE SHOULD IT GO?
+
+https://example.com/summer-sale
+```
+
+Supporting explanation:
+
+> This destination can be changed after your QR has been printed.
+
+Primary action:
+
+```text
+[ Create Dynamic QR ]
+```
+
+---
+
+# 15. Dynamic QR Publish Screen
+
+After creation:
+
+```text
+DYNAMIC QR / 02
+
+YOUR QR IS LIVE
+
+        [ QR ]
+
+qr.yourdomain.com/a8K29
+
+Destination
+
+example.com/summer-sale
+
+[ Download ]
+[ Copy QR URL ]
+[ View Analytics ]
+```
+
+The QR URL must remain stable.
+
+---
+
+# 16. Dynamic QR Editing
+
+The user can change:
+
+* Destination URL
+* QR name
+* Design
+
+Changing the destination must not regenerate the QR identifier.
+
+Example:
+
+Before:
+
+```text
+qr.yourdomain.com/a8K29
+        ↓
+example.com/offer
+```
+
+After:
+
+```text
+qr.yourdomain.com/a8K29
+        ↓
+example.com/summer-sale
+```
+
+The printed QR remains valid.
+
+---
+
+# 17. Dynamic QR Status
+
+Supported states:
+
+```text
+ACTIVE
+PAUSED
+ARCHIVED
+```
+
+Active:
+
+> Redirect normally.
+
+Paused:
+
+> Show an inactive/fallback page.
+
+Archived:
+
+> QR is no longer active.
+
+Actions:
+
+```text
+[ Pause ]
+[ Resume ]
+[ Archive ]
+```
+
+---
+
+# 18. Dynamic Analytics
+
+Analytics are the defining feature of Dynamic QR.
+
+The analytics page should be editorial, visual, and understandable.
+
+Header:
+
+> THE SCAN BOOK
+
+Example:
+
+```text
+Summer Sale
+September 2026
+```
+
+Main metrics:
+
+```text
+12,842
+TOTAL SCANS
+
+8,421
+UNIQUE VISITORS
+
++23%
+GROWTH
+```
+
+---
+
+# 19. Analytics Timeline
+
+Display scan activity over time.
+
+Required filters:
+
+* Today
+* 7 days
+* 30 days
+* 90 days
+* Custom
+
+Chart:
+
+```text
+SCANS / SEPTEMBER
+
+1500 │                  ╭──╮
+1000 │           ╭──────╯  ╰──
+ 500 │──────╭────╯
+     └──────────────────────────
+       01  05  10  15  20  25
+```
+
+Hover interaction should reveal:
+
+```text
+September 3
+
+Scans: 1,284
+Unique: 921
+```
+
+---
+
+# 20. Device Analytics
+
+Show:
+
+```text
+WHAT DID THEY USE?
+
+ANDROID       48%
+IPHONE        46%
+OTHER          6%
+```
+
+Where available, collect:
+
+* Device category
+* Operating system
+* Browser
+
+---
+
+# 21. Geographic Analytics
+
+Show approximate location.
+
+Example:
+
+```text
+WHERE DID THEY SCAN?
+
+INDIA         65%
+USA           15%
+UK             7%
+UAE            4%
+OTHER          9%
+```
+
+City-level information can be shown when sufficiently reliable.
+
+Always communicate:
+
+> Location is approximate and may be inferred from network information.
+
+Never imply GPS-level accuracy unless explicit location permission
+was actually obtained.
+
+---
+
+# 22. Time Analytics
+
+Show:
+
+* Hourly scans
+* Daily scans
+* Weekly trends
+* Peak scanning period
+
+Example insight:
+
+> Peak scanning period: 6 PM–9 PM.
+
+Insights should be factual and derived from available data.
+
+---
+
+# 23. Scan Event Information
+
+Each scan event may include:
+
+```text
+timestamp
+country
+region
+city
+device_type
+operating_system
+browser
+referrer
+user_agent
+privacy-preserving IP identifier
+```
+
+Do not store unnecessary personal data.
+
+---
+
+# 24. Unique Scans
+
+Do not claim that unique scanners are exact human counts.
+
+UI wording:
+
+> Unique visitors
+
+or:
+
+> Estimated unique scanners
+
+Where appropriate, provide a tooltip explaining the methodology.
+
+---
+
+# 25. Activity History
+
+Dynamic QR should have a separate activity section.
+
+Title:
+
+> MARGIN NOTES
+
+Example:
+
+```text
+03 SEP / 18:32
+Destination changed
+
+Previous:
+example.com/offer
+
+New:
+example.com/summer-sale
+
+
+03 SEP / 17:42
+QR design updated
+
+
+03 SEP / 16:21
+QR created
+```
+
+Activity records should be immutable.
+
+---
+
+# 26. Version History
+
+Every destination change creates a version.
+
+Example:
+
+```text
+VERSION 03 — CURRENT
+
+example.com/sale-final
+
+VERSION 02
+
+example.com/summer-sale
+
+VERSION 01
+
+example.com/offer
+```
+
+Action:
+
+```text
+[ Restore Version 02 ]
+```
+
+Restoring should create a new version instead of deleting history.
+
+---
+
+# 27. Dynamic QR Dashboard
+
+The dashboard should not resemble a conventional analytics SaaS.
+
+Example:
+
+```text
+┌──────────────────────────────────────────────┐
+│ SUMMER SALE                         ● ACTIVE │
+│                                              │
+│ qr.yourdomain.com/a8K29                      │
+│                                              │
+│ [ Edit ] [ Download ] [ Copy ] [ Pause ]    │
+├──────────────────────────────────────────────┤
+│                                              │
+│ 12,842             8,421                     │
+│ SCANS              UNIQUE                   │
+│                                              │
+├──────────────────────────────────────────────┤
+│ SCAN ACTIVITY                                │
+│                                              │
+│       ╭────────────╮                         │
+│   ╭───╯            ╰────╮                    │
+│ ──╯                      ╰──                 │
+│                                              │
+├──────────────────────┬───────────────────────┤
+│ DEVICE               │ LOCATION              │
+│ Android 48%          │ India 65%             │
+│ iPhone  46%          │ USA 15%               │
+│ Other    6%          │ UK 7%                 │
+└──────────────────────┴───────────────────────┘
+```
+
+---
+
+# 28. QR List
+
+Navigation:
+
+```text
+QR CODES
+```
+
+Table/list:
+
+```text
+NAME                 TYPE       SCANS       STATUS
+
+Summer Sale          Dynamic    12,842      Active
+Website              Static     —           —
+Restaurant           Dynamic     8,421      Active
+Business Card        Static     —           —
+```
+
+Filters:
+
+* Static
+* Dynamic
+* Active
+* Paused
+
+Search:
+
+```text
+Search QR codes...
+```
+
+---
+
+# 29. Navigation
+
+Keep navigation intentionally small.
+
+```text
+QR STUDIO
+
+Home
+
+QR Codes
+
+Create QR
+
+Settings
+```
+
+For dynamic QR detail:
+
+```text
+QR
+├── Overview
+├── Analytics
+├── Activity
+└── Versions
+```
+
+Do not create unnecessary navigation.
+
+---
+
+# 30. Typography
+
+Use the supplied reference typography where appropriate.
+
+Primary heading:
+
+Instrument Serif
+
+Body:
+
+Newsreader
+
+Recommended hierarchy:
+
+```text
+Display
+Instrument Serif
+
+H1
+Instrument Serif
+
+H2
+Instrument Serif
+
+Body
+Newsreader
+
+Labels
+Newsreader / restrained sans-serif where required
+
+Data
+Use a highly readable numeric treatment
+```
+
+The typography should feel editorial without compromising readability.
+
+---
+
+# 31. Color System
+
+Primary ink:
+
+```text
+#2b2721
+```
+
+Use a warm paper base.
+
+Suggested visual family:
+
+```text
+Paper
+Warm cream
+Soft beige
+Muted botanical green
+Ink brown
+Faded charcoal
+```
+
+Do not introduce a conventional SaaS blue as the primary brand color.
+
+The configured ThreeUI usage specifies:
+
+```tsx
+headingFont="instrument-serif"
+bodyFont="newsreader"
+headingWeight="400"
+bodyWeight="400"
+primaryColor="#2b2721"
+headingSize={30}
+bodySize={20}
+headingLetterSpacing={0.010}
+```
+
+Preserve this configuration when using the supplied component.
+
+---
+
+# 32. Motion
+
+Motion should feel physical rather than technological.
+
+Use:
+
+* Page turns
+* Paper transitions
+* Gentle opacity changes
+* Slight positional movement
+* QR reveal
+* Chart drawing
+* Soft hover movement
+
+Avoid:
+
+* Excessive bouncing
+* Fast UI transitions
+* Large parallax effects
+* Motion that delays user actions
+
+Motion duration should generally feel between:
+
+```text
+150ms–700ms
+```
+
+depending on interaction complexity.
+
+Respect:
+
+```text
+prefers-reduced-motion
+```
+
+---
+
+# 33. Responsive Behavior
+
+Desktop:
+
+* Large editorial composition
+* Side-by-side builder
+* Large QR preview
+* Analytics panels
+
+Tablet:
+
+* Reduced spacing
+* Two-column where practical
+* Collapsible design controls
+
+Mobile:
+
+* Single-column
+* QR preview first
+* Controls below
+* Bottom-sheet or accordion controls
+* Sticky primary action where useful
+
+Mobile builder:
+
+```text
+QR PREVIEW
+
+CONTENT
+
+DESIGN
+
+DOWNLOAD
+```
+
+The QR should remain large enough to evaluate.
+
+---
+
+# 34. Accessibility
+
+Target:
+
+> WCAG 2.2 AA
+
+Requirements:
+
+* Keyboard navigation
+* Visible focus
+* Semantic HTML
+* Screen-reader labels
+* Accessible inputs
+* Accessible buttons
+* Accessible dialogs
+* Accessible tabs
+* Accessible charts
+* Sufficient contrast
+* Reduced-motion support
+
+Never rely exclusively on color to communicate state.
+
+For example:
+
+```text
+● ACTIVE
+```
+
+not only:
+
+```text
+green dot
+```
+
+---
+
+# 35. QR Scannability
+
+Scannability takes priority over aesthetics.
+
+The system must:
+
+* Use valid QR encoding
+* Use appropriate error correction
+* Maintain quiet zone
+* Validate contrast
+* Warn about excessive logo size
+* Prevent invalid configurations when necessary
+
+A beautiful QR that cannot be scanned is considered a product failure.
+
+---
+
+# 36. Security
+
+Dynamic redirects are public infrastructure.
+
+Requirements:
+
+* HTTPS
+* Authentication
+* Authorization
+* Rate limiting
+* Secure sessions
+* Input validation
+* URL scheme validation
+* Abuse detection
+* QR slug unpredictability
+* Audit logs
+* Error isolation
+
+Reject unsafe schemes such as:
+
+```text
+javascript:
+data:
+file:
+```
+
+Only supported web destinations should be accepted for dynamic URLs.
+
+---
+
+# 37. SSRF Protection
+
+If the platform performs URL verification, preview generation,
+metadata fetching, or reputation checking:
+
+Never blindly request user-provided URLs.
+
+Block:
+
+* localhost
+* loopback addresses
+* private IP ranges
+* internal services
+* cloud metadata endpoints
+* other restricted network destinations
+
+---
+
+# 38. Abuse Prevention
+
+The redirect infrastructure must protect against:
+
+* Phishing
+* Malware
+* Spam
+* Redirect abuse
+* Automated QR creation
+* Slug enumeration
+* Credential attacks
+* Analytics scraping
+
+Provide:
+
+```text
+Report QR
+```
+
+for public dynamic QR URLs.
+
+---
+
+# 39. Redirect Architecture
+
+The redirect path is mission critical.
+
+```text
+USER SCANS QR
+      │
+      ▼
+qr.yourdomain.com/a8K29
+      │
+      ▼
+Redirect Service
+      │
+      ├──────► Queue / Analytics Event
+      │
+      ▼
+Resolve Current Destination
+      │
+      ▼
+HTTP Redirect
+      │
+      ▼
+Destination
+```
+
+Analytics processing must not unnecessarily block the redirect.
+
+If analytics is temporarily unavailable:
+
+```text
+SCAN
+ ↓
+Analytics failure
+ ↓
+REDIRECT STILL WORKS
+```
+
+This is a hard requirement.
+
+---
+
+# 40. Redirect Performance
+
+Target:
+
+```text
+p95 redirect processing < 150ms
+```
+
+excluding external network latency.
+
+The redirect service should be optimized independently from the
+dashboard.
+
+---
+
+# 41. Analytics Architecture
+
+Recommended:
+
+```text
+Scan
+ │
+ ▼
+Redirect API
+ │
+ ├──────────────► Destination
+ │
+ ▼
+Event Queue
+ │
+ ▼
+Analytics Worker
+ │
+ ▼
+Database
+ │
+ ▼
+Analytics Dashboard
+```
+
+For an MVP, PostgreSQL can store application and analytics data.
+
+Introduce a specialized analytics database only when volume requires it.
+
+---
+
+# 42. Suggested Frontend Architecture
+
+```text
+src/
+│
+├── app/
+│   ├── page.tsx
+│   ├── create/
+│   │   └── page.tsx
+│   ├── dashboard/
+│   │   └── page.tsx
+│   └── qr/
+│       └── [id]/
+│           ├── page.tsx
+│           └── analytics/
+│               └── page.tsx
+│
+├── components/
+│   ├── qr/
+│   │   ├── QRBuilder.tsx
+│   │   ├── QRPreview.tsx
+│   │   ├── QRContentPanel.tsx
+│   │   ├── QRDesignPanel.tsx
+│   │   ├── QRValidator.tsx
+│   │   └── QRDownload.tsx
+│   │
+│   ├── analytics/
+│   │   ├── ScanOverview.tsx
+│   │   ├── ScanChart.tsx
+│   │   ├── DeviceBreakdown.tsx
+│   │   ├── LocationBreakdown.tsx
+│   │   └── ActivityTimeline.tsx
+│   │
+│   └── sketchbook/
+│       ├── Paper.tsx
+│       ├── Plate.tsx
+│       ├── EditorialHeader.tsx
+│       └── PageTransition.tsx
+│
+├── lib/
+│   ├── qr/
+│   ├── analytics/
+│   ├── validation/
+│   └── security/
+│
+└── styles/
+```
+
+---
+
+# 43. Design System Components
+
+Create reusable components:
+
+```text
+PaperSurface
+EditorialHeading
+EditorialLabel
+SketchbookPlate
+PaperButton
+InkButton
+QRPreview
+QRControl
+SectionRule
+MetricNumber
+AnalyticsChart
+Timeline
+StatusIndicator
+Modal
+Drawer
+Toast
+Tooltip
+```
+
+Components should share a consistent visual language.
+
+---
+
+# 44. Database Model
+
+Suggested conceptual schema:
+
+```text
+users
+─────
+id
+email
+name
+password_hash
+email_verified_at
+created_at
+updated_at
+
+
+qr_codes
+────────
+id
+user_id
+type
+name
+slug
+status
+created_at
+updated_at
+
+
+qr_destinations
+───────────────
+id
+qr_id
+url
+version
+is_current
+created_by
+created_at
+
+
+qr_designs
+──────────
+id
+qr_id
+version
+config
+created_by
+created_at
+
+
+scan_events
+───────────
+id
+qr_id
+timestamp
+country
+region
+city
+device_type
+os
+browser
+referrer
+ip_hash
+
+
+activity_logs
+────────────
+id
+user_id
+qr_id
+action
+metadata
+created_at
+```
+
+---
+
+# 45. Versioning Rule
+
+Never destroy historical destination records.
+
+Bad:
+
+```text
+destination = new_url
+```
+
+without history.
+
+Correct:
+
+```text
+V1 → old URL
+V2 → new URL
+V3 → another URL
+```
+
+Current destination points to V3.
+
+Restoring V1 creates:
+
+```text
+V4 → V1 destination
+```
+
+This preserves the audit trail.
+
+---
+
+# 46. Recommended Technology
+
+Frontend:
+
+```text
+Next.js
+React
+TypeScript
+Tailwind CSS
+```
+
+UI:
+
+```text
+ThreeUI source implementation
+```
+
+QR:
+
+```text
+Reliable QR generation library
+```
+
+Backend:
+
+```text
+Next.js API
+```
+
+or, for a larger architecture:
+
+```text
+Next.js + NestJS
+```
+
+Database:
+
+```text
+PostgreSQL
+```
+
+ORM:
+
+```text
+Prisma
+```
+
+Queue/cache:
+
+```text
+Redis
+```
+
+Object storage:
+
+```text
+S3-compatible storage
+```
+
+---
+
+# 47. Exact ThreeUI Integration Requirement
+
+The following component is the frontend visual foundation:
+
+```tsx
+import { MengToSketchbookLandingPage } from "@designcodeio/threeui";
+import "@designcodeio/threeui/style.css";
+
+export function Scene() {
+  return (
+    <div className="shader-frame">
+      <MengToSketchbookLandingPage
+        headingFont="instrument-serif"
+        bodyFont="newsreader"
+        headingWeight="400"
+        bodyWeight="400"
+        primaryColor="#2b2721"
+        headingSize={30}
+        bodySize={20}
+        headingLetterSpacing={0.010}
+      />
+    </div>
+  );
+}
+```
+
+The implementation must use the exact supplied source.
+
+Canonical HTML:
+
+[https://threeui.com/landing-pages/meng-to-sketchbook.html](https://threeui.com/landing-pages/meng-to-sketchbook.html)
+
+Registered source bundle:
+
+[https://threeui.com/source-code/meng-to-sketchbook-landing-page.json](https://threeui.com/source-code/meng-to-sketchbook-landing-page.json)
+
+Required source files:
+
+```text
+src/shaders/landing-pages/LandingPages.tsx
+
+src/shaders/landing-pages/pageTypography.ts
+
+src/shaders/landing-pages/pageRecipes.ts
+
+src/shaders/landing-pages/LandingPageFrame.tsx
+
+public/landing-pages/meng-to-sketchbook.html
+
+src/shaders/threeui.css
+```
+
+Required assets:
+
+```text
+public/landing-pages/meng-to-sketchbook/bg-wash.jpg
+public/landing-pages/meng-to-sketchbook/bloom.png
+public/landing-pages/meng-to-sketchbook/botanic-gardens.png
+public/landing-pages/meng-to-sketchbook/botany-left.png
+public/landing-pages/meng-to-sketchbook/botany-right.png
+public/landing-pages/meng-to-sketchbook/buddha-tooth.png
+public/landing-pages/meng-to-sketchbook/divider.png
+public/landing-pages/meng-to-sketchbook/gardens-by-the-bay.png
+public/landing-pages/meng-to-sketchbook/instrument-serif-italic.woff2
+public/landing-pages/meng-to-sketchbook/instrument-serif.woff2
+public/landing-pages/meng-to-sketchbook/joo-chiat.png
+public/landing-pages/meng-to-sketchbook/lau-pa-sat.png
+public/landing-pages/meng-to-sketchbook/marina-bay-sands.png
+public/landing-pages/meng-to-sketchbook/marina-bay-skyline.png
+public/landing-pages/meng-to-sketchbook/merlion.png
+public/landing-pages/meng-to-sketchbook/newsreader.woff2
+public/landing-pages/meng-to-sketchbook/singapore-river.png
+```
+
+---
+
+# 48. IMPORTANT: Exact Source Rule
+
+DO NOT:
+
+* Recreate the component from the screenshot.
+* Recreate the component from the description.
+* Approximate the animations.
+* Replace the authored implementation with a custom interpretation.
+* Replace the shaders with CSS approximations.
+* Replace the assets with generated substitutes.
+* Use screenshots as backgrounds.
+* Embed the ThreeUI documentation page.
+* iframe the reference website.
+
+FIRST:
+
+1. Fetch the canonical HTML.
+2. Fetch the complete registered source bundle.
+3. Read the complete source.
+4. Verify the required files.
+5. Copy/adapt only where required for integration.
+6. Preserve authored structure, styling, shaders, motion, dependencies,
+   responsive behavior and asset paths.
+7. Verify source hashes where available.
+8. Copy binary assets byte-for-byte.
+9. Verify binary hashes.
+
+IF THE COMPLETE CANONICAL SOURCE CANNOT BE RETRIEVED:
+
+STOP.
+
+Do not approximate the component.
+
+Report that the exact source could not be retrieved.
+
+---
+
+# 49. ThreeUI Adaptation Rule
+
+The exact source implementation should be preserved as the visual
+foundation.
+
+The QR product content should replace the portfolio content.
+
+Conceptually:
+
+```text
+Original concept
+    ↓
+Sketchbook portfolio
+    ↓
+Adapt visual system
+    ↓
+QR Studio
+```
+
+Preserve:
+
+* Page composition
+* Paper atmosphere
+* Typography
+* Motion system
+* Shader behavior
+* Interaction principles
+* Responsive logic
+* Asset handling
+
+Change:
+
+* Singapore portfolio content
+* Portfolio navigation
+* Portfolio-specific copy
+* Portfolio-specific sections
+* Portfolio-specific data
+
+Replace them with:
+
+* Static QR
+* Dynamic QR
+* QR builder
+* QR preview
+* Analytics
+* Activity
+* Versions
+
+---
+
+# 50. Landing Page Content
+
+Use QR-specific copy.
+
+Primary headline:
+
+> MAKE A QR.
+> MAKE IT USEFUL.
+
+Secondary:
+
+> Beautiful QR codes for things that matter.
+
+Static:
+
+> ENCODE ONCE.
+> KEEP FOREVER.
+
+Dynamic:
+
+> CHANGE ANYTIME.
+> MEASURE EVERY SCAN.
+
+Supporting copy:
+
+> Create a QR in seconds. Choose static for something permanent, or dynamic when you want to edit and understand what happens after every scan.
+
+---
+
+# 51. Empty States
+
+Static:
+
+> Nothing here yet.
+>
+> Add a URL or text to begin.
+
+Dynamic:
+
+> Your first dynamic QR starts here.
+>
+> Create one and you'll be able to change its destination and see its scans.
+
+Analytics:
+
+> No scans yet.
+>
+> Once someone scans your QR, activity will appear here.
+
+---
+
+# 52. Error States
+
+Invalid URL:
+
+> That doesn't look like a valid web address.
+
+Unsafe URL:
+
+> This destination cannot be used.
+
+QR generation failure:
+
+> We couldn't generate this QR. Try simplifying the content or design.
+
+Redirect unavailable:
+
+> This QR is temporarily unavailable.
+
+Network error:
+
+> Something went wrong. Try again.
+
+Never expose technical stack traces.
+
+---
+
+# 53. Loading States
+
+Avoid generic spinning loaders where possible.
+
+Use tactile/editorial loading states:
+
+```text
+Preparing your QR...
+```
+
+or subtle paper/ink animation.
+
+For analytics:
+
+```text
+Opening the scan book...
+```
+
+Loading states must remain brief and non-blocking.
+
+---
+
+# 54. Microcopy
+
+Prefer concise editorial language.
+
+Instead of:
+
+> Submit Form
+
+Use:
+
+> Continue
+
+Instead of:
+
+> QR Configuration
+
+Use:
+
+> Design
+
+Instead of:
+
+> Redirect Destination
+
+Use:
+
+> Where should it go?
+
+Instead of:
+
+> Analytics Data
+
+Use:
+
+> Scan Book
+
+Instead of:
+
+> Audit Log
+
+Use:
+
+> Margin Notes
+
+---
+
+# 55. Product Terminology
+
+Use consistent terminology:
+
+```text
+Static QR
+Dynamic QR
+QR
+Destination
+Scan
+Unique visitor
+Analytics
+Activity
+Version
+Restore
+Active
+Paused
+Archived
+```
+
+Do not randomly alternate between:
+
+* Link
+* URL
+* Destination
+
+Use:
+
+> Destination
+
+when referring to the dynamic target.
+
+---
+
+# 56. Core UX Principle
+
+The user should understand the product in seconds.
+
+The primary mental model is:
+
+```text
+STATIC
+
+QR
+ ↓
+CONTENT
+ ↓
+DOWNLOAD
+
+
+DYNAMIC
+
+QR
+ ↓
+REDIRECT
+ ↓
+SCAN
+ ↓
+ANALYTICS
+ ↓
+EDIT
+```
+
+Everything in the interface should reinforce this.
+
+---
+
+# 57. Success Criteria
+
+A first-time visitor should be able to:
+
+1. Understand Static vs Dynamic.
+2. Create a Static QR in under one minute.
+3. Create a Dynamic QR in under one minute.
+4. Preview the QR immediately.
+5. Download the QR.
+6. Edit a Dynamic QR destination.
+7. Scan the Dynamic QR.
+8. See the scan in analytics.
+9. Understand scan activity.
+10. See what changed and when.
+
+---
+
+# 58. Performance Requirements
+
+Target:
+
+```text
+Homepage LCP < 2.5s
+QR generation < 1s
+Dashboard initial render < 2.5s
+Dynamic redirect p95 < 150ms
+```
+
+Optimize:
+
+* Image loading
+* Fonts
+* JavaScript bundles
+* ThreeUI assets
+* Animation workloads
+* QR generation
+* Analytics queries
+
+Do not compromise redirect performance for visual effects.
+
+---
+
+# 59. Browser Support
+
+Support current versions of:
+
+* Chrome
+* Edge
+* Safari
+* Firefox
+
+Desktop and mobile.
+
+ThreeUI/WebGL-related effects must gracefully degrade when required.
+
+The core QR functionality must remain usable even if enhanced visual
+effects are unavailable.
+
+---
+
+# 60. Final Design Philosophy
+
+The product should feel like:
+
+> A beautifully designed physical notebook for digital links.
+
+Not:
+
+> A QR generator with a decorative skin.
+
+The QR is the object.
+
+The dynamic QR is the living object.
+
+The analytics are its story.
+
+The activity history is its margin.
+
+The version history is its memory.
+
+---
+
+# 61. MASTER IMPLEMENTATION PROMPT
+
+Use the following prompt with the coding agent.
+
+---
+
+You are implementing a production-quality QR web application in an
+existing project.
+
+The product has EXACTLY TWO core features:
+
+1. STATIC QR
+2. DYNAMIC QR
+
+Do not add additional QR types or unrelated product modules.
+
+The visual frontend must use the supplied ThreeUI
+`MengToSketchbookLandingPage` implementation as the exact visual and
+interaction foundation.
+
+IMPORTANT SOURCE RULE:
+
+The ThreeUI component MUST be implemented from the exact canonical
+source provided by the user.
+
+Do not recreate it from screenshots, previews, descriptions, filenames,
+or visual approximation.
+
+First fetch and read the complete canonical implementation.
+
+Canonical HTML:
+
+[https://threeui.com/landing-pages/meng-to-sketchbook.html](https://threeui.com/landing-pages/meng-to-sketchbook.html)
+
+Complete source bundle:
+
+[https://threeui.com/source-code/meng-to-sketchbook-landing-page.json](https://threeui.com/source-code/meng-to-sketchbook-landing-page.json)
+
+Required source files:
+
+* src/shaders/landing-pages/LandingPages.tsx
+* src/shaders/landing-pages/pageTypography.ts
+* src/shaders/landing-pages/pageRecipes.ts
+* src/shaders/landing-pages/LandingPageFrame.tsx
+* public/landing-pages/meng-to-sketchbook.html
+* src/shaders/threeui.css
+
+Required binary assets must be copied byte-for-byte and verified against
+the supplied SHA-256 hashes.
+
+If the canonical source cannot be completely retrieved:
+
+STOP.
+
+Do not approximate or recreate the component.
+
+---
+
+PRODUCT PURPOSE
+
+Build an editorial, tactile QR studio where users can:
+
+* Create Static QR codes.
+* Create Dynamic QR codes.
+* Customize QR appearance.
+* Download PNG/SVG.
+* Edit Dynamic QR destinations.
+* Track Dynamic QR scans.
+* View analytics.
+* View activity history.
+* View destination versions.
+* Restore previous destination versions.
+
+Nothing beyond this scope is required for V1.
+
+---
+
+STATIC QR
+
+Static QR must encode the user's supplied content directly.
+
+Accept:
+
+* URLs
+* Plain text
+* Other valid QR-compatible text
+
+Static QR must NOT use the dynamic redirect service.
+
+Static QR has:
+
+* Content input
+* Live preview
+* QR design controls
+* Validation
+* PNG download
+* SVG download
+
+Static QR cannot be edited after generation.
+
+---
+
+DYNAMIC QR
+
+Dynamic QR must encode a platform-controlled redirect URL.
+
+Example:
+
+qr.yourdomain.com/a8K29
+
+The QR identifier must remain stable.
+
+The current destination must be stored separately.
+
+Example:
+
+QR:
+
+qr.yourdomain.com/a8K29
+
+Version 1:
+
+[https://example.com/offer](https://example.com/offer)
+
+Version 2:
+
+[https://example.com/summer-sale](https://example.com/summer-sale)
+
+The physical QR must continue working after the destination changes.
+
+Dynamic QR requires authentication.
+
+---
+
+DYNAMIC REDIRECT
+
+When the QR is scanned:
+
+1. Resolve QR slug.
+2. Validate QR state.
+3. Capture a scan event.
+4. Resolve current destination.
+5. Redirect immediately.
+
+Analytics must not unnecessarily block redirect behavior.
+
+If analytics infrastructure fails, the redirect must still work.
+
+Dynamic redirect performance target:
+
+p95 application processing under 150ms.
+
+---
+
+ANALYTICS
+
+Track, where available:
+
+* Total scans
+* Estimated unique visitors
+* Timestamp
+* Device category
+* Operating system
+* Browser
+* Country
+* Approximate region/city
+* Referrer
+
+Do not claim exact unique humans.
+
+Do not claim GPS-level location.
+
+Use privacy-conscious identifiers.
+
+Do not store unnecessary raw personal data.
+
+Analytics must support:
+
+* Today
+* 7 days
+* 30 days
+* 90 days
+* Custom range
+
+Display:
+
+* Scan timeline
+* Device breakdown
+* Geographic breakdown
+* Time distribution
+* Recent scan activity
+
+---
+
+ACTIVITY HISTORY
+
+Record:
+
+* QR creation
+* Destination changes
+* Design changes
+* Status changes
+* Version creation
+* Version restoration
+
+Display them as an editorial "Margin Notes" timeline.
+
+Never delete historical activity.
+
+---
+
+VERSION HISTORY
+
+Every destination change creates a new version.
+
+Restoring an old version creates a new version.
+
+Never mutate historical records.
+
+---
+
+DESIGN
+
+Use the supplied ThreeUI implementation's:
+
+* Editorial typography
+* Paper atmosphere
+* Tactile composition
+* Motion
+* Page transitions
+* Organic visual hierarchy
+* Responsive behavior
+* Shaders
+* Assets
+
+Use:
+
+headingFont="instrument-serif"
+
+bodyFont="newsreader"
+
+headingWeight="400"
+
+bodyWeight="400"
+
+primaryColor="#2b2721"
+
+headingSize={30}
+
+bodySize={20}
+
+headingLetterSpacing={0.010}
+
+Do not replace the supplied implementation with a custom approximation.
+
+Adapt the content to the QR product.
+
+---
+
+DESIGN LANGUAGE
+
+The product should feel:
+
+* Editorial
+* Premium
+* Tactile
+* Quiet
+* Human
+* Botanical
+* Paper-based
+* Sophisticated
+
+Avoid:
+
+* Generic SaaS dashboard styling
+* Neon gradients
+* Glassmorphism
+* Excessive cards
+* Excessive rounded corners
+* Generic blue UI
+* Excessive shadows
+* Unnecessary animation
+
+---
+
+HOMEPAGE
+
+Create:
+
+MAKE A QR.
+MAKE IT USEFUL.
+
+Then present:
+
+STATIC / 01
+
+Encode once.
+Keep forever.
+
+[Create Static QR]
+
+and:
+
+DYNAMIC / 02
+
+Change anytime.
+Measure every scan.
+
+[Create Dynamic QR]
+
+The interaction should feel like navigating an editorial sketchbook.
+
+---
+
+STATIC BUILDER
+
+Show:
+
+STATIC QR / 01
+
+WHAT SHOULD THIS QR CONTAIN?
+
+Input for URL or text.
+
+Then:
+
+DESIGN
+
+Live QR preview.
+
+Controls:
+
+* Pattern
+* Eye style
+* Foreground
+* Background
+* Logo
+* Logo size
+* Logo padding
+* Frame
+* Quiet zone
+
+Validate scan reliability.
+
+Provide:
+
+Download PNG
+Download SVG
+
+---
+
+DYNAMIC BUILDER
+
+Show:
+
+DYNAMIC QR / 01
+
+QR NAME
+
+Destination
+
+Create Dynamic QR.
+
+After creation show:
+
+DYNAMIC QR / 02
+
+YOUR QR IS LIVE
+
+QR preview.
+
+Dynamic URL.
+
+Destination.
+
+Actions:
+
+Download
+Copy QR URL
+View Analytics
+Edit
+Pause
+
+---
+
+ANALYTICS UI
+
+Use editorial naming:
+
+THE SCAN BOOK
+
+Metrics:
+
+Total scans
+Estimated unique visitors
+Growth
+
+Sections:
+
+SCAN ACTIVITY
+DEVICE
+LOCATION
+TIME
+MARGIN NOTES
+
+Do not make analytics look like a generic enterprise dashboard.
+
+---
+
+RESPONSIVE DESIGN
+
+Desktop:
+
+Large editorial composition and large QR preview.
+
+Tablet:
+
+Reduced spacing and adaptable panels.
+
+Mobile:
+
+Single-column builder.
+
+QR preview first.
+
+Controls below.
+
+Use bottom sheets/accordions where appropriate.
+
+---
+
+ACCESSIBILITY
+
+Target WCAG 2.2 AA.
+
+Implement:
+
+* Semantic HTML
+* Keyboard navigation
+* Visible focus
+* Accessible labels
+* Accessible dialogs
+* Accessible charts
+* Sufficient contrast
+* Reduced motion
+* Screen-reader-friendly status indicators
+
+---
+
+SECURITY
+
+Implement:
+
+* Secure authentication
+* Secure sessions
+* Authorization
+* Rate limiting
+* Input validation
+* Safe URL scheme validation
+* Abuse prevention
+* Audit logging
+* Unpredictable QR slugs
+
+Reject:
+
+javascript:
+data:
+file:
+
+and other unsafe schemes.
+
+If any server-side URL fetching exists, protect against SSRF.
+
+Block:
+
+localhost
+127.0.0.1
+private network ranges
+cloud metadata endpoints
+internal destinations
+
+---
+
+RELIABILITY
+
+Dynamic redirect must remain available independently from analytics.
+
+Analytics failure must never cause redirect failure.
+
+Implement:
+
+* Error boundaries
+* Structured logging
+* Monitoring hooks
+* Database backups
+* Graceful failure states
+
+---
+
+DATABASE
+
+Use PostgreSQL.
+
+Use Prisma where appropriate.
+
+Core entities:
+
+users
+qr_codes
+qr_destinations
+qr_designs
+scan_events
+activity_logs
+
+Use immutable version records.
+
+---
+
+FRONTEND
+
+Use:
+
+Next.js
+React
+TypeScript
+Tailwind CSS
+
+Preserve the ThreeUI dependencies required by the exact source.
+
+Do not replace the source implementation with a visual recreation.
+
+---
+
+COMPONENT STRUCTURE
+
+Organize reusable QR components:
+
+QRBuilder
+QRPreview
+QRContentPanel
+QRDesignPanel
+QRValidator
+QRDownload
+
+Analytics:
+
+ScanOverview
+ScanChart
+DeviceBreakdown
+LocationBreakdown
+ActivityTimeline
+
+Visual:
+
+PaperSurface
+EditorialHeading
+EditorialLabel
+SketchbookPlate
+PageTransition
+PaperButton
+
+---
+
+IMPORTANT IMPLEMENTATION RULES
+
+1. Inspect the existing project before editing.
+2. Do not destroy existing functionality.
+3. Preserve the existing build system where possible.
+4. Fetch and read the complete ThreeUI source before implementing it.
+5. Verify source hashes where supplied.
+6. Copy binary assets byte-for-byte.
+7. Do not use screenshots as implementation assets.
+8. Do not iframe ThreeUI.
+9. Do not embed the documentation page.
+10. Do not approximate the supplied component.
+11. Keep Static and Dynamic QR as the only product features.
+12. Make the dynamic redirect architecture production-safe.
+13. Make analytics asynchronous where possible.
+14. Ensure analytics failure does not break redirects.
+15. Make the QR builder responsive.
+16. Make QR scan reliability a higher priority than visual customization.
+17. Keep historical destination versions immutable.
+18. Preserve activity history.
+19. Implement proper loading, empty and error states.
+20. Test both QR creation flows.
+21. Test dynamic editing.
+22. Test dynamic redirects.
+23. Test scan analytics.
+24. Test version restoration.
+25. Test responsive layouts.
+26. Test keyboard accessibility.
+27. Test QR scannability after customization.
+28. Test redirect behavior when analytics is unavailable.
+29. Run production build checks.
+30. Verify the rendered application in the browser.
+
+---
+
+FINAL QUALITY BAR
+
+The finished product should feel like a premium editorial QR studio.
+
+A user should be able to arrive, immediately understand Static vs
+Dynamic, create a QR within approximately one minute, download it, and,
+for Dynamic QR, later edit the destination and understand exactly how
+the QR has been used.
+
+The final product should communicate:
+
+STATIC:
+
+Encode once.
+Keep forever.
+
+DYNAMIC:
+
+Change anytime.
+Measure every scan.
+
+Do not add unnecessary features.
+
+Do not compromise the exact ThreeUI implementation.
+
+Do not approximate unavailable source code.
+
+Build the smallest complete product that makes these two QR modes
+exceptionally polished, reliable, and useful.
+
+```
+
+This `design.md` is intentionally **implementation-oriented**, so you can give it to a coding agent as the design source of truth rather than having separate PRD/design/prompt documents.
+```

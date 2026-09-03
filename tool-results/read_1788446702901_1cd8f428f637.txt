@@ -1,0 +1,2002 @@
+     1→Absolutely. Since you want **only two core features — Static QR and Dynamic QR**, the PRD should be deliberately focused. The sophistication should come from **quality, editing, analytics, reliability, security, and UX**, not from adding dozens of QR types.
+     2→
+     3→# Product Requirements Document — Dynamic & Static QR Platform
+     4→
+     5→**Working product name:** QR Platform
+     6→**Document version:** 1.0
+     7→**Product type:** Web SaaS
+     8→**Primary features:**
+     9→
+    10→1. Static QR Generator
+    11→2. Dynamic QR Generator + Analytics
+    12→
+    13→**Core principle:**
+    14→
+    15→> **Static QR = generate once, works forever.**
+    16→> **Dynamic QR = edit anytime, track every scan.**
+    17→
+    18→---
+    19→
+    20→# 1. Executive Summary
+    21→
+    22→The product is a web-based QR platform that allows users to create two kinds of QR codes:
+    23→
+    24→### Static QR
+    25→
+    26→The user's information is encoded directly into the QR code.
+    27→
+    28→```text
+    29→User enters destination
+    30→        ↓
+    31→QR generated
+    32→        ↓
+    33→Information encoded directly
+    34→        ↓
+    35→Download / share
+    36→```
+    37→
+    38→Once generated, the encoded information cannot be changed.
+    39→
+    40→### Dynamic QR
+    41→
+    42→The QR contains a platform-managed redirect URL.
+    43→
+    44→```text
+    45→User enters destination
+    46→        ↓
+    47→Platform creates unique QR
+    48→        ↓
+    49→QR contains platform redirect
+    50→        ↓
+    51→User scans
+    52→        ↓
+    53→Platform records scan
+    54→        ↓
+    55→Platform resolves destination
+    56→        ↓
+    57→User redirected
+    58→```
+    59→
+    60→The destination can subsequently be changed without reprinting the QR.
+    61→
+    62→---
+    63→
+    64→# 2. Product Vision
+    65→
+    66→> **Make QR creation extremely simple while making dynamic QR codes measurable, editable, reliable, and secure.**
+    67→
+    68→The product should not attempt to become:
+    69→
+    70→* A website builder
+    71→* A marketing automation platform
+    72→* A CRM
+    73→* A payment platform
+    74→* A social media tool
+    75→* A huge QR-type marketplace
+    76→
+    77→The product has one job:
+    78→
+    79→> **Create QR codes and, for dynamic QR codes, give users control and useful analytics.**
+    80→
+    81→---
+    82→
+    83→# 3. Product Goals
+    84→
+    85→## Primary goals
+    86→
+    87→### G1 — Extremely simple QR creation
+    88→
+    89→A first-time user should be able to create a QR in less than one minute.
+    90→
+    91→### G2 — High-quality QR generation
+    92→
+    93→Generated QR codes must be:
+    94→
+    95→* Scan reliable
+    96→* High resolution
+    97→* Exportable
+    98→* Customizable
+    99→* Print friendly
+   100→
+   101→### G3 — Reliable dynamic QR infrastructure
+   102→
+   103→Dynamic QR links must:
+   104→
+   105→* Resolve quickly
+   106→* Remain stable
+   107→* Support destination editing
+   108→* Handle high traffic
+   109→* Record scan events reliably
+   110→
+   111→### G4 — Useful analytics
+   112→
+   113→Users should understand:
+   114→
+   115→* How many times the QR was scanned
+   116→* When it was scanned
+   117→* Approximate geographic distribution
+   118→* Device information
+   119→* Unique vs total scans
+   120→* Scan trends
+   121→
+   122→### G5 — Complete edit history
+   123→
+   124→Users should know:
+   125→
+   126→* What changed
+   127→* When it changed
+   128→* Who changed it
+   129→* Previous value
+   130→* Current value
+   131→
+   132→---
+   133→
+   134→# 4. Non-Goals
+   135→
+   136→For V1, explicitly **do not build**:
+   137→
+   138→* Coupon-specific QR types
+   139→* PDF-specific QR types
+   140→* vCard-specific QR types
+   141→* Wi-Fi QR wizard
+   142→* Multi-URL QR
+   143→* A/B testing
+   144→* AI campaign generation
+   145→* Landing-page builder
+   146→* Team collaboration
+   147→* White-label
+   148→* API marketplace
+   149→* Payment collection
+   150→* CRM
+   151→* Email marketing
+   152→* Social media management
+   153→
+   154→Users can still encode **any text or URL supported by the QR standard** into a static or dynamic QR.
+   155→
+   156→---
+   157→
+   158→# 5. Target Users
+   159→
+   160→## Persona 1 — Individual
+   161→
+   162→Needs a QR quickly.
+   163→
+   164→Examples:
+   165→
+   166→* Portfolio
+   167→* Website
+   168→* Resume
+   169→* Social profile
+   170→* Contact information
+   171→
+   172→Primary requirement:
+   173→
+   174→> **Fast and simple.**
+   175→
+   176→---
+   177→
+   178→## Persona 2 — Small Business
+   179→
+   180→Examples:
+   181→
+   182→* Restaurant
+   183→* Shop
+   184→* Freelancer
+   185→* Event organizer
+   186→* Local business
+   187→
+   188→Needs:
+   189→
+   190→* Editable QR
+   191→* Scan count
+   192→* Analytics
+   193→* Branding
+   194→* Print/download
+   195→
+   196→Primary requirement:
+   197→
+   198→> **"I want to know whether people are actually scanning this."**
+   199→
+   200→---
+   201→
+   202→## Persona 3 — Marketing User
+   203→
+   204→Needs multiple dynamic QR codes.
+   205→
+   206→Requirements:
+   207→
+   208→* Campaign naming
+   209→* Scan analytics
+   210→* History
+   211→* Export
+   212→* QR organization
+   213→
+   214→Primary requirement:
+   215→
+   216→> **"I want to measure offline traffic."**
+   217→
+   218→---
+   219→
+   220→# 6. Core Product Model
+   221→
+   222→There are only two creation modes.
+   223→
+   224→```text
+   225→                  QR PLATFORM
+   226→                       │
+   227→              ┌────────┴────────┐
+   228→              │                 │
+   229→          STATIC QR         DYNAMIC QR
+   230→              │                 │
+   231→       Direct encoding     Redirect URL
+   232→              │                 │
+   233→       No tracking          Tracking
+   234→       No editing           Editable
+   235→       No account*          Account
+   236→```
+   237→
+   238→`*` Static QR can optionally be generated without an account, depending on the final product strategy.
+   239→
+   240→---
+   241→
+   242→# 7. Feature 1 — Static QR
+   243→
+   244→## 7.1 Purpose
+   245→
+   246→Allow a user to encode information directly into a QR code.
+   247→
+   248→---
+   249→
+   250→## 7.2 Input
+   251→
+   252→Primary field:
+   253→
+   254→**Content**
+   255→
+   256→Example:
+   257→
+   258→```text
+   259→https://example.com
+   260→```
+   261→
+   262→But the field should also accept arbitrary text:
+   263→
+   264→```text
+   265→Hello, welcome to our store.
+   266→```
+   267→
+   268→The system should not artificially restrict the user to URLs.
+   269→
+   270→---
+   271→
+   272→# 8. Static QR User Flow
+   273→
+   274→```text
+   275→Landing Page
+   276→     ↓
+   277→Create QR
+   278→     ↓
+   279→Select "Static"
+   280→     ↓
+   281→Enter content
+   282→     ↓
+   283→Customize
+   284→     ↓
+   285→Preview
+   286→     ↓
+   287→Generate
+   288→     ↓
+   289→Download
+   290→```
+   291→
+   292→---
+   293→
+   294→# 9. Static QR Customization
+   295→
+   296→The user should be able to customize the visual appearance without compromising scan reliability.
+   297→
+   298→### QR pattern
+   299→
+   300→Options:
+   301→
+   302→* Square
+   303→* Rounded
+   304→* Dot
+   305→
+   306→### Eye/frame style
+   307→
+   308→Options:
+   309→
+   310→* Square
+   311→* Rounded
+   312→* Circle
+   313→
+   314→### Colors
+   315→
+   316→* Foreground
+   317→* Background
+   318→
+   319→### Gradient
+   320→
+   321→Optional.
+   322→
+   323→### Logo
+   324→
+   325→Upload logo.
+   326→
+   327→### Logo controls
+   328→
+   329→* Size
+   330→* Padding
+   331→* Position
+   332→
+   333→### Frame
+   334→
+   335→Optional:
+   336→
+   337→```text
+   338→SCAN ME
+   339→```
+   340→
+   341→### Margin
+   342→
+   343→Control quiet zone.
+   344→
+   345→---
+   346→
+   347→# 10. Static QR Export
+   348→
+   349→Required formats:
+   350→
+   351→### PNG
+   352→
+   353→Options:
+   354→
+   355→* 512 × 512
+   356→* 1024 × 1024
+   357→* 2048 × 2048
+   358→* Custom
+   359→
+   360→### SVG
+   361→
+   362→Vector format.
+   363→
+   364→### PDF
+   365→
+   366→Print-oriented export can be added if needed, but isn't necessary for the initial MVP.
+   367→
+   368→---
+   369→
+   370→# 11. Static QR Validation
+   371→
+   372→Before allowing download, the system should validate:
+   373→
+   374→### Content
+   375→
+   376→* Not empty
+   377→* Valid UTF-8
+   378→* Reasonable maximum length
+   379→
+   380→### QR
+   381→
+   382→* Valid encoding
+   383→* Correct error correction
+   384→* Adequate quiet zone
+   385→
+   386→### Design
+   387→
+   388→Warn when:
+   389→
+   390→* Contrast is too low
+   391→* Logo is too large
+   392→* Foreground/background are too similar
+   393→* Quiet zone is insufficient
+   394→
+   395→Example:
+   396→
+   397→> ⚠️ Your logo is too large and may reduce scan reliability.
+   398→
+   399→Do not prevent customization unnecessarily, but provide a strong warning.
+   400→
+   401→---
+   402→
+   403→# 12. Static QR Data Model
+   404→
+   405→A static QR doesn't need a redirect infrastructure.
+   406→
+   407→Conceptually:
+   408→
+   409→```text
+   410→static_qr
+   411→─────────
+   412→id
+   413→content
+   414→content_type
+   415→design_config
+   416→created_at
+   417→```
+   418→
+   419→The actual QR can be generated client-side or server-side.
+   420→
+   421→---
+   422→
+   423→# 13. Feature 2 — Dynamic QR
+   424→
+   425→This is the primary SaaS feature.
+   426→
+   427→## Purpose
+   428→
+   429→Allow users to create a QR whose destination can be changed later while maintaining the same printed QR.
+   430→
+   431→---
+   432→
+   433→# 14. Dynamic QR Architecture
+   434→
+   435→```text
+   436→             QR CODE
+   437→                │
+   438→                ▼
+   439→    qr.yourdomain.com/x8K29
+   440→                │
+   441→                ▼
+   442→        Redirect Service
+   443→                │
+   444→        ┌───────┴────────┐
+   445→        ▼                ▼
+   446→   Record Scan       Resolve URL
+   447→                         │
+   448→                         ▼
+   449→                    Destination
+   450→```
+   451→
+   452→The actual destination should **never be encoded directly** into the dynamic QR.
+   453→
+   454→---
+   455→
+   456→# 15. Dynamic QR Creation
+   457→
+   458→User enters:
+   459→
+   460→### QR Name
+   461→
+   462→```text
+   463→Summer Sale Poster
+   464→```
+   465→
+   466→### Destination
+   467→
+   468→```text
+   469→https://example.com/summer-sale
+   470→```
+   471→
+   472→Then:
+   473→
+   474→**Create Dynamic QR**
+   475→
+   476→System generates:
+   477→
+   478→```text
+   479→https://qr.yourdomain.com/x8K29
+   480→```
+   481→
+   482→That URL is encoded into the QR.
+   483→
+   484→---
+   485→
+   486→# 16. Dynamic QR URL Requirements
+   487→
+   488→The generated identifier must be:
+   489→
+   490→* Unique
+   491→* Non-sequential
+   492→* Unpredictable
+   493→* URL-safe
+   494→* Short enough for practical QR encoding
+   495→
+   496→Example:
+   497→
+   498→```text
+   499→qr.example.com/a8Kx92
+   500→```
+   501→
+   502→Avoid:
+   503→
+   504→```text
+   505→qr.example.com/12345
+   506→```
+   507→
+   508→because predictable identifiers create unnecessary enumeration risk.
+   509→
+   510→---
+   511→
+   512→# 17. Dynamic QR Editing
+   513→
+   514→The user can edit:
+   515→
+   516→### Destination URL
+   517→
+   518→Before:
+   519→
+   520→```text
+   521→https://example.com/offer
+   522→```
+   523→
+   524→After:
+   525→
+   526→```text
+   527→https://example.com/new-offer
+   528→```
+   529→
+   530→The QR image remains unchanged.
+   531→
+   532→---
+   533→
+   534→# 18. Dynamic QR Lifecycle
+   535→
+   536→Each dynamic QR has a state.
+   537→
+   538→```text
+   539→ACTIVE
+   540→   │
+   541→   ├── EDIT
+   542→   │
+   543→   ├── PAUSE
+   544→   │
+   545→   ├── RESUME
+   546→   │
+   547→   └── ARCHIVE
+   548→```
+   549→
+   550→### Active
+   551→
+   552→Redirect works normally.
+   553→
+   554→### Paused
+   555→
+   556→QR displays a configurable fallback message or platform-managed inactive page.
+   557→
+   558→### Archived
+   559→
+   560→QR is no longer actively managed.
+   561→
+   562→---
+   563→
+   564→# 19. Dynamic QR Dashboard
+   565→
+   566→Every dynamic QR gets an overview.
+   567→
+   568→```text
+   569→Summer Sale
+   570→──────────────────────────────
+   571→
+   572→STATUS
+   573→● Active
+   574→
+   575→DESTINATION
+   576→example.com/summer-sale
+   577→
+   578→TOTAL SCANS
+   579→12,842
+   580→
+   581→UNIQUE SCANS
+   582→8,421
+   583→
+   584→CREATED
+   585→03 Sep 2026
+   586→
+   587→LAST SCAN
+   588→03 Sep 2026, 18:42
+   589→```
+   590→
+   591→Actions:
+   592→
+   593→```text
+   594→[ Edit ]
+   595→[ Analytics ]
+   596→[ Download ]
+   597→[ Copy QR URL ]
+   598→[ Pause ]
+   599→```
+   600→
+   601→---
+   602→
+   603→# 20. Analytics Requirements
+   604→
+   605→Analytics are the key differentiator between static and dynamic.
+   606→
+   607→## Required metrics
+   608→
+   609→### Total scans
+   610→
+   611→Every successfully processed scan event.
+   612→
+   613→Example:
+   614→
+   615→```text
+   616→12,842
+   617→Total scans
+   618→```
+   619→
+   620→---
+   621→
+   622→## Unique scans
+   623→
+   624→Estimate distinct scanners using privacy-conscious identification.
+   625→
+   626→Important:
+   627→
+   628→> The system should label this as **unique scanners/visitors estimate**, not claim to know the exact number of unique humans.
+   629→
+   630→---
+   631→
+   632→# 21. Scan Timestamp
+   633→
+   634→Every scan should record:
+   635→
+   636→```text
+   637→2026-09-03 18:42:17
+   638→```
+   639→
+   640→Dashboard should support:
+   641→
+   642→* Today
+   643→* 7 days
+   644→* 30 days
+   645→* 90 days
+   646→* Custom range
+   647→
+   648→---
+   649→
+   650→# 22. Scan Timeline
+   651→
+   652→Example:
+   653→
+   654→```text
+   655→Scans
+   656→
+   657→1500 │
+   658→     │             ╭──╮
+   659→1000 │       ╭─────╯  ╰───╮
+   660→     │  ╭────╯             ╰
+   661→ 500 │──╯
+   662→     │
+   663→     └────────────────────────
+   664→       Mon Tue Wed Thu Fri Sat
+   665→```
+   666→
+   667→Hovering over a point shows:
+   668→
+   669→```text
+   670→September 3
+   671→
+   672→Scans: 1,284
+   673→Unique: 921
+   674→```
+   675→
+   676→---
+   677→
+   678→# 23. Device Analytics
+   679→
+   680→Capture, where reliably available:
+   681→
+   682→* Device category
+   683→* Operating system
+   684→* Browser
+   685→
+   686→Example:
+   687→
+   688→```text
+   689→Device
+   690→
+   691→Android       48%
+   692→iPhone        46%
+   693→Other          6%
+   694→```
+   695→
+   696→---
+   697→
+   698→# 24. Geographic Analytics
+   699→
+   700→Capture approximate geographic information from available request metadata.
+   701→
+   702→### Country
+   703→
+   704→```text
+   705→India       8,421
+   706→USA         1,921
+   707→UK            721
+   708→UAE           412
+   709→```
+   710→
+   711→### City
+   712→
+   713→Where sufficiently reliable:
+   714→
+   715→```text
+   716→Bengaluru
+   717→Mysuru
+   718→Mumbai
+   719→Delhi
+   720→```
+   721→
+   722→The UI must clearly state:
+   723→
+   724→> Location is approximate and may be inferred from network information.
+   725→
+   726→Do not claim GPS-level accuracy.
+   727→
+   728→---
+   729→
+   730→# 25. Time Analytics
+   731→
+   732→Display:
+   733→
+   734→### Scans by hour
+   735→
+   736→```text
+   737→12 AM
+   738→ 2 AM
+   739→ 4 AM
+   740→ 6 AM
+   741→ 8 AM
+   742→10 AM
+   743→12 PM
+   744→ 2 PM
+   745→ 4 PM
+   746→ 6 PM
+   747→ 8 PM
+   748→10 PM
+   749→```
+   750→
+   751→And:
+   752→
+   753→> **Peak scanning period: 6 PM–9 PM**
+   754→
+   755→---
+   756→
+   757→# 26. Referrer Analytics
+   758→
+   759→Where available, capture the referring source.
+   760→
+   761→Examples:
+   762→
+   763→```text
+   764→Direct             5,421
+   765→Google               821
+   766→Instagram            421
+   767→Other                 98
+   768→```
+   769→
+   770→However, don't assume referrer data is always present.
+   771→
+   772→---
+   773→
+   774→# 27. Scan Event Model
+   775→
+   776→Conceptually:
+   777→
+   778→```text
+   779→scan_event
+   780→──────────
+   781→id
+   782→qr_id
+   783→timestamp
+   784→country
+   785→region
+   786→city
+   787→device_type
+   788→os
+   789→browser
+   790→referrer
+   791→user_agent
+   792→ip_hash
+   793→```
+   794→
+   795→Avoid storing raw IP indefinitely.
+   796→
+   797→---
+   798→
+   799→# 28. Privacy Requirements
+   800→
+   801→This is important.
+   802→
+   803→The platform should implement:
+   804→
+   805→### Data minimization
+   806→
+   807→Only collect analytics necessary for the feature.
+   808→
+   809→### IP handling
+   810→
+   811→Prefer:
+   812→
+   813→```text
+   814→IP
+   815→ ↓
+   816→derive approximate location
+   817→ ↓
+   818→hash/anonymize
+   819→ ↓
+   820→discard or limit retention
+   821→```
+   822→
+   823→### Retention
+   824→
+   825→Allow configurable retention eventually.
+   826→
+   827→For MVP:
+   828→
+   829→```text
+   830→Analytics retention: 12 months
+   831→```
+   832→
+   833→can be a reasonable starting policy, but this should be reviewed legally for your target markets.
+   834→
+   835→---
+   836→
+   837→# 29. Edit History
+   838→
+   839→Every dynamic QR must have an audit trail.
+   840→
+   841→Example:
+   842→
+   843→```text
+   844→ACTIVITY
+   845→
+   846→Sep 03, 18:42
+   847→Destination changed
+   848→
+   849→Previous:
+   850→example.com/offer
+   851→
+   852→New:
+   853→example.com/summer-sale
+   854→
+   855→By:
+   856→Va Mu
+   857→```
+   858→
+   859→---
+   860→
+   861→# 30. Versioning
+   862→
+   863→Every destination update creates a version.
+   864→
+   865→```text
+   866→Version 1
+   867→example.com/offer
+   868→
+   869→Version 2
+   870→example.com/summer-sale
+   871→
+   872→Version 3
+   873→example.com/sale-final
+   874→```
+   875→
+   876→Current:
+   877→
+   878→**Version 3**
+   879→
+   880→---
+   881→
+   882→# 31. Restore Version
+   883→
+   884→User can select:
+   885→
+   886→```text
+   887→Version 2
+   888→
+   889→[ Restore ]
+   890→```
+   891→
+   892→System creates a **new version**, rather than deleting history.
+   893→
+   894→For example:
+   895→
+   896→```text
+   897→V1
+   898→V2
+   899→V3
+   900→V4 ← restored V2
+   901→```
+   902→
+   903→This preserves an immutable audit trail.
+   904→
+   905→---
+   906→
+   907→# 32. Design History
+   908→
+   909→If QR visual customization is editable, design changes should also be tracked.
+   910→
+   911→Example:
+   912→
+   913→```text
+   914→18:32
+   915→Logo changed
+   916→
+   917→17:42
+   918→Foreground color changed
+   919→
+   920→16:21
+   921→Frame changed
+   922→```
+   923→
+   924→---
+   925→
+   926→# 33. QR Analytics vs QR Editing
+   927→
+   928→Keep these as separate concepts.
+   929→
+   930→### Analytics
+   931→
+   932→Answers:
+   933→
+   934→> **What happened?**
+   935→
+   936→### Activity
+   937→
+   938→Answers:
+   939→
+   940→> **What changed?**
+   941→
+   942→This distinction should be reflected in the UI.
+   943→
+   944→---
+   945→
+   946→# 34. Dynamic QR Analytics Page
+   947→
+   948→Recommended layout:
+   949→
+   950→```text
+   951→┌─────────────────────────────────────────────────────┐
+   952→│ Summer Sale                              ● ACTIVE   │
+   953→│                                                     │
+   954→│ [Edit] [Download] [Copy Link] [Pause]              │
+   955→├─────────────────────────────────────────────────────┤
+   956→│                                                     │
+   957→│ 12,842          8,421          +23%                 │
+   958→│ Total scans    Unique         Growth                │
+   959→│                                                     │
+   960→├─────────────────────────────────────────────────────┤
+   961→│                                                     │
+   962→│ SCAN ACTIVITY                                       │
+   963→│                                                     │
+   964→│       ╭────────────╮                                │
+   965→│   ╭───╯            ╰────╮                           │
+   966→│ ──╯                      ╰──                        │
+   967→│                                                     │
+   968→├──────────────────────────┬──────────────────────────┤
+   969→│ DEVICE                   │ LOCATION                 │
+   970→│                          │                          │
+   971→│ Android 48%             │ India  65%              │
+   972→│ iPhone  46%             │ USA    15%              │
+   973→│ Other    6%             │ UK      7%              │
+   974→├──────────────────────────┴──────────────────────────┤
+   975→│                                                     │
+   976→│ ACTIVITY HISTORY                                    │
+   977→│                                                     │
+   978→│ 18:32 Destination changed                           │
+   979→│ 17:42 QR design changed                             │
+   980→│ 16:21 QR created                                    │
+   981→└─────────────────────────────────────────────────────┘
+   982→```
+   983→
+   984→---
+   985→
+   986→# 35. QR Builder UX
+   987→
+   988→The builder should be the central experience.
+   989→
+   990→## Step 1
+   991→
+   992→### Choose QR type
+   993→
+   994→```text
+   995→┌───────────────────────────────┐
+   996→│                               │
+   997→│       Create QR Code          │
+   998→│                               │
+   999→│   ○ Static                    │
+  1000→│   ○ Dynamic                   │
+  1001→│                               │
+  1002→└───────────────────────────────┘
+  1003→```
+  1004→
+  1005→---
+  1006→
+  1007→# 36. Step 2 — Content
+  1008→
+  1009→Static:
+  1010→
+  1011→```text
+  1012→CONTENT
+  1013→
+  1014→┌─────────────────────────────┐
+  1015→│ Enter URL or any text...   │
+  1016→└─────────────────────────────┘
+  1017→```
+  1018→
+  1019→Dynamic:
+  1020→
+  1021→```text
+  1022→QR NAME
+  1023→
+  1024→┌─────────────────────────────┐
+  1025→│ Summer Sale Poster          │
+  1026→└─────────────────────────────┘
+  1027→
+  1028→DESTINATION
+  1029→
+  1030→┌─────────────────────────────┐
+  1031→│ https://example.com/sale    │
+  1032→└─────────────────────────────┘
+  1033→```
+  1034→
+  1035→---
+  1036→
+  1037→# 37. Step 3 — Design
+  1038→
+  1039→Use a two-column layout.
+  1040→
+  1041→```text
+  1042→┌─────────────────┬────────────────────────────┐
+  1043→│                 │                            │
+  1044→│   DESIGN        │          QR PREVIEW        │
+  1045→│                 │                            │
+  1046→│ Color           │                            │
+  1047→│ [████████]      │         ████████           │
+  1048→│                 │         ██    ██           │
+  1049→│ Pattern         │         ██ QR ██           │
+  1050→│ [Rounded ▼]     │         ██    ██           │
+  1051→│                 │         ████████           │
+  1052→│ Logo            │                            │
+  1053→│ [Upload]        │                            │
+  1054→│                 │                            │
+  1055→│ Frame           │                            │
+  1056→│ [Classic ▼]     │                            │
+  1057→└─────────────────┴────────────────────────────┘
+  1058→```
+  1059→
+  1060→Preview should update instantly.
+  1061→
+  1062→---
+  1063→
+  1064→# 38. Step 4 — Validate
+  1065→
+  1066→Before generating:
+  1067→
+  1068→```text
+  1069→SCAN TEST
+  1070→
+  1071→✓ Content valid
+  1072→✓ Contrast acceptable
+  1073→✓ Quiet zone acceptable
+  1074→✓ Error correction acceptable
+  1075→✓ Logo size acceptable
+  1076→```
+  1077→
+  1078→If problematic:
+  1079→
+  1080→```text
+  1081→⚠ QR may be difficult to scan.
+  1082→
+  1083→Increase contrast or reduce logo size.
+  1084→```
+  1085→
+  1086→---
+  1087→
+  1088→# 39. Step 5 — Generate
+  1089→
+  1090→For static:
+  1091→
+  1092→```text
+  1093→✓ Static QR created
+  1094→
+  1095→[Download PNG]
+  1096→[Download SVG]
+  1097→```
+  1098→
+  1099→For dynamic:
+  1100→
+  1101→```text
+  1102→✓ Dynamic QR created
+  1103→
+  1104→Your QR URL:
+  1105→
+  1106→qr.yourdomain.com/a8K29
+  1107→
+  1108→[Download PNG]
+  1109→[Download SVG]
+  1110→[Open Analytics]
+  1111→```
+  1112→
+  1113→---
+  1114→
+  1115→# 40. Homepage
+  1116→
+  1117→The homepage should communicate the distinction immediately.
+  1118→
+  1119→```text
+  1120→              CREATE YOUR QR
+  1121→
+  1122→     Simple QR codes. Powerful tracking.
+  1123→
+  1124→        ┌───────────────┐
+  1125→        │ STATIC QR     │
+  1126→        │               │
+  1127→        │ Generate once │
+  1128→        │ No tracking   │
+  1129→        │               │
+  1130→        │ [Create]      │
+  1131→        └───────────────┘
+  1132→
+  1133→        ┌───────────────┐
+  1134→        │ DYNAMIC QR    │
+  1135→        │               │
+  1136→        │ Edit anytime  │
+  1137→        │ Track scans   │
+  1138→        │               │
+  1139→        │ [Create]      │
+  1140→        └───────────────┘
+  1141→```
+  1142→
+  1143→---
+  1144→
+  1145→# 41. User Account
+  1146→
+  1147→Dynamic QR requires an account because the user needs persistent management.
+  1148→
+  1149→Required:
+  1150→
+  1151→* Email/password or passwordless authentication
+  1152→* Email verification
+  1153→* Password reset
+  1154→* Session management
+  1155→
+  1156→Social login can be added later.
+  1157→
+  1158→---
+  1159→
+  1160→# 42. Dashboard Navigation
+  1161→
+  1162→Keep it minimal.
+  1163→
+  1164→```text
+  1165→Dashboard
+  1166→│
+  1167→├── QR Codes
+  1168→│
+  1169→├── Create QR
+  1170→│
+  1171→├── Analytics
+  1172→│
+  1173→└── Settings
+  1174→```
+  1175→
+  1176→Don't introduce unnecessary navigation.
+  1177→
+  1178→---
+  1179→
+  1180→# 43. QR List
+  1181→
+  1182→```text
+  1183→QR CODE                 TYPE       SCANS      STATUS
+  1184→
+  1185→Summer Sale             Dynamic    12,842     ● Active
+  1186→Website                 Static     —          —
+  1187→Restaurant              Dynamic     8,421     ● Active
+  1188→Business Card           Static     —          —
+  1189→```
+  1190→
+  1191→Search:
+  1192→
+  1193→```text
+  1194→Search QR codes...
+  1195→```
+  1196→
+  1197→Filters:
+  1198→
+  1199→* Static
+  1200→* Dynamic
+  1201→* Active
+  1202→* Paused
+  1203→
+  1204→---
+  1205→
+  1206→# 44. QR Naming
+  1207→
+  1208→Dynamic QR names should be required.
+  1209→
+  1210→Examples:
+  1211→
+  1212→```text
+  1213→Summer Sale Poster
+  1214→Restaurant Table 01
+  1215→Product Package A
+  1216→Instagram Campaign
+  1217→```
+  1218→
+  1219→Static QR names can be optional if accounts are supported.
+  1220→
+  1221→---
+  1222→
+  1223→# 45. Download Requirements
+  1224→
+  1225→Downloads must preserve the configured design.
+  1226→
+  1227→### PNG
+  1228→
+  1229→Suitable for:
+  1230→
+  1231→* Digital
+  1232→* Social
+  1233→* Basic print
+  1234→
+  1235→### SVG
+  1236→
+  1237→Preferred for:
+  1238→
+  1239→* Professional printing
+  1240→* Large-format applications
+  1241→
+  1242→The system should generate QR assets with sufficient resolution and preserve the quiet zone.
+  1243→
+  1244→---
+  1245→
+  1246→# 46. QR Scannability
+  1247→
+  1248→This is a **critical non-functional requirement**.
+  1249→
+  1250→The platform must prioritize:
+  1251→
+  1252→> **Scan reliability over visual customization.**
+  1253→
+  1254→Implement:
+  1255→
+  1256→* QR error correction
+  1257→* Contrast validation
+  1258→* Quiet zone enforcement
+  1259→* Logo-size limits/warnings
+  1260→* Encoding validation
+  1261→
+  1262→Do not allow a beautiful QR to become unusable.
+  1263→
+  1264→---
+  1265→
+  1266→# 47. Dynamic Redirect Performance
+  1267→
+  1268→This is another critical requirement.
+  1269→
+  1270→When a user scans:
+  1271→
+  1272→```text
+  1273→QR
+  1274→ ↓
+  1275→Dynamic redirect
+  1276→ ↓
+  1277→Destination
+  1278→```
+  1279→
+  1280→the redirect service must add minimal latency.
+  1281→
+  1282→Target:
+  1283→
+  1284→> **p95 redirect processing < 150 ms**, excluding network latency outside your infrastructure.
+  1285→
+  1286→Analytics should not block the redirect unnecessarily.
+  1287→
+  1288→Preferred architecture:
+  1289→
+  1290→```text
+  1291→Scan
+  1292→ │
+  1293→ ├────► Event queue
+  1294→ │
+  1295→ └────► Resolve destination
+  1296→             │
+  1297→             ▼
+  1298→          Redirect
+  1299→```
+  1300→
+  1301→---
+  1302→
+  1303→# 48. Analytics Architecture
+  1304→
+  1305→Don't make analytics processing part of the critical redirect path.
+  1306→
+  1307→```text
+  1308→                 SCAN
+  1309→                   │
+  1310→                   ▼
+  1311→             Redirect API
+  1312→              /         \
+  1313→             /           \
+  1314→            ▼             ▼
+  1315→      Event Queue      Destination
+  1316→            │
+  1317→            ▼
+  1318→      Analytics Worker
+  1319→            │
+  1320→            ▼
+  1321→        PostgreSQL
+  1322→```
+  1323→
+  1324→This makes the system faster and more resilient.
+  1325→
+  1326→---
+  1327→
+  1328→# 49. Recommended Technical Architecture
+  1329→
+  1330→For the initial production version:
+  1331→
+  1332→```text
+  1333→Frontend
+  1334→────────
+  1335→Next.js
+  1336→TypeScript
+  1337→Tailwind CSS
+  1338→shadcn/ui
+  1339→
+  1340→Backend
+  1341→───────
+  1342→Next.js API / NestJS
+  1343→
+  1344→Database
+  1345→────────
+  1346→PostgreSQL
+  1347→
+  1348→ORM
+  1349→───
+  1350→Prisma
+  1351→
+  1352→Cache / Queue
+  1353→─────────────
+  1354→Redis
+  1355→
+  1356→Storage
+  1357→───────
+  1358→S3-compatible object storage
+  1359→
+  1360→Authentication
+  1361→──────────────
+  1362→Secure session-based auth
+  1363→
+  1364→QR Engine
+  1365→─────────
+  1366→QR generation library supporting
+  1367→SVG + PNG + error correction
+  1368→```
+  1369→
+  1370→You don't necessarily need microservices.
+  1371→
+  1372→---
+  1373→
+  1374→# 50. Recommended System Architecture
+  1375→
+  1376→```text
+  1377→                         INTERNET
+  1378→                             │
+  1379→                             ▼
+  1380→                     ┌─────────────┐
+  1381→                     │ CDN / WAF   │
+  1382→                     └──────┬──────┘
+  1383→                            │
+  1384→             ┌──────────────┴──────────────┐
+  1385→             │                             │
+  1386→             ▼                             ▼
+  1387→       Web Application               Redirect API
+  1388→             │                             │
+  1389→             ▼                             ▼
+  1390→        Application API                Redis
+  1391→             │                             │
+  1392→             │                             ▼
+  1393→             │                         Event Queue
+  1394→             │                             │
+  1395→             ▼                             ▼
+  1396→        PostgreSQL                  Analytics Worker
+  1397→             │                             │
+  1398→             └──────────────┬──────────────┘
+  1399→                            ▼
+  1400→                       Analytics DB
+  1401→```
+  1402→
+  1403→For an MVP, PostgreSQL can handle both application and analytics data. You can introduce a dedicated analytics store later if volume demands it.
+  1404→
+  1405→---
+  1406→
+  1407→# 51. Database Schema
+  1408→
+  1409→A production-oriented simplified schema:
+  1410→
+  1411→```text
+  1412→users
+  1413→─────
+  1414→id
+  1415→email
+  1416→name
+  1417→password_hash
+  1418→email_verified_at
+  1419→created_at
+  1420→updated_at
+  1421→
+  1422→
+  1423→qr_codes
+  1424→────────
+  1425→id
+  1426→user_id
+  1427→type
+  1428→name
+  1429→slug
+  1430→status
+  1431→created_at
+  1432→updated_at
+  1433→
+  1434→
+  1435→qr_destinations
+  1436→───────────────
+  1437→id
+  1438→qr_id
+  1439→url
+  1440→version
+  1441→is_current
+  1442→created_by
+  1443→created_at
+  1444→
+  1445→
+  1446→qr_designs
+  1447→──────────
+  1448→id
+  1449→qr_id
+  1450→version
+  1451→config
+  1452→created_by
+  1453→created_at
+  1454→
+  1455→
+  1456→scan_events
+  1457→───────────
+  1458→id
+  1459→qr_id
+  1460→timestamp
+  1461→country
+  1462→region
+  1463→city
+  1464→device_type
+  1465→os
+  1466→browser
+  1467→referrer
+  1468→ip_hash
+  1469→
+  1470→
+  1471→activity_logs
+  1472→────────────
+  1473→id
+  1474→user_id
+  1475→qr_id
+  1476→action
+  1477→metadata
+  1478→created_at
+  1479→```
+  1480→
+  1481→---
+  1482→
+  1483→# 52. Important Database Rule
+  1484→
+  1485→Never overwrite important historical information.
+  1486→
+  1487→Bad:
+  1488→
+  1489→```text
+  1490→qr.destination = new_url
+  1491→```
+  1492→
+  1493→with no history.
+  1494→
+  1495→Better:
+  1496→
+  1497→```text
+  1498→qr_destinations
+  1499→
+  1500→V1 → old URL
+  1501→V2 → new URL
+  1502→V3 → another URL
+  1503→```
+  1504→
+  1505→Current destination points to V3.
+  1506→
+  1507→This enables auditability.
+  1508→
+  1509→---
+  1510→
+  1511→# 53. Security Requirements
+  1512→
+  1513→## Authentication
+  1514→
+  1515→* Secure password hashing
+  1516→* Session expiration
+  1517→* Secure cookies
+  1518→* CSRF protection where applicable
+  1519→* Email verification
+  1520→* Password reset tokens
+  1521→* Login rate limiting
+  1522→
+  1523→---
+  1524→
+  1525→# 54. Dynamic Redirect Security
+  1526→
+  1527→This is extremely important.
+  1528→
+  1529→Because your infrastructure will effectively host:
+  1530→
+  1531→```text
+  1532→qr.yourdomain.com/*
+  1533→```
+  1534→
+  1535→you must prevent abuse.
+  1536→
+  1537→Implement:
+  1538→
+  1539→### URL validation
+  1540→
+  1541→Accept:
+  1542→
+  1543→```text
+  1544→https://example.com
+  1545→```
+  1546→
+  1547→Reject:
+  1548→
+  1549→```text
+  1550→javascript:...
+  1551→data:...
+  1552→file:...
+  1553→```
+  1554→
+  1555→and other unsafe schemes.
+  1556→
+  1557→### HTTPS preference
+  1558→
+  1559→Warn or restrict HTTP destinations depending on product policy.
+  1560→
+  1561→### Abuse detection
+  1562→
+  1563→Monitor:
+  1564→
+  1565→* suspicious domains
+  1566→* phishing URLs
+  1567→* malware indicators
+  1568→* excessive QR creation
+  1569→* unusual redirect activity
+  1570→
+  1571→---
+  1572→
+  1573→# 55. SSRF Protection
+  1574→
+  1575→The backend must **not blindly fetch arbitrary user URLs**.
+  1576→
+  1577→For example, if you implement URL metadata previews or destination verification, protect against:
+  1578→
+  1579→```text
+  1580→localhost
+  1581→127.0.0.1
+  1582→private IP ranges
+  1583→cloud metadata endpoints
+  1584→internal services
+  1585→```
+  1586→
+  1587→This is especially important if your server ever performs outbound HTTP requests based on user input.
+  1588→
+  1589→---
+  1590→
+  1591→# 56. Rate Limiting
+  1592→
+  1593→Apply rate limits to:
+  1594→
+  1595→### Authentication
+  1596→
+  1597→```text
+  1598→Login attempts
+  1599→Password reset
+  1600→```
+  1601→
+  1602→### QR creation
+  1603→
+  1604→Prevent automated abuse.
+  1605→
+  1606→### Dynamic redirects
+  1607→
+  1608→Protect infrastructure from abuse.
+  1609→
+  1610→### Analytics endpoints
+  1611→
+  1612→Prevent scraping.
+  1613→
+  1614→---
+  1615→
+  1616→# 57. Abuse Reporting
+  1617→
+  1618→Provide:
+  1619→
+  1620→**Report QR**
+  1621→
+  1622→for publicly accessible dynamic QR URLs.
+  1623→
+  1624→Possible reasons:
+  1625→
+  1626→* Phishing
+  1627→* Malware
+  1628→* Scam
+  1629→* Spam
+  1630→* Illegal content
+  1631→* Other abuse
+  1632→
+  1633→This is important for protecting your redirect domain.
+  1634→
+  1635→---
+  1636→
+  1637→# 58. Reliability Requirements
+  1638→
+  1639→### Availability
+  1640→
+  1641→Target:
+  1642→
+  1643→**99.9% uptime** for the redirect service.
+  1644→
+  1645→### Backups
+  1646→
+  1647→Database:
+  1648→
+  1649→* Daily full backup
+  1650→* Point-in-time recovery where supported
+  1651→
+  1652→### Monitoring
+  1653→
+  1654→Monitor:
+  1655→
+  1656→* Redirect latency
+  1657→* Redirect failures
+  1658→* Database health
+  1659→* Queue failures
+  1660→* QR generation failures
+  1661→* Scan ingestion failures
+  1662→
+  1663→---
+  1664→
+  1665→# 59. Failure Handling
+  1666→
+  1667→If analytics infrastructure is temporarily unavailable:
+  1668→
+  1669→```text
+  1670→SCAN
+  1671→ ↓
+  1672→Analytics unavailable
+  1673→ ↓
+  1674→REDIRECT MUST STILL WORK
+  1675→```
+  1676→
+  1677→Analytics failure should **not cause the customer's QR destination to fail**.
+  1678→
+  1679→This should be a hard architectural requirement.
+  1680→
+  1681→---
+  1682→
+  1683→# 60. Dynamic QR Failure Page
+  1684→
+  1685→If the QR is:
+  1686→
+  1687→### Paused
+  1688→
+  1689→Show:
+  1690→
+  1691→> This QR code is temporarily unavailable.
+  1692→
+  1693→### Deleted/archived
+  1694→
+  1695→Show:
+  1696→
+  1697→> This QR code is no longer active.
+  1698→
+  1699→### Destination invalid
+  1700→
+  1701→Show:
+  1702→
+  1703→> The destination is temporarily unavailable.
+  1704→
+  1705→Never expose:
+  1706→
+  1707→* stack traces
+  1708→* database errors
+  1709→* internal IDs
+  1710→* server information
+  1711→
+  1712→---
+  1713→
+  1714→# 61. Analytics Data Quality
+  1715→
+  1716→The system should distinguish:
+  1717→
+  1718→### Scan request
+  1719→
+  1720→A request reached the redirect service.
+  1721→
+  1722→### Successful redirect
+  1723→
+  1724→The destination was resolved and redirect returned.
+  1725→
+  1726→### Unique scanner estimate
+  1727→
+  1728→An analytics-derived approximation.
+  1729→
+  1730→Don't present these as identical metrics.
+  1731→
+  1732→---
+  1733→
+  1734→# 62. Bot Detection
+  1735→
+  1736→The analytics engine should attempt to filter obvious:
+  1737→
+  1738→* Crawlers
+  1739→* Monitoring bots
+  1740→* Security scanners
+  1741→* Automated requests
+  1742→
+  1743→Otherwise users may see:
+  1744→
+  1745→```text
+  1746→1,000 scans
+  1747→```
+  1748→
+  1749→when much of the traffic is automated.
+  1750→
+  1751→Create:
+  1752→
+  1753→```text
+  1754→raw_events
+  1755→```
+  1756→
+  1757→and:
+  1758→
+  1759→```text
+  1760→analytics_events
+  1761→```
+  1762→
+  1763→where filtering occurs.
+  1764→
+  1765→---
+  1766→
+  1767→# 63. Analytics Dashboard Filters
+  1768→
+  1769→Required:
+  1770→
+  1771→### Time
+  1772→
+  1773→* Today
+  1774→* 7 days
+  1775→* 30 days
+  1776→* 90 days
+  1777→* Custom
+  1778→
+  1779→### Metrics
+  1780→
+  1781→* Total
+  1782→* Unique
+  1783→
+  1784→### Dimensions
+  1785→
+  1786→* Country
+  1787→* City
+  1788→* Device
+  1789→* OS
+  1790→* Browser
+  1791→
+  1792→---
+  1793→
+  1794→# 64. Analytics Export
+  1795→
+  1796→This is a high-value feature even in V1.
+  1797→
+  1798→Allow:
+  1799→
+  1800→**Export CSV**
+  1801→
+  1802→Example:
+  1803→
+  1804→```text
+  1805→timestamp,country,city,device,os,browser
+  1806→2026-09-03 18:42,India,Mysuru,Mobile,Android,Chrome
+  1807→```
+  1808→
+  1809→Don't overbuild PDF reports initially.
+  1810→
+  1811→---
+  1812→
+  1813→# 65. Static vs Dynamic Comparison
+  1814→
+  1815→The UI should make the distinction extremely clear.
+  1816→
+  1817→| Capability              | Static | Dynamic |
+  1818→| ----------------------- | -----: | ------: |
+  1819→| Generate QR             |      ✓ |       ✓ |
+  1820→| Encode URL/text         |      ✓ |       ✓ |
+  1821→| Customize               |      ✓ |       ✓ |
+  1822→| PNG                     |      ✓ |       ✓ |
+  1823→| SVG                     |      ✓ |       ✓ |
+  1824→| Edit destination        |      ✕ |       ✓ |
+  1825→| Scan analytics          |      ✕ |       ✓ |
+  1826→| Unique scan estimate    |      ✕ |       ✓ |
+  1827→| Device analytics        |      ✕ |       ✓ |
+  1828→| Location analytics      |      ✕ |       ✓ |
+  1829→| Activity history        |      ✕ |       ✓ |
+  1830→| Version history         |      ✕ |       ✓ |
+  1831→| Pause                   |      ✕ |       ✓ |
+  1832→| Redirect infrastructure |      ✕ |       ✓ |
+  1833→
+  1834→This table effectively defines your product.
+  1835→
+  1836→---
+  1837→
+  1838→# 66. UX Principles
+  1839→
+  1840→## Principle 1 — One screen whenever possible
+  1841→
+  1842→Don't make users navigate five pages to create a QR.
+  1843→
+  1844→## Principle 2 — Preview immediately
+  1845→
+  1846→Every design change should appear instantly.
+  1847→
+  1848→## Principle 3 — Explain Static vs Dynamic
+  1849→
+  1850→Users should understand what they're buying/using.
+  1851→
+  1852→## Principle 4 — Never sacrifice scan reliability
+  1853→
+  1854→Visual customization comes second.
+  1855→
+  1856→## Principle 5 — Analytics must be understandable
+  1857→
+  1858→Don't dump raw technical information on users.
+  1859→
+  1860→---
+  1861→
+  1862→# 67. Accessibility
+  1863→
+  1864→The application should target:
+  1865→
+  1866→**WCAG 2.2 AA**
+  1867→
+  1868→Requirements include:
+  1869→
+  1870→* Keyboard navigation
+  1871→* Visible focus states
+  1872→* Screen-reader labels
+  1873→* Proper form labels
+  1874→* Sufficient UI contrast
+  1875→* Accessible charts
+  1876→* Accessible modal dialogs
+  1877→* Error messages associated with fields
+  1878→* Don't use color as the only status indicator
+  1879→
+  1880→---
+  1881→
+  1882→# 68. Responsive Design
+  1883→
+  1884→The application must work on:
+  1885→
+  1886→### Desktop
+  1887→
+  1888→Primary dashboard experience.
+  1889→
+  1890→### Tablet
+  1891→
+  1892→Builder and analytics usable.
+  1893→
+  1894→### Mobile
+  1895→
+  1896→Users should be able to:
+  1897→
+  1898→* Create QR
+  1899→* Edit dynamic QR
+  1900→* View basic analytics
+  1901→* Download/share QR
+  1902→
+  1903→The QR preview should never become unusably small.
+  1904→
+  1905→---
+  1906→
+  1907→# 69. Performance
+  1908→
+  1909→### Public redirect
+  1910→
+  1911→Highest priority.
+  1912→
+  1913→Target:
+  1914→
+  1915→**p95 application processing <150ms**
+  1916→
+  1917→### Dashboard
+  1918→
+  1919→Target:
+  1920→
+  1921→**LCP <2.5 seconds** under reasonable conditions.
+  1922→
+  1923→### QR generation
+  1924→
+  1925→Target:
+  1926→
+  1927→**<1 second** for normal QR generation.
+  1928→
+  1929→---
+  1930→
+  1931→# 70. SEO
+  1932→
+  1933→Public marketing pages should target:
+  1934→
+  1935→* QR code generator
+  1936→* Static QR code generator
+  1937→* Dynamic QR code generator
+  1938→* QR code analytics
+  1939→* Editable QR code
+  1940→* Trackable QR code
+  1941→* Free QR generator
+  1942→
+  1943→But the actual logged-in application should not depend on SEO.
+  1944→
+  1945→---
+  1946→
+  1947→# 71. Monetization
+  1948→
+  1949→You can postpone billing until the product is validated.
+  1950→
+  1951→Potential model:
+  1952→
+  1953→### Free
+  1954→
+  1955→Static:
+  1956→
+  1957→Unlimited or generous usage.
+  1958→
+  1959→Dynamic:
+  1960→
+  1961→Limited number of active dynamic QRs.
+  1962→
+  1963→### Pro
+  1964→
+  1965→More:
+  1966→
+  1967→* Dynamic QR codes
+  1968→* Analytics history
+  1969→* CSV export
+  1970→* Advanced customization
+  1971→* Higher limits
+  1972→
+  1973→### Business
+  1974→
+  1975→Later:
+  1976→
+  1977→* More QR codes
+  1978→* Longer analytics retention
+  1979→* Teams
+  1980→* Custom domains
+  1981→* API
+  1982→
+  1983→Don't put artificial limits on basic QR generation merely to force upgrades.
+  1984→
+  1985→The **dynamic infrastructure and analytics** are what should drive monetization.
+  1986→
+  1987→---
+  1988→
+  1989→# 72. MVP Definition
+  1990→
+  1991→Your true MVP should contain:
+  1992→
+  1993→## Static
+  1994→
+  1995→* Create
+  1996→* URL/text input
+  1997→* Customize
+  1998→* Preview
+  1999→* PNG
+  2000→* SVG
+
+[showing lines 1-2000 of 2486; use offset=2001 with limit to continue reading]

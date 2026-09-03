@@ -1,0 +1,2002 @@
+     1→     1→Below is a complete `design.md` you can place directly into the project. It combines the **product design direction**, the **two-feature scope**, and the **exact ThreeUI integration requirement** into one implementation-ready design specification.
+     2→     2→
+     3→     3→````md
+     4→     4→# QR Platform — Design Specification
+     5→     5→
+     6→     6→Version: 1.0
+     7→     7→Status: Implementation Ready
+     8→     8→
+     9→     9→---
+    10→    10→
+    11→    11→# 1. Product
+    12→    12→
+    13→    13→A focused QR platform with exactly two core product features:
+    14→    14→
+    15→    15→1. Static QR
+    16→    16→2. Dynamic QR
+    17→    17→
+    18→    18→The product should feel like a tactile editorial design studio rather than a generic SaaS dashboard.
+    19→    19→
+    20→    20→Core product promise:
+    21→    21→
+    22→    22→> Static QR — Encode once.
+    23→    23→>
+    24→    24→> Dynamic QR — Change anytime. Measure every scan.
+    25→    25→
+    26→    26→The application must prioritize:
+    27→    27→
+    28→    28→- Simplicity
+    29→    29→- Scan reliability
+    30→    30→- Beautiful QR output
+    31→    31→- Fast creation
+    32→    32→- Dynamic destination editing
+    33→    33→- Useful scan analytics
+    34→    34→- Version history
+    35→    35→- Security
+    36→    36→- Responsive behavior
+    37→    37→
+    38→    38→Do NOT expand the product into a large QR marketplace or marketing automation platform.
+    39→    39→
+    40→    40→---
+    41→    41→
+    42→    42→# 2. Design Direction
+    43→    43→
+    44→    44→The frontend visual language is inspired by the supplied ThreeUI
+    45→    45→`MengToSketchbookLandingPage` implementation.
+    46→    46→
+    47→    47→The reference provides:
+    48→    48→
+    49→    49→- Tactile sketchbook atmosphere
+    50→    50→- Editorial typography
+    51→    51→- Botanical/paper visual texture
+    52→    52→- Illustrated surfaces
+    53→    53→- Layered compositions
+    54→    54→- Page-turn interactions
+    55→    55→- Subtle motion
+    56→    56→- Hand-crafted visual character
+    57→    57→- Strong editorial hierarchy
+    58→    58→- Responsive interactions
+    59→    59→
+    60→    60→However:
+    61→    61→
+    62→    62→IMPORTANT:
+    63→    63→
+    64→    64→Do not copy the Singapore portfolio's content, text, information
+    65→    65→architecture, or portfolio semantics.
+    66→    66→
+    67→    67→Use the supplied implementation as the exact visual/interaction
+    68→    68→foundation where applicable and transform the experience into a QR
+    69→    69→creation and analytics product.
+    70→    70→
+    71→    71→The result should feel like:
+    72→    72→
+    73→    73→> An editorial QR design studio.
+    74→    74→
+    75→    75→Not:
+    76→    76→
+    77→    77→> A generic admin dashboard.
+    78→    78→
+    79→    79→---
+    80→    80→
+    81→    81→# 3. Design Personality
+    82→    82→
+    83→    83→## Tone
+    84→    84→
+    85→    85→- Quiet
+    86→    86→- Tactile
+    87→    87→- Premium
+    88→    88→- Editorial
+    89→    89→- Intelligent
+    90→    90→- Minimal
+    91→    91→- Human
+    92→    92→- Slightly experimental
+    93→    93→
+    94→    94→## Visual characteristics
+    95→    95→
+    96→    96→Use:
+    97→    97→
+    98→    98→- Warm paper surfaces
+    99→    99→- Ink-like typography
+   100→   100→- Muted botanical tones
+   101→   101→- Thin borders
+   102→   102→- Editorial rules
+   103→   103→- Subtle texture
+   104→   104→- Organic spacing
+   105→   105→- Soft shadows
+   106→   106→- Slightly imperfect visual details
+   107→   107→- Illustrated accents
+   108→   108→- Restrained animation
+   109→   109→
+   110→   110→Avoid:
+   111→   111→
+   112→   112→- Neon gradients
+   113→   113→- Excessive glassmorphism
+   114→   114→- Generic blue SaaS UI
+   115→   115→- Excessive cards
+   116→   116→- Heavy drop shadows
+   117→   117→- Overly rounded UI
+   118→   118→- Loud dashboards
+   119→   119→- Excessive animations
+   120→   120→- Decorative elements that interfere with usability
+   121→   121→
+   122→   122→---
+   123→   123→
+   124→   124→# 4. Core Product Structure
+   125→   125→
+   126→   126→The application contains only two QR creation modes.
+   127→   127→
+   128→   128→```text
+   129→   129→QR PLATFORM
+   130→   130→│
+   131→   131→├── STATIC QR
+   132→   132→│   ├── Content
+   133→   133→│   ├── Design
+   134→   134→│   ├── Preview
+   135→   135→│   └── Download
+   136→   136→│
+   137→   137→└── DYNAMIC QR
+   138→   138→    ├── Content
+   139→   139→    ├── Design
+   140→   140→    ├── Preview
+   141→   141→    ├── Publish
+   142→   142→    ├── Analytics
+   143→   143→    └── Version History
+   144→   144→````
+   145→   145→
+   146→   146→---
+   147→   147→
+   148→   148→# 5. Static QR Definition
+   149→   149→
+   150→   150→Static QR encodes the supplied content directly into the QR.
+   151→   151→
+   152→   152→Example:
+   153→   153→
+   154→   154→```text
+   155→   155→User input
+   156→   156→    ↓
+   157→   157→https://example.com
+   158→   158→    ↓
+   159→   159→QR encoding
+   160→   160→    ↓
+   161→   161→Static QR
+   162→   162→```
+   163→   163→
+   164→   164→The QR does not require a platform redirect.
+   165→   165→
+   166→   166→The encoded content cannot be changed after generation.
+   167→   167→
+   168→   168→Static QR should be usable with:
+   169→   169→
+   170→   170→* URLs
+   171→   171→* Plain text
+   172→   172→* Other valid QR-compatible text content
+   173→   173→
+   174→   174→Do not build separate QR-type wizards for V1.
+   175→   175→
+   176→   176→---
+   177→   177→
+   178→   178→# 6. Dynamic QR Definition
+   179→   179→
+   180→   180→Dynamic QR contains a platform-controlled redirect URL.
+   181→   181→
+   182→   182→Example:
+   183→   183→
+   184→   184→```text
+   185→   185→QR
+   186→   186→ ↓
+   187→   187→qr.yourdomain.com/a8K29
+   188→   188→ ↓
+   189→   189→Redirect service
+   190→   190→ ↓
+   191→   191→Analytics event
+   192→   192→ ↓
+   193→   193→Current destination
+   194→   194→ ↓
+   195→   195→User destination
+   196→   196→```
+   197→   197→
+   198→   198→The destination can be changed without changing the printed QR.
+   199→   199→
+   200→   200→Dynamic QR requires an authenticated account.
+   201→   201→
+   202→   202→---
+   203→   203→
+   204→   204→# 7. Homepage
+   205→   205→
+   206→   206→The homepage is the primary entry point.
+   207→   207→
+   208→   208→It should immediately communicate the two product choices.
+   209→   209→
+   210→   210→Hero copy:
+   211→   211→
+   212→   212→> Make a QR.
+   213→   213→> Make it useful.
+   214→   214→
+   215→   215→Supporting copy:
+   216→   216→
+   217→   217→> Create a beautiful QR code in seconds. Choose static for something permanent, or dynamic when you want to change and measure it later.
+   218→   218→
+   219→   219→Primary choices:
+   220→   220→
+   221→   221→```text
+   222→   222→STATIC QR
+   223→   223→
+   224→   224→Encode once.
+   225→   225→Keep forever.
+   226→   226→
+   227→   227→[ Create Static QR ]
+   228→   228→```
+   229→   229→
+   230→   230→and:
+   231→   231→
+   232→   232→```text
+   233→   233→DYNAMIC QR
+   234→   234→
+   235→   235→Change anytime.
+   236→   236→Measure every scan.
+   237→   237→
+   238→   238→[ Create Dynamic QR ]
+   239→   239→```
+   240→   240→
+   241→   241→The two options should feel like editorial "plates" or pages in a
+   242→   242→sketchbook.
+   243→   243→
+   244→   244→---
+   245→   245→
+   246→   246→# 8. Homepage Composition
+   247→   247→
+   248→   248→Recommended structure:
+   249→   249→
+   250→   250→```text
+   251→   251→┌─────────────────────────────────────────────┐
+   252→   252→│ QR STUDIO                         About      │
+   253→   253→├─────────────────────────────────────────────┤
+   254→   254→│                                             │
+   255→   255→│             MAKE A QR.                      │
+   256→   256→│             MAKE IT USEFUL.                 │
+   257→   257→│                                             │
+   258→   258→│ Create beautiful QR codes that work.        │
+   259→   259→│                                             │
+   260→   260→│                                             │
+   261→   261→│ ┌────────────────────┐ ┌─────────────────┐ │
+   262→   262→│ │                    │ │                 │ │
+   263→   263→│ │     STATIC / 01    │ │  DYNAMIC / 02  │ │
+   264→   264→│ │                    │ │                 │ │
+   265→   265→│ │ Encode once.       │ │ Change anytime.│ │
+   266→   266→│ │ Keep forever.      │ │ Track scans.   │ │
+   267→   267→│ │                    │ │                 │ │
+   268→   268→│ │ [ CREATE ]         │ │ [ CREATE ]     │ │
+   269→   269→│ └────────────────────┘ └─────────────────┘ │
+   270→   270→│                                             │
+   271→   271→└─────────────────────────────────────────────┘
+   272→   272→```
+   273→   273→
+   274→   274→---
+   275→   275→
+   276→   276→# 9. Static QR Builder
+   277→   277→
+   278→   278→The Static QR builder should feel like an editorial worksheet.
+   279→   279→
+   280→   280→Header:
+   281→   281→
+   282→   282→> STATIC QR / 01
+   283→   283→
+   284→   284→Main question:
+   285→   285→
+   286→   286→> WHAT SHOULD THIS QR CONTAIN?
+   287→   287→
+   288→   288→Input:
+   289→   289→
+   290→   290→```text
+   291→   291→┌─────────────────────────────────────┐
+   292→   292→│ Enter a URL or any text...          │
+   293→   293→└─────────────────────────────────────┘
+   294→   294→```
+   295→   295→
+   296→   296→Below:
+   297→   297→
+   298→   298→> The information is stored directly inside the QR code.
+   299→   299→
+   300→   300→Then:
+   301→   301→
+   302→   302→```text
+   303→   303→[ Generate QR ]
+   304→   304→```
+   305→   305→
+   306→   306→---
+   307→   307→
+   308→   308→# 10. Static QR Design Panel
+   309→   309→
+   310→   310→Controls:
+   311→   311→
+   312→   312→## Pattern
+   313→   313→
+   314→   314→* Square
+   315→   315→* Rounded
+   316→   316→* Dot
+   317→   317→
+   318→   318→## Eye style
+   319→   319→
+   320→   320→* Square
+   321→   321→* Rounded
+   322→   322→* Circle
+   323→   323→
+   324→   324→## Foreground
+   325→   325→
+   326→   326→Color picker.
+   327→   327→
+   328→   328→## Background
+   329→   329→
+   330→   330→Color picker.
+   331→   331→
+   332→   332→## Logo
+   333→   333→
+   334→   334→Upload logo.
+   335→   335→
+   336→   336→## Logo size
+   337→   337→
+   338→   338→Slider.
+   339→   339→
+   340→   340→## Logo padding
+   341→   341→
+   342→   342→Slider.
+   343→   343→
+   344→   344→## Frame
+   345→   345→
+   346→   346→Options:
+   347→   347→
+   348→   348→* None
+   349→   349→* Simple
+   350→   350→* Scan Me
+   351→   351→
+   352→   352→## Quiet zone
+   353→   353→
+   354→   354→Slider or controlled preset.
+   355→   355→
+   356→   356→---
+   357→   357→
+   358→   358→# 11. Static QR Preview
+   359→   359→
+   360→   360→Preview must update live.
+   361→   361→
+   362→   362→Use a large editorial preview area.
+   363→   363→
+   364→   364→Example:
+   365→   365→
+   366→   366→```text
+   367→   367→┌──────────────────────────────┐
+   368→   368→│                              │
+   369→   369→│                              │
+   370→   370→│          QR PREVIEW          │
+   371→   371→│                              │
+   372→   372→│         ██████████           │
+   373→   373→│         ██      ██           │
+   374→   374→│         ██  QR  ██           │
+   375→   375→│         ██      ██           │
+   376→   376→│         ██████████           │
+   377→   377→│                              │
+   378→   378→│                              │
+   379→   379→└──────────────────────────────┘
+   380→   380→```
+   381→   381→
+   382→   382→The preview should appear as a physical printed object on paper.
+   383→   383→
+   384→   384→---
+   385→   385→
+   386→   386→# 12. QR Validation
+   387→   387→
+   388→   388→Before download:
+   389→   389→
+   390→   390→Validate:
+   391→   391→
+   392→   392→* Content exists
+   393→   393→* Content can be encoded
+   394→   394→* QR generation succeeds
+   395→   395→* Contrast is sufficient
+   396→   396→* Quiet zone is sufficient
+   397→   397→* Logo does not cover too much of the QR
+   398→   398→* Design does not create obvious scan risks
+   399→   399→
+   400→   400→Show warnings rather than unnecessarily blocking customization.
+   401→   401→
+   402→   402→Example:
+   403→   403→
+   404→   404→> Your logo is large enough to reduce scan reliability.
+   405→   405→
+   406→   406→Provide:
+   407→   407→
+   408→   408→> Fix automatically
+   409→   409→
+   410→   410→where possible.
+   411→   411→
+   412→   412→---
+   413→   413→
+   414→   414→# 13. Static QR Download
+   415→   415→
+   416→   416→Primary actions:
+   417→   417→
+   418→   418→```text
+   419→   419→[ Download PNG ]
+   420→   420→[ Download SVG ]
+   421→   421→```
+   422→   422→
+   423→   423→PNG resolutions:
+   424→   424→
+   425→   425→* 512px
+   426→   426→* 1024px
+   427→   427→* 2048px
+   428→   428→* Custom
+   429→   429→
+   430→   430→SVG must be vector-based.
+   431→   431→
+   432→   432→Downloaded assets must preserve:
+   433→   433→
+   434→   434→* Pattern
+   435→   435→* Colors
+   436→   436→* Logo
+   437→   437→* Frame
+   438→   438→* Quiet zone
+   439→   439→* Error correction
+   440→   440→
+   441→   441→---
+   442→   442→
+   443→   443→# 14. Dynamic QR Builder
+   444→   444→
+   445→   445→Header:
+   446→   446→
+   447→   447→> DYNAMIC QR / 01
+   448→   448→
+   449→   449→Input:
+   450→   450→
+   451→   451→```text
+   452→   452→QR NAME
+   453→   453→
+   454→   454→Summer Sale Poster
+   455→   455→```
+   456→   456→
+   457→   457→Destination:
+   458→   458→
+   459→   459→```text
+   460→   460→WHERE SHOULD IT GO?
+   461→   461→
+   462→   462→https://example.com/summer-sale
+   463→   463→```
+   464→   464→
+   465→   465→Supporting explanation:
+   466→   466→
+   467→   467→> This destination can be changed after your QR has been printed.
+   468→   468→
+   469→   469→Primary action:
+   470→   470→
+   471→   471→```text
+   472→   472→[ Create Dynamic QR ]
+   473→   473→```
+   474→   474→
+   475→   475→---
+   476→   476→
+   477→   477→# 15. Dynamic QR Publish Screen
+   478→   478→
+   479→   479→After creation:
+   480→   480→
+   481→   481→```text
+   482→   482→DYNAMIC QR / 02
+   483→   483→
+   484→   484→YOUR QR IS LIVE
+   485→   485→
+   486→   486→        [ QR ]
+   487→   487→
+   488→   488→qr.yourdomain.com/a8K29
+   489→   489→
+   490→   490→Destination
+   491→   491→
+   492→   492→example.com/summer-sale
+   493→   493→
+   494→   494→[ Download ]
+   495→   495→[ Copy QR URL ]
+   496→   496→[ View Analytics ]
+   497→   497→```
+   498→   498→
+   499→   499→The QR URL must remain stable.
+   500→   500→
+   501→   501→---
+   502→   502→
+   503→   503→# 16. Dynamic QR Editing
+   504→   504→
+   505→   505→The user can change:
+   506→   506→
+   507→   507→* Destination URL
+   508→   508→* QR name
+   509→   509→* Design
+   510→   510→
+   511→   511→Changing the destination must not regenerate the QR identifier.
+   512→   512→
+   513→   513→Example:
+   514→   514→
+   515→   515→Before:
+   516→   516→
+   517→   517→```text
+   518→   518→qr.yourdomain.com/a8K29
+   519→   519→        ↓
+   520→   520→example.com/offer
+   521→   521→```
+   522→   522→
+   523→   523→After:
+   524→   524→
+   525→   525→```text
+   526→   526→qr.yourdomain.com/a8K29
+   527→   527→        ↓
+   528→   528→example.com/summer-sale
+   529→   529→```
+   530→   530→
+   531→   531→The printed QR remains valid.
+   532→   532→
+   533→   533→---
+   534→   534→
+   535→   535→# 17. Dynamic QR Status
+   536→   536→
+   537→   537→Supported states:
+   538→   538→
+   539→   539→```text
+   540→   540→ACTIVE
+   541→   541→PAUSED
+   542→   542→ARCHIVED
+   543→   543→```
+   544→   544→
+   545→   545→Active:
+   546→   546→
+   547→   547→> Redirect normally.
+   548→   548→
+   549→   549→Paused:
+   550→   550→
+   551→   551→> Show an inactive/fallback page.
+   552→   552→
+   553→   553→Archived:
+   554→   554→
+   555→   555→> QR is no longer active.
+   556→   556→
+   557→   557→Actions:
+   558→   558→
+   559→   559→```text
+   560→   560→[ Pause ]
+   561→   561→[ Resume ]
+   562→   562→[ Archive ]
+   563→   563→```
+   564→   564→
+   565→   565→---
+   566→   566→
+   567→   567→# 18. Dynamic Analytics
+   568→   568→
+   569→   569→Analytics are the defining feature of Dynamic QR.
+   570→   570→
+   571→   571→The analytics page should be editorial, visual, and understandable.
+   572→   572→
+   573→   573→Header:
+   574→   574→
+   575→   575→> THE SCAN BOOK
+   576→   576→
+   577→   577→Example:
+   578→   578→
+   579→   579→```text
+   580→   580→Summer Sale
+   581→   581→September 2026
+   582→   582→```
+   583→   583→
+   584→   584→Main metrics:
+   585→   585→
+   586→   586→```text
+   587→   587→12,842
+   588→   588→TOTAL SCANS
+   589→   589→
+   590→   590→8,421
+   591→   591→UNIQUE VISITORS
+   592→   592→
+   593→   593→+23%
+   594→   594→GROWTH
+   595→   595→```
+   596→   596→
+   597→   597→---
+   598→   598→
+   599→   599→# 19. Analytics Timeline
+   600→   600→
+   601→   601→Display scan activity over time.
+   602→   602→
+   603→   603→Required filters:
+   604→   604→
+   605→   605→* Today
+   606→   606→* 7 days
+   607→   607→* 30 days
+   608→   608→* 90 days
+   609→   609→* Custom
+   610→   610→
+   611→   611→Chart:
+   612→   612→
+   613→   613→```text
+   614→   614→SCANS / SEPTEMBER
+   615→   615→
+   616→   616→1500 │                  ╭──╮
+   617→   617→1000 │           ╭──────╯  ╰──
+   618→   618→ 500 │──────╭────╯
+   619→   619→     └──────────────────────────
+   620→   620→       01  05  10  15  20  25
+   621→   621→```
+   622→   622→
+   623→   623→Hover interaction should reveal:
+   624→   624→
+   625→   625→```text
+   626→   626→September 3
+   627→   627→
+   628→   628→Scans: 1,284
+   629→   629→Unique: 921
+   630→   630→```
+   631→   631→
+   632→   632→---
+   633→   633→
+   634→   634→# 20. Device Analytics
+   635→   635→
+   636→   636→Show:
+   637→   637→
+   638→   638→```text
+   639→   639→WHAT DID THEY USE?
+   640→   640→
+   641→   641→ANDROID       48%
+   642→   642→IPHONE        46%
+   643→   643→OTHER          6%
+   644→   644→```
+   645→   645→
+   646→   646→Where available, collect:
+   647→   647→
+   648→   648→* Device category
+   649→   649→* Operating system
+   650→   650→* Browser
+   651→   651→
+   652→   652→---
+   653→   653→
+   654→   654→# 21. Geographic Analytics
+   655→   655→
+   656→   656→Show approximate location.
+   657→   657→
+   658→   658→Example:
+   659→   659→
+   660→   660→```text
+   661→   661→WHERE DID THEY SCAN?
+   662→   662→
+   663→   663→INDIA         65%
+   664→   664→USA           15%
+   665→   665→UK             7%
+   666→   666→UAE            4%
+   667→   667→OTHER          9%
+   668→   668→```
+   669→   669→
+   670→   670→City-level information can be shown when sufficiently reliable.
+   671→   671→
+   672→   672→Always communicate:
+   673→   673→
+   674→   674→> Location is approximate and may be inferred from network information.
+   675→   675→
+   676→   676→Never imply GPS-level accuracy unless explicit location permission
+   677→   677→was actually obtained.
+   678→   678→
+   679→   679→---
+   680→   680→
+   681→   681→# 22. Time Analytics
+   682→   682→
+   683→   683→Show:
+   684→   684→
+   685→   685→* Hourly scans
+   686→   686→* Daily scans
+   687→   687→* Weekly trends
+   688→   688→* Peak scanning period
+   689→   689→
+   690→   690→Example insight:
+   691→   691→
+   692→   692→> Peak scanning period: 6 PM–9 PM.
+   693→   693→
+   694→   694→Insights should be factual and derived from available data.
+   695→   695→
+   696→   696→---
+   697→   697→
+   698→   698→# 23. Scan Event Information
+   699→   699→
+   700→   700→Each scan event may include:
+   701→   701→
+   702→   702→```text
+   703→   703→timestamp
+   704→   704→country
+   705→   705→region
+   706→   706→city
+   707→   707→device_type
+   708→   708→operating_system
+   709→   709→browser
+   710→   710→referrer
+   711→   711→user_agent
+   712→   712→privacy-preserving IP identifier
+   713→   713→```
+   714→   714→
+   715→   715→Do not store unnecessary personal data.
+   716→   716→
+   717→   717→---
+   718→   718→
+   719→   719→# 24. Unique Scans
+   720→   720→
+   721→   721→Do not claim that unique scanners are exact human counts.
+   722→   722→
+   723→   723→UI wording:
+   724→   724→
+   725→   725→> Unique visitors
+   726→   726→
+   727→   727→or:
+   728→   728→
+   729→   729→> Estimated unique scanners
+   730→   730→
+   731→   731→Where appropriate, provide a tooltip explaining the methodology.
+   732→   732→
+   733→   733→---
+   734→   734→
+   735→   735→# 25. Activity History
+   736→   736→
+   737→   737→Dynamic QR should have a separate activity section.
+   738→   738→
+   739→   739→Title:
+   740→   740→
+   741→   741→> MARGIN NOTES
+   742→   742→
+   743→   743→Example:
+   744→   744→
+   745→   745→```text
+   746→   746→03 SEP / 18:32
+   747→   747→Destination changed
+   748→   748→
+   749→   749→Previous:
+   750→   750→example.com/offer
+   751→   751→
+   752→   752→New:
+   753→   753→example.com/summer-sale
+   754→   754→
+   755→   755→
+   756→   756→03 SEP / 17:42
+   757→   757→QR design updated
+   758→   758→
+   759→   759→
+   760→   760→03 SEP / 16:21
+   761→   761→QR created
+   762→   762→```
+   763→   763→
+   764→   764→Activity records should be immutable.
+   765→   765→
+   766→   766→---
+   767→   767→
+   768→   768→# 26. Version History
+   769→   769→
+   770→   770→Every destination change creates a version.
+   771→   771→
+   772→   772→Example:
+   773→   773→
+   774→   774→```text
+   775→   775→VERSION 03 — CURRENT
+   776→   776→
+   777→   777→example.com/sale-final
+   778→   778→
+   779→   779→VERSION 02
+   780→   780→
+   781→   781→example.com/summer-sale
+   782→   782→
+   783→   783→VERSION 01
+   784→   784→
+   785→   785→example.com/offer
+   786→   786→```
+   787→   787→
+   788→   788→Action:
+   789→   789→
+   790→   790→```text
+   791→   791→[ Restore Version 02 ]
+   792→   792→```
+   793→   793→
+   794→   794→Restoring should create a new version instead of deleting history.
+   795→   795→
+   796→   796→---
+   797→   797→
+   798→   798→# 27. Dynamic QR Dashboard
+   799→   799→
+   800→   800→The dashboard should not resemble a conventional analytics SaaS.
+   801→   801→
+   802→   802→Example:
+   803→   803→
+   804→   804→```text
+   805→   805→┌──────────────────────────────────────────────┐
+   806→   806→│ SUMMER SALE                         ● ACTIVE │
+   807→   807→│                                              │
+   808→   808→│ qr.yourdomain.com/a8K29                      │
+   809→   809→│                                              │
+   810→   810→│ [ Edit ] [ Download ] [ Copy ] [ Pause ]    │
+   811→   811→├──────────────────────────────────────────────┤
+   812→   812→│                                              │
+   813→   813→│ 12,842             8,421                     │
+   814→   814→│ SCANS              UNIQUE                   │
+   815→   815→│                                              │
+   816→   816→├──────────────────────────────────────────────┤
+   817→   817→│ SCAN ACTIVITY                                │
+   818→   818→│                                              │
+   819→   819→│       ╭────────────╮                         │
+   820→   820→│   ╭───╯            ╰────╮                    │
+   821→   821→│ ──╯                      ╰──                 │
+   822→   822→│                                              │
+   823→   823→├──────────────────────┬───────────────────────┤
+   824→   824→│ DEVICE               │ LOCATION              │
+   825→   825→│ Android 48%          │ India 65%             │
+   826→   826→│ iPhone  46%          │ USA 15%               │
+   827→   827→│ Other    6%          │ UK 7%                 │
+   828→   828→└──────────────────────┴───────────────────────┘
+   829→   829→```
+   830→   830→
+   831→   831→---
+   832→   832→
+   833→   833→# 28. QR List
+   834→   834→
+   835→   835→Navigation:
+   836→   836→
+   837→   837→```text
+   838→   838→QR CODES
+   839→   839→```
+   840→   840→
+   841→   841→Table/list:
+   842→   842→
+   843→   843→```text
+   844→   844→NAME                 TYPE       SCANS       STATUS
+   845→   845→
+   846→   846→Summer Sale          Dynamic    12,842      Active
+   847→   847→Website              Static     —           —
+   848→   848→Restaurant           Dynamic     8,421      Active
+   849→   849→Business Card        Static     —           —
+   850→   850→```
+   851→   851→
+   852→   852→Filters:
+   853→   853→
+   854→   854→* Static
+   855→   855→* Dynamic
+   856→   856→* Active
+   857→   857→* Paused
+   858→   858→
+   859→   859→Search:
+   860→   860→
+   861→   861→```text
+   862→   862→Search QR codes...
+   863→   863→```
+   864→   864→
+   865→   865→---
+   866→   866→
+   867→   867→# 29. Navigation
+   868→   868→
+   869→   869→Keep navigation intentionally small.
+   870→   870→
+   871→   871→```text
+   872→   872→QR STUDIO
+   873→   873→
+   874→   874→Home
+   875→   875→
+   876→   876→QR Codes
+   877→   877→
+   878→   878→Create QR
+   879→   879→
+   880→   880→Settings
+   881→   881→```
+   882→   882→
+   883→   883→For dynamic QR detail:
+   884→   884→
+   885→   885→```text
+   886→   886→QR
+   887→   887→├── Overview
+   888→   888→├── Analytics
+   889→   889→├── Activity
+   890→   890→└── Versions
+   891→   891→```
+   892→   892→
+   893→   893→Do not create unnecessary navigation.
+   894→   894→
+   895→   895→---
+   896→   896→
+   897→   897→# 30. Typography
+   898→   898→
+   899→   899→Use the supplied reference typography where appropriate.
+   900→   900→
+   901→   901→Primary heading:
+   902→   902→
+   903→   903→Instrument Serif
+   904→   904→
+   905→   905→Body:
+   906→   906→
+   907→   907→Newsreader
+   908→   908→
+   909→   909→Recommended hierarchy:
+   910→   910→
+   911→   911→```text
+   912→   912→Display
+   913→   913→Instrument Serif
+   914→   914→
+   915→   915→H1
+   916→   916→Instrument Serif
+   917→   917→
+   918→   918→H2
+   919→   919→Instrument Serif
+   920→   920→
+   921→   921→Body
+   922→   922→Newsreader
+   923→   923→
+   924→   924→Labels
+   925→   925→Newsreader / restrained sans-serif where required
+   926→   926→
+   927→   927→Data
+   928→   928→Use a highly readable numeric treatment
+   929→   929→```
+   930→   930→
+   931→   931→The typography should feel editorial without compromising readability.
+   932→   932→
+   933→   933→---
+   934→   934→
+   935→   935→# 31. Color System
+   936→   936→
+   937→   937→Primary ink:
+   938→   938→
+   939→   939→```text
+   940→   940→#2b2721
+   941→   941→```
+   942→   942→
+   943→   943→Use a warm paper base.
+   944→   944→
+   945→   945→Suggested visual family:
+   946→   946→
+   947→   947→```text
+   948→   948→Paper
+   949→   949→Warm cream
+   950→   950→Soft beige
+   951→   951→Muted botanical green
+   952→   952→Ink brown
+   953→   953→Faded charcoal
+   954→   954→```
+   955→   955→
+   956→   956→Do not introduce a conventional SaaS blue as the primary brand color.
+   957→   957→
+   958→   958→The configured ThreeUI usage specifies:
+   959→   959→
+   960→   960→```tsx
+   961→   961→headingFont="instrument-serif"
+   962→   962→bodyFont="newsreader"
+   963→   963→headingWeight="400"
+   964→   964→bodyWeight="400"
+   965→   965→primaryColor="#2b2721"
+   966→   966→headingSize={30}
+   967→   967→bodySize={20}
+   968→   968→headingLetterSpacing={0.010}
+   969→   969→```
+   970→   970→
+   971→   971→Preserve this configuration when using the supplied component.
+   972→   972→
+   973→   973→---
+   974→   974→
+   975→   975→# 32. Motion
+   976→   976→
+   977→   977→Motion should feel physical rather than technological.
+   978→   978→
+   979→   979→Use:
+   980→   980→
+   981→   981→* Page turns
+   982→   982→* Paper transitions
+   983→   983→* Gentle opacity changes
+   984→   984→* Slight positional movement
+   985→   985→* QR reveal
+   986→   986→* Chart drawing
+   987→   987→* Soft hover movement
+   988→   988→
+   989→   989→Avoid:
+   990→   990→
+   991→   991→* Excessive bouncing
+   992→   992→* Fast UI transitions
+   993→   993→* Large parallax effects
+   994→   994→* Motion that delays user actions
+   995→   995→
+   996→   996→Motion duration should generally feel between:
+   997→   997→
+   998→   998→```text
+   999→   999→150ms–700ms
+  1000→  1000→```
+  1001→  1001→
+  1002→  1002→depending on interaction complexity.
+  1003→  1003→
+  1004→  1004→Respect:
+  1005→  1005→
+  1006→  1006→```text
+  1007→  1007→prefers-reduced-motion
+  1008→  1008→```
+  1009→  1009→
+  1010→  1010→---
+  1011→  1011→
+  1012→  1012→# 33. Responsive Behavior
+  1013→  1013→
+  1014→  1014→Desktop:
+  1015→  1015→
+  1016→  1016→* Large editorial composition
+  1017→  1017→* Side-by-side builder
+  1018→  1018→* Large QR preview
+  1019→  1019→* Analytics panels
+  1020→  1020→
+  1021→  1021→Tablet:
+  1022→  1022→
+  1023→  1023→* Reduced spacing
+  1024→  1024→* Two-column where practical
+  1025→  1025→* Collapsible design controls
+  1026→  1026→
+  1027→  1027→Mobile:
+  1028→  1028→
+  1029→  1029→* Single-column
+  1030→  1030→* QR preview first
+  1031→  1031→* Controls below
+  1032→  1032→* Bottom-sheet or accordion controls
+  1033→  1033→* Sticky primary action where useful
+  1034→  1034→
+  1035→  1035→Mobile builder:
+  1036→  1036→
+  1037→  1037→```text
+  1038→  1038→QR PREVIEW
+  1039→  1039→
+  1040→  1040→CONTENT
+  1041→  1041→
+  1042→  1042→DESIGN
+  1043→  1043→
+  1044→  1044→DOWNLOAD
+  1045→  1045→```
+  1046→  1046→
+  1047→  1047→The QR should remain large enough to evaluate.
+  1048→  1048→
+  1049→  1049→---
+  1050→  1050→
+  1051→  1051→# 34. Accessibility
+  1052→  1052→
+  1053→  1053→Target:
+  1054→  1054→
+  1055→  1055→> WCAG 2.2 AA
+  1056→  1056→
+  1057→  1057→Requirements:
+  1058→  1058→
+  1059→  1059→* Keyboard navigation
+  1060→  1060→* Visible focus
+  1061→  1061→* Semantic HTML
+  1062→  1062→* Screen-reader labels
+  1063→  1063→* Accessible inputs
+  1064→  1064→* Accessible buttons
+  1065→  1065→* Accessible dialogs
+  1066→  1066→* Accessible tabs
+  1067→  1067→* Accessible charts
+  1068→  1068→* Sufficient contrast
+  1069→  1069→* Reduced-motion support
+  1070→  1070→
+  1071→  1071→Never rely exclusively on color to communicate state.
+  1072→  1072→
+  1073→  1073→For example:
+  1074→  1074→
+  1075→  1075→```text
+  1076→  1076→● ACTIVE
+  1077→  1077→```
+  1078→  1078→
+  1079→  1079→not only:
+  1080→  1080→
+  1081→  1081→```text
+  1082→  1082→green dot
+  1083→  1083→```
+  1084→  1084→
+  1085→  1085→---
+  1086→  1086→
+  1087→  1087→# 35. QR Scannability
+  1088→  1088→
+  1089→  1089→Scannability takes priority over aesthetics.
+  1090→  1090→
+  1091→  1091→The system must:
+  1092→  1092→
+  1093→  1093→* Use valid QR encoding
+  1094→  1094→* Use appropriate error correction
+  1095→  1095→* Maintain quiet zone
+  1096→  1096→* Validate contrast
+  1097→  1097→* Warn about excessive logo size
+  1098→  1098→* Prevent invalid configurations when necessary
+  1099→  1099→
+  1100→  1100→A beautiful QR that cannot be scanned is considered a product failure.
+  1101→  1101→
+  1102→  1102→---
+  1103→  1103→
+  1104→  1104→# 36. Security
+  1105→  1105→
+  1106→  1106→Dynamic redirects are public infrastructure.
+  1107→  1107→
+  1108→  1108→Requirements:
+  1109→  1109→
+  1110→  1110→* HTTPS
+  1111→  1111→* Authentication
+  1112→  1112→* Authorization
+  1113→  1113→* Rate limiting
+  1114→  1114→* Secure sessions
+  1115→  1115→* Input validation
+  1116→  1116→* URL scheme validation
+  1117→  1117→* Abuse detection
+  1118→  1118→* QR slug unpredictability
+  1119→  1119→* Audit logs
+  1120→  1120→* Error isolation
+  1121→  1121→
+  1122→  1122→Reject unsafe schemes such as:
+  1123→  1123→
+  1124→  1124→```text
+  1125→  1125→javascript:
+  1126→  1126→data:
+  1127→  1127→file:
+  1128→  1128→```
+  1129→  1129→
+  1130→  1130→Only supported web destinations should be accepted for dynamic URLs.
+  1131→  1131→
+  1132→  1132→---
+  1133→  1133→
+  1134→  1134→# 37. SSRF Protection
+  1135→  1135→
+  1136→  1136→If the platform performs URL verification, preview generation,
+  1137→  1137→metadata fetching, or reputation checking:
+  1138→  1138→
+  1139→  1139→Never blindly request user-provided URLs.
+  1140→  1140→
+  1141→  1141→Block:
+  1142→  1142→
+  1143→  1143→* localhost
+  1144→  1144→* loopback addresses
+  1145→  1145→* private IP ranges
+  1146→  1146→* internal services
+  1147→  1147→* cloud metadata endpoints
+  1148→  1148→* other restricted network destinations
+  1149→  1149→
+  1150→  1150→---
+  1151→  1151→
+  1152→  1152→# 38. Abuse Prevention
+  1153→  1153→
+  1154→  1154→The redirect infrastructure must protect against:
+  1155→  1155→
+  1156→  1156→* Phishing
+  1157→  1157→* Malware
+  1158→  1158→* Spam
+  1159→  1159→* Redirect abuse
+  1160→  1160→* Automated QR creation
+  1161→  1161→* Slug enumeration
+  1162→  1162→* Credential attacks
+  1163→  1163→* Analytics scraping
+  1164→  1164→
+  1165→  1165→Provide:
+  1166→  1166→
+  1167→  1167→```text
+  1168→  1168→Report QR
+  1169→  1169→```
+  1170→  1170→
+  1171→  1171→for public dynamic QR URLs.
+  1172→  1172→
+  1173→  1173→---
+  1174→  1174→
+  1175→  1175→# 39. Redirect Architecture
+  1176→  1176→
+  1177→  1177→The redirect path is mission critical.
+  1178→  1178→
+  1179→  1179→```text
+  1180→  1180→USER SCANS QR
+  1181→  1181→      │
+  1182→  1182→      ▼
+  1183→  1183→qr.yourdomain.com/a8K29
+  1184→  1184→      │
+  1185→  1185→      ▼
+  1186→  1186→Redirect Service
+  1187→  1187→      │
+  1188→  1188→      ├──────► Queue / Analytics Event
+  1189→  1189→      │
+  1190→  1190→      ▼
+  1191→  1191→Resolve Current Destination
+  1192→  1192→      │
+  1193→  1193→      ▼
+  1194→  1194→HTTP Redirect
+  1195→  1195→      │
+  1196→  1196→      ▼
+  1197→  1197→Destination
+  1198→  1198→```
+  1199→  1199→
+  1200→  1200→Analytics processing must not unnecessarily block the redirect.
+  1201→  1201→
+  1202→  1202→If analytics is temporarily unavailable:
+  1203→  1203→
+  1204→  1204→```text
+  1205→  1205→SCAN
+  1206→  1206→ ↓
+  1207→  1207→Analytics failure
+  1208→  1208→ ↓
+  1209→  1209→REDIRECT STILL WORKS
+  1210→  1210→```
+  1211→  1211→
+  1212→  1212→This is a hard requirement.
+  1213→  1213→
+  1214→  1214→---
+  1215→  1215→
+  1216→  1216→# 40. Redirect Performance
+  1217→  1217→
+  1218→  1218→Target:
+  1219→  1219→
+  1220→  1220→```text
+  1221→  1221→p95 redirect processing < 150ms
+  1222→  1222→```
+  1223→  1223→
+  1224→  1224→excluding external network latency.
+  1225→  1225→
+  1226→  1226→The redirect service should be optimized independently from the
+  1227→  1227→dashboard.
+  1228→  1228→
+  1229→  1229→---
+  1230→  1230→
+  1231→  1231→# 41. Analytics Architecture
+  1232→  1232→
+  1233→  1233→Recommended:
+  1234→  1234→
+  1235→  1235→```text
+  1236→  1236→Scan
+  1237→  1237→ │
+  1238→  1238→ ▼
+  1239→  1239→Redirect API
+  1240→  1240→ │
+  1241→  1241→ ├──────────────► Destination
+  1242→  1242→ │
+  1243→  1243→ ▼
+  1244→  1244→Event Queue
+  1245→  1245→ │
+  1246→  1246→ ▼
+  1247→  1247→Analytics Worker
+  1248→  1248→ │
+  1249→  1249→ ▼
+  1250→  1250→Database
+  1251→  1251→ │
+  1252→  1252→ ▼
+  1253→  1253→Analytics Dashboard
+  1254→  1254→```
+  1255→  1255→
+  1256→  1256→For an MVP, PostgreSQL can store application and analytics data.
+  1257→  1257→
+  1258→  1258→Introduce a specialized analytics database only when volume requires it.
+  1259→  1259→
+  1260→  1260→---
+  1261→  1261→
+  1262→  1262→# 42. Suggested Frontend Architecture
+  1263→  1263→
+  1264→  1264→```text
+  1265→  1265→src/
+  1266→  1266→│
+  1267→  1267→├── app/
+  1268→  1268→│   ├── page.tsx
+  1269→  1269→│   ├── create/
+  1270→  1270→│   │   └── page.tsx
+  1271→  1271→│   ├── dashboard/
+  1272→  1272→│   │   └── page.tsx
+  1273→  1273→│   └── qr/
+  1274→  1274→│       └── [id]/
+  1275→  1275→│           ├── page.tsx
+  1276→  1276→│           └── analytics/
+  1277→  1277→│               └── page.tsx
+  1278→  1278→│
+  1279→  1279→├── components/
+  1280→  1280→│   ├── qr/
+  1281→  1281→│   │   ├── QRBuilder.tsx
+  1282→  1282→│   │   ├── QRPreview.tsx
+  1283→  1283→│   │   ├── QRContentPanel.tsx
+  1284→  1284→│   │   ├── QRDesignPanel.tsx
+  1285→  1285→│   │   ├── QRValidator.tsx
+  1286→  1286→│   │   └── QRDownload.tsx
+  1287→  1287→│   │
+  1288→  1288→│   ├── analytics/
+  1289→  1289→│   │   ├── ScanOverview.tsx
+  1290→  1290→│   │   ├── ScanChart.tsx
+  1291→  1291→│   │   ├── DeviceBreakdown.tsx
+  1292→  1292→│   │   ├── LocationBreakdown.tsx
+  1293→  1293→│   │   └── ActivityTimeline.tsx
+  1294→  1294→│   │
+  1295→  1295→│   └── sketchbook/
+  1296→  1296→│       ├── Paper.tsx
+  1297→  1297→│       ├── Plate.tsx
+  1298→  1298→│       ├── EditorialHeader.tsx
+  1299→  1299→│       └── PageTransition.tsx
+  1300→  1300→│
+  1301→  1301→├── lib/
+  1302→  1302→│   ├── qr/
+  1303→  1303→│   ├── analytics/
+  1304→  1304→│   ├── validation/
+  1305→  1305→│   └── security/
+  1306→  1306→│
+  1307→  1307→└── styles/
+  1308→  1308→```
+  1309→  1309→
+  1310→  1310→---
+  1311→  1311→
+  1312→  1312→# 43. Design System Components
+  1313→  1313→
+  1314→  1314→Create reusable components:
+  1315→  1315→
+  1316→  1316→```text
+  1317→  1317→PaperSurface
+  1318→  1318→EditorialHeading
+  1319→  1319→EditorialLabel
+  1320→  1320→SketchbookPlate
+  1321→  1321→PaperButton
+  1322→  1322→InkButton
+  1323→  1323→QRPreview
+  1324→  1324→QRControl
+  1325→  1325→SectionRule
+  1326→  1326→MetricNumber
+  1327→  1327→AnalyticsChart
+  1328→  1328→Timeline
+  1329→  1329→StatusIndicator
+  1330→  1330→Modal
+  1331→  1331→Drawer
+  1332→  1332→Toast
+  1333→  1333→Tooltip
+  1334→  1334→```
+  1335→  1335→
+  1336→  1336→Components should share a consistent visual language.
+  1337→  1337→
+  1338→  1338→---
+  1339→  1339→
+  1340→  1340→# 44. Database Model
+  1341→  1341→
+  1342→  1342→Suggested conceptual schema:
+  1343→  1343→
+  1344→  1344→```text
+  1345→  1345→users
+  1346→  1346→─────
+  1347→  1347→id
+  1348→  1348→email
+  1349→  1349→name
+  1350→  1350→password_hash
+  1351→  1351→email_verified_at
+  1352→  1352→created_at
+  1353→  1353→updated_at
+  1354→  1354→
+  1355→  1355→
+  1356→  1356→qr_codes
+  1357→  1357→────────
+  1358→  1358→id
+  1359→  1359→user_id
+  1360→  1360→type
+  1361→  1361→name
+  1362→  1362→slug
+  1363→  1363→status
+  1364→  1364→created_at
+  1365→  1365→updated_at
+  1366→  1366→
+  1367→  1367→
+  1368→  1368→qr_destinations
+  1369→  1369→───────────────
+  1370→  1370→id
+  1371→  1371→qr_id
+  1372→  1372→url
+  1373→  1373→version
+  1374→  1374→is_current
+  1375→  1375→created_by
+  1376→  1376→created_at
+  1377→  1377→
+  1378→  1378→
+  1379→  1379→qr_designs
+  1380→  1380→──────────
+  1381→  1381→id
+  1382→  1382→qr_id
+  1383→  1383→version
+  1384→  1384→config
+  1385→  1385→created_by
+  1386→  1386→created_at
+  1387→  1387→
+  1388→  1388→
+  1389→  1389→scan_events
+  1390→  1390→───────────
+  1391→  1391→id
+  1392→  1392→qr_id
+  1393→  1393→timestamp
+  1394→  1394→country
+  1395→  1395→region
+  1396→  1396→city
+  1397→  1397→device_type
+  1398→  1398→os
+  1399→  1399→browser
+  1400→  1400→referrer
+  1401→  1401→ip_hash
+  1402→  1402→
+  1403→  1403→
+  1404→  1404→activity_logs
+  1405→  1405→────────────
+  1406→  1406→id
+  1407→  1407→user_id
+  1408→  1408→qr_id
+  1409→  1409→action
+  1410→  1410→metadata
+  1411→  1411→created_at
+  1412→  1412→```
+  1413→  1413→
+  1414→  1414→---
+  1415→  1415→
+  1416→  1416→# 45. Versioning Rule
+  1417→  1417→
+  1418→  1418→Never destroy historical destination records.
+  1419→  1419→
+  1420→  1420→Bad:
+  1421→  1421→
+  1422→  1422→```text
+  1423→  1423→destination = new_url
+  1424→  1424→```
+  1425→  1425→
+  1426→  1426→without history.
+  1427→  1427→
+  1428→  1428→Correct:
+  1429→  1429→
+  1430→  1430→```text
+  1431→  1431→V1 → old URL
+  1432→  1432→V2 → new URL
+  1433→  1433→V3 → another URL
+  1434→  1434→```
+  1435→  1435→
+  1436→  1436→Current destination points to V3.
+  1437→  1437→
+  1438→  1438→Restoring V1 creates:
+  1439→  1439→
+  1440→  1440→```text
+  1441→  1441→V4 → V1 destination
+  1442→  1442→```
+  1443→  1443→
+  1444→  1444→This preserves the audit trail.
+  1445→  1445→
+  1446→  1446→---
+  1447→  1447→
+  1448→  1448→# 46. Recommended Technology
+  1449→  1449→
+  1450→  1450→Frontend:
+  1451→  1451→
+  1452→  1452→```text
+  1453→  1453→Next.js
+  1454→  1454→React
+  1455→  1455→TypeScript
+  1456→  1456→Tailwind CSS
+  1457→  1457→```
+  1458→  1458→
+  1459→  1459→UI:
+  1460→  1460→
+  1461→  1461→```text
+  1462→  1462→ThreeUI source implementation
+  1463→  1463→```
+  1464→  1464→
+  1465→  1465→QR:
+  1466→  1466→
+  1467→  1467→```text
+  1468→  1468→Reliable QR generation library
+  1469→  1469→```
+  1470→  1470→
+  1471→  1471→Backend:
+  1472→  1472→
+  1473→  1473→```text
+  1474→  1474→Next.js API
+  1475→  1475→```
+  1476→  1476→
+  1477→  1477→or, for a larger architecture:
+  1478→  1478→
+  1479→  1479→```text
+  1480→  1480→Next.js + NestJS
+  1481→  1481→```
+  1482→  1482→
+  1483→  1483→Database:
+  1484→  1484→
+  1485→  1485→```text
+  1486→  1486→PostgreSQL
+  1487→  1487→```
+  1488→  1488→
+  1489→  1489→ORM:
+  1490→  1490→
+  1491→  1491→```text
+  1492→  1492→Prisma
+  1493→  1493→```
+  1494→  1494→
+  1495→  1495→Queue/cache:
+  1496→  1496→
+  1497→  1497→```text
+  1498→  1498→Redis
+  1499→  1499→```
+  1500→  1500→
+  1501→  1501→Object storage:
+  1502→  1502→
+  1503→  1503→```text
+  1504→  1504→S3-compatible storage
+  1505→  1505→```
+  1506→  1506→
+  1507→  1507→---
+  1508→  1508→
+  1509→  1509→# 47. Exact ThreeUI Integration Requirement
+  1510→  1510→
+  1511→  1511→The following component is the frontend visual foundation:
+  1512→  1512→
+  1513→  1513→```tsx
+  1514→  1514→import { MengToSketchbookLandingPage } from "@designcodeio/threeui";
+  1515→  1515→import "@designcodeio/threeui/style.css";
+  1516→  1516→
+  1517→  1517→export function Scene() {
+  1518→  1518→  return (
+  1519→  1519→    <div className="shader-frame">
+  1520→  1520→      <MengToSketchbookLandingPage
+  1521→  1521→        headingFont="instrument-serif"
+  1522→  1522→        bodyFont="newsreader"
+  1523→  1523→        headingWeight="400"
+  1524→  1524→        bodyWeight="400"
+  1525→  1525→        primaryColor="#2b2721"
+  1526→  1526→        headingSize={30}
+  1527→  1527→        bodySize={20}
+  1528→  1528→        headingLetterSpacing={0.010}
+  1529→  1529→      />
+  1530→  1530→    </div>
+  1531→  1531→  );
+  1532→  1532→}
+  1533→  1533→```
+  1534→  1534→
+  1535→  1535→The implementation must use the exact supplied source.
+  1536→  1536→
+  1537→  1537→Canonical HTML:
+  1538→  1538→
+  1539→  1539→[https://threeui.com/landing-pages/meng-to-sketchbook.html](https://threeui.com/landing-pages/meng-to-sketchbook.html)
+  1540→  1540→
+  1541→  1541→Registered source bundle:
+  1542→  1542→
+  1543→  1543→[https://threeui.com/source-code/meng-to-sketchbook-landing-page.json](https://threeui.com/source-code/meng-to-sketchbook-landing-page.json)
+  1544→  1544→
+  1545→  1545→Required source files:
+  1546→  1546→
+  1547→  1547→```text
+  1548→  1548→src/shaders/landing-pages/LandingPages.tsx
+  1549→  1549→
+  1550→  1550→src/shaders/landing-pages/pageTypography.ts
+  1551→  1551→
+  1552→  1552→src/shaders/landing-pages/pageRecipes.ts
+  1553→  1553→
+  1554→  1554→src/shaders/landing-pages/LandingPageFrame.tsx
+  1555→  1555→
+  1556→  1556→public/landing-pages/meng-to-sketchbook.html
+  1557→  1557→
+  1558→  1558→src/shaders/threeui.css
+  1559→  1559→```
+  1560→  1560→
+  1561→  1561→Required assets:
+  1562→  1562→
+  1563→  1563→```text
+  1564→  1564→public/landing-pages/meng-to-sketchbook/bg-wash.jpg
+  1565→  1565→public/landing-pages/meng-to-sketchbook/bloom.png
+  1566→  1566→public/landing-pages/meng-to-sketchbook/botanic-gardens.png
+  1567→  1567→public/landing-pages/meng-to-sketchbook/botany-left.png
+  1568→  1568→public/landing-pages/meng-to-sketchbook/botany-right.png
+  1569→  1569→public/landing-pages/meng-to-sketchbook/buddha-tooth.png
+  1570→  1570→public/landing-pages/meng-to-sketchbook/divider.png
+  1571→  1571→public/landing-pages/meng-to-sketchbook/gardens-by-the-bay.png
+  1572→  1572→public/landing-pages/meng-to-sketchbook/instrument-serif-italic.woff2
+  1573→  1573→public/landing-pages/meng-to-sketchbook/instrument-serif.woff2
+  1574→  1574→public/landing-pages/meng-to-sketchbook/joo-chiat.png
+  1575→  1575→public/landing-pages/meng-to-sketchbook/lau-pa-sat.png
+  1576→  1576→public/landing-pages/meng-to-sketchbook/marina-bay-sands.png
+  1577→  1577→public/landing-pages/meng-to-sketchbook/marina-bay-skyline.png
+  1578→  1578→public/landing-pages/meng-to-sketchbook/merlion.png
+  1579→  1579→public/landing-pages/meng-to-sketchbook/newsreader.woff2
+  1580→  1580→public/landing-pages/meng-to-sketchbook/singapore-river.png
+  1581→  1581→```
+  1582→  1582→
+  1583→  1583→---
+  1584→  1584→
+  1585→  1585→# 48. IMPORTANT: Exact Source Rule
+  1586→  1586→
+  1587→  1587→DO NOT:
+  1588→  1588→
+  1589→  1589→* Recreate the component from the screenshot.
+  1590→  1590→* Recreate the component from the description.
+  1591→  1591→* Approximate the animations.
+  1592→  1592→* Replace the authored implementation with a custom interpretation.
+  1593→  1593→* Replace the shaders with CSS approximations.
+  1594→  1594→* Replace the assets with generated substitutes.
+  1595→  1595→* Use screenshots as backgrounds.
+  1596→  1596→* Embed the ThreeUI documentation page.
+  1597→  1597→* iframe the reference website.
+  1598→  1598→
+  1599→  1599→FIRST:
+  1600→  1600→
+  1601→  1601→1. Fetch the canonical HTML.
+  1602→  1602→2. Fetch the complete registered source bundle.
+  1603→  1603→3. Read the complete source.
+  1604→  1604→4. Verify the required files.
+  1605→  1605→5. Copy/adapt only where required for integration.
+  1606→  1606→6. Preserve authored structure, styling, shaders, motion, dependencies,
+  1607→  1607→   responsive behavior and asset paths.
+  1608→  1608→7. Verify source hashes where available.
+  1609→  1609→8. Copy binary assets byte-for-byte.
+  1610→  1610→9. Verify binary hashes.
+  1611→  1611→
+  1612→  1612→IF THE COMPLETE CANONICAL SOURCE CANNOT BE RETRIEVED:
+  1613→  1613→
+  1614→  1614→STOP.
+  1615→  1615→
+  1616→  1616→Do not approximate the component.
+  1617→  1617→
+  1618→  1618→Report that the exact source could not be retrieved.
+  1619→  1619→
+  1620→  1620→---
+  1621→  1621→
+  1622→  1622→# 49. ThreeUI Adaptation Rule
+  1623→  1623→
+  1624→  1624→The exact source implementation should be preserved as the visual
+  1625→  1625→foundation.
+  1626→  1626→
+  1627→  1627→The QR product content should replace the portfolio content.
+  1628→  1628→
+  1629→  1629→Conceptually:
+  1630→  1630→
+  1631→  1631→```text
+  1632→  1632→Original concept
+  1633→  1633→    ↓
+  1634→  1634→Sketchbook portfolio
+  1635→  1635→    ↓
+  1636→  1636→Adapt visual system
+  1637→  1637→    ↓
+  1638→  1638→QR Studio
+  1639→  1639→```
+  1640→  1640→
+  1641→  1641→Preserve:
+  1642→  1642→
+  1643→  1643→* Page composition
+  1644→  1644→* Paper atmosphere
+  1645→  1645→* Typography
+  1646→  1646→* Motion system
+  1647→  1647→* Shader behavior
+  1648→  1648→* Interaction principles
+  1649→  1649→* Responsive logic
+  1650→  1650→* Asset handling
+  1651→  1651→
+  1652→  1652→Change:
+  1653→  1653→
+  1654→  1654→* Singapore portfolio content
+  1655→  1655→* Portfolio navigation
+  1656→  1656→* Portfolio-specific copy
+  1657→  1657→* Portfolio-specific sections
+  1658→  1658→* Portfolio-specific data
+  1659→  1659→
+  1660→  1660→Replace them with:
+  1661→  1661→
+  1662→  1662→* Static QR
+  1663→  1663→* Dynamic QR
+  1664→  1664→* QR builder
+  1665→  1665→* QR preview
+  1666→  1666→* Analytics
+  1667→  1667→* Activity
+  1668→  1668→* Versions
+  1669→  1669→
+  1670→  1670→---
+  1671→  1671→
+  1672→  1672→# 50. Landing Page Content
+  1673→  1673→
+  1674→  1674→Use QR-specific copy.
+  1675→  1675→
+  1676→  1676→Primary headline:
+  1677→  1677→
+  1678→  1678→> MAKE A QR.
+  1679→  1679→> MAKE IT USEFUL.
+  1680→  1680→
+  1681→  1681→Secondary:
+  1682→  1682→
+  1683→  1683→> Beautiful QR codes for things that matter.
+  1684→  1684→
+  1685→  1685→Static:
+  1686→  1686→
+  1687→  1687→> ENCODE ONCE.
+  1688→  1688→> KEEP FOREVER.
+  1689→  1689→
+  1690→  1690→Dynamic:
+  1691→  1691→
+  1692→  1692→> CHANGE ANYTIME.
+  1693→  1693→> MEASURE EVERY SCAN.
+  1694→  1694→
+  1695→  1695→Supporting copy:
+  1696→  1696→
+  1697→  1697→> Create a QR in seconds. Choose static for something permanent, or dynamic when you want to edit and understand what happens after every scan.
+  1698→  1698→
+  1699→  1699→---
+  1700→  1700→
+  1701→  1701→# 51. Empty States
+  1702→  1702→
+  1703→  1703→Static:
+  1704→  1704→
+  1705→  1705→> Nothing here yet.
+  1706→  1706→>
+  1707→  1707→> Add a URL or text to begin.
+  1708→  1708→
+  1709→  1709→Dynamic:
+  1710→  1710→
+  1711→  1711→> Your first dynamic QR starts here.
+  1712→  1712→>
+  1713→  1713→> Create one and you'll be able to change its destination and see its scans.
+  1714→  1714→
+  1715→  1715→Analytics:
+  1716→  1716→
+  1717→  1717→> No scans yet.
+  1718→  1718→>
+  1719→  1719→> Once someone scans your QR, activity will appear here.
+  1720→  1720→
+  1721→  1721→---
+  1722→  1722→
+  1723→  1723→# 52. Error States
+  1724→  1724→
+  1725→  1725→Invalid URL:
+  1726→  1726→
+  1727→  1727→> That doesn't look like a valid web address.
+  1728→  1728→
+  1729→  1729→Unsafe URL:
+  1730→  1730→
+  1731→  1731→> This destination cannot be used.
+  1732→  1732→
+  1733→  1733→QR generation failure:
+  1734→  1734→
+  1735→  1735→> We couldn't generate this QR. Try simplifying the content or design.
+  1736→  1736→
+  1737→  1737→Redirect unavailable:
+  1738→  1738→
+  1739→  1739→> This QR is temporarily unavailable.
+  1740→  1740→
+  1741→  1741→Network error:
+  1742→  1742→
+  1743→  1743→> Something went wrong. Try again.
+  1744→  1744→
+  1745→  1745→Never expose technical stack traces.
+  1746→  1746→
+  1747→  1747→---
+  1748→  1748→
+  1749→  1749→# 53. Loading States
+  1750→  1750→
+  1751→  1751→Avoid generic spinning loaders where possible.
+  1752→  1752→
+  1753→  1753→Use tactile/editorial loading states:
+  1754→  1754→
+  1755→  1755→```text
+  1756→  1756→Preparing your QR...
+  1757→  1757→```
+  1758→  1758→
+  1759→  1759→or subtle paper/ink animation.
+  1760→  1760→
+  1761→  1761→For analytics:
+  1762→  1762→
+  1763→  1763→```text
+  1764→  1764→Opening the scan book...
+  1765→  1765→```
+  1766→  1766→
+  1767→  1767→Loading states must remain brief and non-blocking.
+  1768→  1768→
+  1769→  1769→---
+  1770→  1770→
+  1771→  1771→# 54. Microcopy
+  1772→  1772→
+  1773→  1773→Prefer concise editorial language.
+  1774→  1774→
+  1775→  1775→Instead of:
+  1776→  1776→
+  1777→  1777→> Submit Form
+  1778→  1778→
+  1779→  1779→Use:
+  1780→  1780→
+  1781→  1781→> Continue
+  1782→  1782→
+  1783→  1783→Instead of:
+  1784→  1784→
+  1785→  1785→> QR Configuration
+  1786→  1786→
+  1787→  1787→Use:
+  1788→  1788→
+  1789→  1789→> Design
+  1790→  1790→
+  1791→  1791→Instead of:
+  1792→  1792→
+  1793→  1793→> Redirect Destination
+  1794→  1794→
+  1795→  1795→Use:
+  1796→  1796→
+  1797→  1797→> Where should it go?
+  1798→  1798→
+  1799→  1799→Instead of:
+  1800→  1800→
+  1801→  1801→> Analytics Data
+  1802→  1802→
+  1803→  1803→Use:
+  1804→  1804→
+  1805→  1805→> Scan Book
+  1806→  1806→
+  1807→  1807→Instead of:
+  1808→  1808→
+  1809→  1809→> Audit Log
+  1810→  1810→
+  1811→  1811→Use:
+  1812→  1812→
+  1813→  1813→> Margin Notes
+  1814→  1814→
+  1815→  1815→---
+  1816→  1816→
+  1817→  1817→# 55. Product Terminology
+  1818→  1818→
+  1819→  1819→Use consistent terminology:
+  1820→  1820→
+  1821→  1821→```text
+  1822→  1822→Static QR
+  1823→  1823→Dynamic QR
+  1824→  1824→QR
+  1825→  1825→Destination
+  1826→  1826→Scan
+  1827→  1827→Unique visitor
+  1828→  1828→Analytics
+  1829→  1829→Activity
+  1830→  1830→Version
+  1831→  1831→Restore
+  1832→  1832→Active
+  1833→  1833→Paused
+  1834→  1834→Archived
+  1835→  1835→```
+  1836→  1836→
+  1837→  1837→Do not randomly alternate between:
+  1838→  1838→
+  1839→  1839→* Link
+  1840→  1840→* URL
+  1841→  1841→* Destination
+  1842→  1842→
+  1843→  1843→Use:
+  1844→  1844→
+  1845→  1845→> Destination
+  1846→  1846→
+  1847→  1847→when referring to the dynamic target.
+  1848→  1848→
+  1849→  1849→---
+  1850→  1850→
+  1851→  1851→# 56. Core UX Principle
+  1852→  1852→
+  1853→  1853→The user should understand the product in seconds.
+  1854→  1854→
+  1855→  1855→The primary mental model is:
+  1856→  1856→
+  1857→  1857→```text
+  1858→  1858→STATIC
+  1859→  1859→
+  1860→  1860→QR
+  1861→  1861→ ↓
+  1862→  1862→CONTENT
+  1863→  1863→ ↓
+  1864→  1864→DOWNLOAD
+  1865→  1865→
+  1866→  1866→
+  1867→  1867→DYNAMIC
+  1868→  1868→
+  1869→  1869→QR
+  1870→  1870→ ↓
+  1871→  1871→REDIRECT
+  1872→  1872→ ↓
+  1873→  1873→SCAN
+  1874→  1874→ ↓
+  1875→  1875→ANALYTICS
+  1876→  1876→ ↓
+  1877→  1877→EDIT
+  1878→  1878→```
+  1879→  1879→
+  1880→  1880→Everything in the interface should reinforce this.
+  1881→  1881→
+  1882→  1882→---
+  1883→  1883→
+  1884→  1884→# 57. Success Criteria
+  1885→  1885→
+  1886→  1886→A first-time visitor should be able to:
+  1887→  1887→
+  1888→  1888→1. Understand Static vs Dynamic.
+  1889→  1889→2. Create a Static QR in under one minute.
+  1890→  1890→3. Create a Dynamic QR in under one minute.
+  1891→  1891→4. Preview the QR immediately.
+  1892→  1892→5. Download the QR.
+  1893→  1893→6. Edit a Dynamic QR destination.
+  1894→  1894→7. Scan the Dynamic QR.
+  1895→  1895→8. See the scan in analytics.
+  1896→  1896→9. Understand scan activity.
+  1897→  1897→10. See what changed and when.
+  1898→  1898→
+  1899→  1899→---
+  1900→  1900→
+  1901→  1901→# 58. Performance Requirements
+  1902→  1902→
+  1903→  1903→Target:
+  1904→  1904→
+  1905→  1905→```text
+  1906→  1906→Homepage LCP < 2.5s
+  1907→  1907→QR generation < 1s
+  1908→  1908→Dashboard initial render < 2.5s
+  1909→  1909→Dynamic redirect p95 < 150ms
+  1910→  1910→```
+  1911→  1911→
+  1912→  1912→Optimize:
+  1913→  1913→
+  1914→  1914→* Image loading
+  1915→  1915→* Fonts
+  1916→  1916→* JavaScript bundles
+  1917→  1917→* ThreeUI assets
+  1918→  1918→* Animation workloads
+  1919→  1919→* QR generation
+  1920→  1920→* Analytics queries
+  1921→  1921→
+  1922→  1922→Do not compromise redirect performance for visual effects.
+  1923→  1923→
+  1924→  1924→---
+  1925→  1925→
+  1926→  1926→# 59. Browser Support
+  1927→  1927→
+  1928→  1928→Support current versions of:
+  1929→  1929→
+  1930→  1930→* Chrome
+  1931→  1931→* Edge
+  1932→  1932→* Safari
+  1933→  1933→* Firefox
+  1934→  1934→
+  1935→  1935→Desktop and mobile.
+  1936→  1936→
+  1937→  1937→ThreeUI/WebGL-related effects must gracefully degrade when required.
+  1938→  1938→
+  1939→  1939→The core QR functionality must remain usable even if enhanced visual
+  1940→  1940→effects are unavailable.
+  1941→  1941→
+  1942→  1942→---
+  1943→  1943→
+  1944→  1944→# 60. Final Design Philosophy
+  1945→  1945→
+  1946→  1946→The product should feel like:
+  1947→  1947→
+  1948→  1948→> A beautifully designed physical notebook for digital links.
+  1949→  1949→
+  1950→  1950→Not:
+  1951→  1951→
+  1952→  1952→> A QR generator with a decorative skin.
+  1953→  1953→
+  1954→  1954→The QR is the object.
+  1955→  1955→
+  1956→  1956→The dynamic QR is the living object.
+  1957→  1957→
+  1958→  1958→The analytics are its story.
+  1959→  1959→
+  1960→  1960→The activity history is its margin.
+  1961→  1961→
+  1962→  1962→The version history is its memory.
+  1963→  1963→
+  1964→  1964→---
+  1965→  1965→
+  1966→  1966→# 61. MASTER IMPLEMENTATION PROMPT
+  1967→  1967→
+  1968→  1968→Use the following prompt with the coding agent.
+  1969→  1969→
+  1970→  1970→---
+  1971→  1971→
+  1972→  1972→You are implementing a production-quality QR web application in an
+  1973→  1973→existing project.
+  1974→  1974→
+  1975→  1975→The product has EXACTLY TWO core features:
+  1976→  1976→
+  1977→  1977→1. STATIC QR
+  1978→  1978→2. DYNAMIC QR
+  1979→  1979→
+  1980→  1980→Do not add additional QR types or unrelated product modules.
+  1981→  1981→
+  1982→  1982→The visual frontend must use the supplied ThreeUI
+  1983→  1983→`MengToSketchbookLandingPage` implementation as the exact visual and
+  1984→  1984→interaction foundation.
+  1985→  1985→
+  1986→  1986→IMPORTANT SOURCE RULE:
+  1987→  1987→
+  1988→  1988→The ThreeUI component MUST be implemented from the exact canonical
+  1989→  1989→source provided by the user.
+  1990→  1990→
+  1991→  1991→Do not recreate it from screenshots, previews, descriptions, filenames,
+  1992→  1992→or visual approximation.
+  1993→  1993→
+  1994→  1994→First fetch and read the complete canonical implementation.
+  1995→  1995→
+  1996→  1996→Canonical HTML:
+  1997→  1997→
+  1998→  1998→[https://threeui.com/landing-pages/meng-to-sketchbook.html](https://threeui.com/landing-pages/meng-to-sketchbook.html)
+  1999→  1999→
+  2000→  2000→Complete source bundle:
+
+[showing lines 1-2000 of 2002; use offset=2001 with limit to continue reading]
