@@ -41,6 +41,8 @@ export async function serializeQr(qrId: string) {
     type: qr.type,
     name: qr.name,
     slug: qr.slug,
+    shortCode: qr.shortCode || qr.slug,
+    scanUrl: `/q/${qr.shortCode || qr.slug}`,
     status: qr.status,
     content: qr.content,
     designConfig: JSON.parse(qr.designConfig),

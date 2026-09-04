@@ -76,8 +76,9 @@ export function QrDetailView({
     "overview" | "analytics" | "activity" | "versions"
   >(tab);
 
-  const redirectUrl = qr?.slug
-    ? `${typeof window !== "undefined" ? window.location.origin : ""}/api/r/${qr.slug}`
+  const code = (qr as unknown as { shortCode?: string })?.shortCode || qr?.slug;
+  const redirectUrl = code
+    ? `${typeof window !== "undefined" ? window.location.origin : ""}/q/${code}`
     : "";
 
   const onCopy = async () => {
@@ -120,10 +121,10 @@ export function QrDetailView({
             <EditorialHeading as="h1" className="text-[clamp(1.75rem,4vw,3rem)]">
               {qr.name}
             </EditorialHeading>
-            {isDynamic && qr.slug && (
+            {isDynamic && code && (
               <div className="mt-3 flex items-center gap-2">
                 <code className="font-sans text-[0.8125rem] text-[var(--ink-2)] bg-[var(--paper-3)] px-2 py-1 border border-[var(--rule)] rounded-[2px]">
-                  /api/r/{qr.slug}
+                  /q/{code}
                 </code>
                 <button
                   onClick={onCopy}
@@ -217,8 +218,9 @@ function OverviewTab({
 
   if (!qr) return null;
   const isDynamic = qr.type === "DYNAMIC";
-  const redirectUrl = qr.slug
-    ? `${typeof window !== "undefined" ? window.location.origin : ""}/api/r/${qr.slug}`
+  const code = (qr as unknown as { shortCode?: string })?.shortCode || qr.slug;
+  const redirectUrl = code
+    ? `${typeof window !== "undefined" ? window.location.origin : ""}/q/${code}`
     : "";
 
   const onStatus = (status: "ACTIVE" | "PAUSED" | "ARCHIVED") => {
@@ -626,8 +628,8 @@ function AnalyticsTab({ qrId }: { qrId: string }) {
           <MetricNumber value={(analytics?.scansInRange ?? 0).toLocaleString()} />
         </PaperSurface>
         <PaperSurface variant="inset" className="p-5">
-          <Eyebrow className="block mb-2">Unique visitors</Eyebrow>
-          <MetricNumber value={(analytics?.uniqueVisitors ?? 0).toLocaleString()} />
+          <Eyebrow className="block mb-2">Estimated unique visitors</Eyebrow>
+          <MetricNumber value={(analytics?.estimatedUniqueVisitors ?? analytics?.uniqueVisitors ?? 0).toLocaleString()} />
         </PaperSurface>
         <PaperSurface variant="inset" className="p-5">
           <Eyebrow className="block mb-2">Growth</Eyebrow>

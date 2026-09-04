@@ -187,6 +187,7 @@ export interface AnalyticsData {
   totalScans: number;
   scansInRange: number;
   uniqueVisitors: number;
+  estimatedUniqueVisitors?: number;
   growthPct: number;
   timeline: { label: string; date: string; scans: number; unique: number }[];
   devices: { key: string; count: number; pct: number }[];

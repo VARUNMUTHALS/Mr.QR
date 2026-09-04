@@ -268,8 +268,9 @@ function PublishScreen({ qrId }: { qrId: string }) {
   const previewRef = React.useRef<QRPreviewHandle>(null);
   const { toast } = useToast();
 
-  const redirectUrl = qr?.slug
-    ? `${typeof window !== "undefined" ? window.location.origin : ""}/api/r/${qr.slug}`
+  const code = (qr as unknown as { shortCode?: string })?.shortCode || qr?.slug;
+  const redirectUrl = code
+    ? `${typeof window !== "undefined" ? window.location.origin : ""}/q/${code}`
     : "";
 
   const onCopy = async () => {

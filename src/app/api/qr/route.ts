@@ -11,7 +11,7 @@ export async function GET() {
   if (!user) return errorResponse("Unauthorized", 401);
 
   const qrs = await db.qrCode.findMany({
-    where: { userId: user.id },
+    where: { userId: user.id, deletedAt: null },
     orderBy: { updatedAt: "desc" },
     include: {
       destinations: { orderBy: { version: "desc" }, take: 1 },

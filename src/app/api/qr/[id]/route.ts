@@ -68,10 +68,28 @@ export async function DELETE(
   const user = await getCurrentUser();
   if (!user) return errorResponse("Unauthorized", 401);
   const { id } = await params;
-
   const qr = await db.qrCode.findUnique({ where: { id }, select: { userId: true, name: true } });
   if (!qr || qr.userId !== user.id) return errorResponse("Not found", 404);
 
-  await db.qrCode.delete({ where: { id } });
-  return json({ ok: true });
+  // Soft-delete: retain historical analytics & audit logs, archive shortCode, hide from lists
+  await db.$transaction(async (tx) => {
+    await tx.qrCode.update({
+      where: { id },
+      data: {
+        status: "ARCHIVED",
+        archivedAt: new Date(),
+        deletedAt: new Date(),
+      },
+    });
+    await tx.activityLog.create({
+      data: {
+        userId: user.id,
+        qrId: id,
+        action: "STATUS_CHANGED",
+        metadata: JSON.stringify({ status: "ARCHIVED", softDeleted: true, name: qr.name }),
+      },
+    });
+  });
+
+  return json({ ok: true, message: "QR code archived and soft-deleted." });
 }

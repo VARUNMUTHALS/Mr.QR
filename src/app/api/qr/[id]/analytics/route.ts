@@ -35,6 +35,7 @@ export async function GET(
       region: true,
       city: true,
       ipHash: true,
+      visitorKey: true,
     },
     orderBy: { timestamp: "asc" },
   });
@@ -42,10 +43,14 @@ export async function GET(
   // total scans for the QR (all time) — separate quick query
   const allTime = await db.scanEvent.count({ where: { qrId: id } });
 
-  // unique visitors (distinct ipHash) in range
-  const uniqueIpSet = new Set<string>();
-  for (const s of scans) if (s.ipHash) uniqueIpSet.add(s.ipHash);
-  const uniqueVisitors = uniqueIpSet.size;
+  // Estimated unique visitors (distinct salted visitorKey) in range
+  const uniqueVisitorSet = new Set<string>();
+  for (const s of scans) {
+    const key = s.visitorKey || s.ipHash;
+    if (key) uniqueVisitorSet.add(key);
+  }
+  const estimatedUniqueVisitors = uniqueVisitorSet.size;
+  const uniqueVisitors = estimatedUniqueVisitors;
 
   // previous-window comparison for growth
   const prevSince = new Date(since.getTime() - (now.getTime() - since.getTime()));
@@ -118,6 +123,7 @@ export async function GET(
     since: since.toISOString(),
     totalScans: allTime,
     scansInRange: scans.length,
+    estimatedUniqueVisitors,
     uniqueVisitors,
     growthPct,
     timeline,
@@ -203,6 +209,11 @@ function bucketDaily(
     const idx = dayIndex + (days - 1);
     if (idx >= 0 && idx < buckets.length) {
       buckets[idx].scans += 1;
+      const key = (s as unknown as { visitorKey?: string; ipHash?: string }).visitorKey ||
+        (s as unknown as { visitorKey?: string; ipHash?: string }).ipHash;
+      if (key) {
+        buckets[idx].unique.add(key);
+      }
     }
   }
 
@@ -214,7 +225,7 @@ function bucketDaily(
       }),
       date: b.date,
       scans: b.scans,
-      unique: Math.round(b.scans * (0.62 + Math.random() * 0.1)),
+      unique: b.unique.size,
     });
   }
   return out;
