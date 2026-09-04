@@ -12,6 +12,7 @@ import {
   BotanicalSprig,
 } from "@/components/studio/primitives";
 import { ArrowRight, ArrowUpRight, Leaf, Activity, ScanLine, History } from "lucide-react";
+import { InteractiveHeroCard } from "@/components/studio/interactive-hero-card";
 
 export function HomeView() {
   const go = useNav((s) => s.go);
@@ -24,38 +25,54 @@ export function HomeView() {
           variant="right"
           className="absolute top-6 right-0 hidden md:block h-28 w-56 opacity-70 pointer-events-none"
         />
-        <div className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
-            className="eyebrow text-[var(--ink-muted)] mb-6"
-          >
-            QR Studio · Vol. 01
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 0.61, 0.36, 1] }}
-            className="display-heading text-[var(--ink)] text-[clamp(2.75rem,9vw,6.5rem)] leading-[0.92]"
-          >
-            Make a QR.
-            <br />
-            <span className="italic text-[var(--botanical)]">Make it useful.</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 0.61, 0.36, 1] }}
-            className="mt-8 font-body text-[1.0625rem] sm:text-[1.1875rem] leading-[1.65] text-[var(--ink-2)] max-w-2xl"
-          >
-            Create a beautiful QR code in seconds. Choose{" "}
-            <em className="not-italic text-[var(--ink)] font-medium">static</em>{" "}
-            for something permanent, or{" "}
-            <em className="not-italic text-[var(--ink)] font-medium">dynamic</em>{" "}
-            when you want to change its destination and measure what happens
-            after every scan.
-          </motion.p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+              className="eyebrow text-[var(--ink-muted)] mb-6 flex items-center gap-2"
+            >
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--botanical)]" />
+              QR Studio · Enterprise Suite
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 0.61, 0.36, 1] }}
+              className="display-heading text-[var(--ink)] text-[clamp(2.75rem,8vw,5.5rem)] leading-[0.92]"
+            >
+              Make a QR.
+              <br />
+              <span className="italic text-[var(--botanical)]">Make it useful.</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 0.61, 0.36, 1] }}
+              className="mt-8 font-body text-[1.0625rem] sm:text-[1.1875rem] leading-[1.65] text-[var(--ink-2)] max-w-xl"
+            >
+              Generate high-precision dynamic QR codes backed by PostgreSQL and real edge telemetry.
+              Update destinations anytime without reprinting, protected by organization RBAC.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 0.61, 0.36, 1] }}
+              className="mt-8 flex flex-wrap items-center gap-4"
+            >
+              <InkButton size="lg" variant="botanical" onClick={() => go({ view: "create-dynamic" })}>
+                Create Dynamic QR <ArrowRight className="h-4 w-4" />
+              </InkButton>
+              <InkButton size="lg" variant="paper" onClick={() => go({ view: "create-static" })}>
+                Static QR
+              </InkButton>
+            </motion.div>
+          </div>
+
+          <div className="lg:col-span-5 flex justify-center">
+            <InteractiveHeroCard onClick={() => go({ view: "create-dynamic" })} />
+          </div>
         </div>
       </section>
 
