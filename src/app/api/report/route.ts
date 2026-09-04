@@ -50,5 +50,5 @@ function reportPage(): string {
   return `<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Report submitted</title>
 <style>body{font-family:Georgia,serif;background:#ece3d2;color:#2b2721;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:2rem}
 .c{max-width:480px;background:#faf4e8;border:1px solid rgba(43,39,33,.16);padding:2.5rem 2.25rem}h1{font-weight:400;margin:0 0 1rem}p{line-height:1.6;color:#4a4339}a{color:#2b2721}</style></head>
-<body><main class="c"><h1>Report received.</h1><p>Thank you. We've logged this QR for review and will take action if it violates our policies.</p><p><a href="/">Return to QR Studio →</a></p></main></body></html>`;
+<body><main class="c"><h1>Report received.</h1><p>Thank you. We've logged this QR for review and will take action if it violates our policies.</p><p><a href="/">Return to Mr.QR →</a></p></main></body></html>`;
 }

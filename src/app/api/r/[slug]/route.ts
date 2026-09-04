@@ -179,7 +179,7 @@ function renderNotFound(slug: string): string {
     `<p class="eyebrow">Not found</p>
      <h1>This QR doesn't lead anywhere.</h1>
      <p>We couldn't find a QR for <code>${escapeHtml(slug)}</code>. It may have been removed, or the link may be incomplete.</p>
-     <p class="report"><a href="/" style="color:var(--ink)">Go to QR Studio →</a></p>`
+     <p class="report"><a href="/" style="color:var(--ink)">Go to Mr.QR →</a></p>`
   );
 }
 

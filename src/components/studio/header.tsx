@@ -48,11 +48,12 @@ export function StudioHeader() {
           <button
             onClick={home}
             className="group flex items-center gap-2.5"
-            aria-label="QR Studio — home"
+            aria-label="Mr.QR — home"
           >
             <BrandMark />
-            <span className="hidden sm:block font-sans text-[0.8125rem] tracking-[0.24em] uppercase text-[var(--ink)]">
-              QR&nbsp;Studio
+            <span className="flex items-center text-[0.9375rem] font-bold tracking-tight text-[var(--ink)]">
+              <span className="font-serif italic text-lg mr-0.5">Mr.</span>
+              <span className="text-[var(--terracotta)] font-sans tracking-wider">QR</span>
             </span>
           </button>
 
@@ -185,33 +186,32 @@ function BrandMark() {
   return (
     <svg
       viewBox="0 0 32 32"
-      className="h-7 w-7 text-[var(--ink)]"
+      className="h-8 w-8"
       aria-hidden
     >
-      <rect
-        x="1"
-        y="1"
-        width="30"
-        height="30"
-        rx="3"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.4"
-      />
-      <g fill="currentColor">
-        <rect x="6" y="6" width="5" height="5" />
-        <rect x="21" y="6" width="5" height="5" />
-        <rect x="6" y="21" width="5" height="5" />
-        <rect x="14" y="6" width="2" height="2" />
-        <rect x="18" y="10" width="2" height="2" />
-        <rect x="14" y="14" width="2" height="2" />
-        <rect x="10" y="18" width="2" height="2" />
-        <rect x="18" y="18" width="2" height="2" />
-        <rect x="22" y="14" width="2" height="2" />
-        <rect x="22" y="22" width="2" height="2" />
-        <rect x="14" y="22" width="2" height="2" />
-      </g>
-      <circle cx="16" cy="16" r="3.2" fill="none" stroke="var(--terracotta)" strokeWidth="1.4" />
+      <rect width="32" height="32" rx="7" fill="#141312" />
+      
+      {/* Finder Patterns */}
+      <rect x="4" y="4" width="8" height="8" rx="2" fill="none" stroke="var(--terracotta)" strokeWidth="1.6" />
+      <rect x="6.5" y="6.5" width="3" height="3" rx="0.8" fill="var(--terracotta)" />
+      
+      <rect x="20" y="4" width="8" height="8" rx="2" fill="none" stroke="var(--terracotta)" strokeWidth="1.6" />
+      <rect x="22.5" y="6.5" width="3" height="3" rx="0.8" fill="var(--terracotta)" />
+      
+      <rect x="4" y="20" width="8" height="8" rx="2" fill="none" stroke="var(--terracotta)" strokeWidth="1.6" />
+      <rect x="6.5" y="22.5" width="3" height="3" rx="0.8" fill="var(--terracotta)" />
+
+      {/* Signature Glasses */}
+      <circle cx="11.5" cy="14.5" r="3.2" fill="none" stroke="#FAF8F5" strokeWidth="1.3" />
+      <circle cx="10.8" cy="13.8" r="0.7" fill="#FAF8F5" opacity="0.8" />
+      <circle cx="19.5" cy="14.5" r="3.2" fill="none" stroke="#FAF8F5" strokeWidth="1.3" />
+      <circle cx="18.8" cy="13.8" r="0.7" fill="#FAF8F5" opacity="0.8" />
+      <path d="M 14.7 14.2 Q 15.5 13.2 16.3 14.2" fill="none" stroke="#FAF8F5" strokeWidth="1.2" strokeLinecap="round" />
+
+      {/* Bowtie */}
+      <polygon points="12,22 14.8,23.3 12,24.6" fill="var(--terracotta)" />
+      <polygon points="19,22 16.2,23.3 19,24.6" fill="var(--terracotta)" />
+      <rect x="14.5" y="22.3" width="2" height="2" rx="0.5" fill="#FAF8F5" />
     </svg>
   );
 }

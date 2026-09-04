@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="7" fill="#141312" />
+  
+  <!-- Finder Top-Left -->
+  <rect x="4" y="4" width="8" height="8" rx="2" fill="none" stroke="#E27344" stroke-width="1.6" />
+  <rect x="6.5" y="6.5" width="3" height="3" rx="0.8" fill="#E27344" />
+  
+  <!-- Finder Top-Right -->
+  <rect x="20" y="4" width="8" height="8" rx="2" fill="none" stroke="#E27344" stroke-width="1.6" />
+  <rect x="22.5" y="6.5" width="3" height="3" rx="0.8" fill="#E27344" />
+  
+  <!-- Finder Bottom-Left -->
+  <rect x="4" y="20" width="8" height="8" rx="2" fill="none" stroke="#E27344" stroke-width="1.6" />
+  <rect x="6.5" y="22.5" width="3" height="3" rx="0.8" fill="#E27344" />
+  
+  <!-- Matrix Accents -->
+  <rect x="14.5" y="5" width="2" height="2" rx="0.5" fill="#F5EFE6" opacity="0.9" />
+  <rect x="14.5" y="8.5" width="2" height="2" rx="0.5" fill="#E27344" opacity="0.9" />
+  <rect x="21" y="15" width="2" height="2" rx="0.5" fill="#F5EFE6" opacity="0.85" />
+  <rect x="25" y="18" width="2" height="2" rx="0.5" fill="#E27344" opacity="0.85" />
+  <rect x="21" y="22" width="2" height="2" rx="0.5" fill="#F5EFE6" opacity="0.85" />
+  <rect x="25" y="25" width="2" height="2" rx="0.5" fill="#E27344" opacity="0.85" />
+
+  <!-- Gentleman Glasses -->
+  <!-- Left Lens -->
+  <circle cx="11.5" cy="14.5" r="3.2" fill="none" stroke="#F5EFE6" stroke-width="1.3" />
+  <circle cx="10.8" cy="13.8" r="0.8" fill="#F5EFE6" opacity="0.7" />
+  <!-- Right Lens -->
+  <circle cx="19.5" cy="14.5" r="3.2" fill="none" stroke="#F5EFE6" stroke-width="1.3" />
+  <circle cx="18.8" cy="13.8" r="0.8" fill="#F5EFE6" opacity="0.7" />
+  <!-- Bridge -->
+  <path d="M 14.7 14.2 Q 15.5 13.2 16.3 14.2" fill="none" stroke="#F5EFE6" stroke-width="1.2" stroke-linecap="round" />
+
+  <!-- Bowtie -->
+  <polygon points="12,22 14.8,23.3 12,24.6" fill="#E27344" />
+  <polygon points="19,22 16.2,23.3 19,24.6" fill="#E27344" />
+  <rect x="14.5" y="22.3" width="2" height="2" rx="0.5" fill="#F5EFE6" />
+</svg>

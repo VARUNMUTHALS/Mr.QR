@@ -147,7 +147,7 @@ async function recordScan(input: {
 function shell(title: string, body: string): string {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>${escapeHtml(title)} — QR Studio</title>
+<title>${escapeHtml(title)} — Mr.QR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -174,7 +174,7 @@ function renderNotFound(code: string): string {
     `<span class="eyebrow">Studio · Resolver</span>
 <h1>Code <em>not found.</em></h1>
 <p>The code <strong>${escapeHtml(code)}</strong> doesn't correspond to an active QR in this studio.</p>
-<div class="foot"><span>QR Studio</span><a href="/" class="btn">Create your own</a></div>`
+<div class="foot"><span>Mr.QR</span><a href="/" class="btn">Create your own</a></div>`
   );
 }
 

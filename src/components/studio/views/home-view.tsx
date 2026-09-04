@@ -34,7 +34,7 @@ export function HomeView() {
               className="eyebrow text-[var(--ink-muted)] mb-6 flex items-center gap-2"
             >
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--botanical)]" />
-              QR Studio · Enterprise Suite
+              Mr.QR · Enterprise Dynamic Suite
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 16 }}

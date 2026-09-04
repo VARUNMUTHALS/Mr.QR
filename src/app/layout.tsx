@@ -27,17 +27,22 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "QR Studio — Encode once. Change anytime.",
+  title: "Mr.QR — Dynamic QR Studio | Encode once. Change anytime.",
   description:
-    "An editorial QR design studio. Create beautiful static QR codes, or dynamic QR codes you can edit and measure after every scan.",
-  keywords: ["QR code", "dynamic QR", "static QR", "QR analytics", "QR studio"],
-  authors: [{ name: "QR Studio" }],
+    "Mr.QR is an editorial, high-performance dynamic QR studio. Create beautiful custom QR codes you can redirect, edit, and analyze after every scan.",
+  keywords: ["Mr.QR", "Mr QR", "dynamic QR", "static QR", "QR analytics", "QR studio"],
+  authors: [{ name: "Mr.QR" }],
   icons: {
-    icon: "/logo.svg",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.ico" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "QR Studio",
-    description: "Make a QR. Make it useful.",
+    title: "Mr.QR — Dynamic QR Platform",
+    description: "Encode once. Change anytime. Measure every scan.",
     type: "website",
   },
 };

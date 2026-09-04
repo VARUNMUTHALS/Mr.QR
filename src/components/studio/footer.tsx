@@ -13,9 +13,9 @@ export function StudioFooter() {
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8 py-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
           <div className="max-w-md">
-            <div className="eyebrow mb-3">QR Studio</div>
+            <div className="eyebrow mb-3 text-[var(--terracotta)] font-bold tracking-widest">Mr.QR Studio</div>
             <p className="font-body text-[0.9375rem] leading-relaxed text-[var(--ink-2)]">
-              An editorial QR design studio. Encode once for something
+              An editorial dynamic QR platform. Encode once for something
               permanent, or go dynamic to change the destination and measure
               every scan.
             </p>
@@ -35,7 +35,7 @@ export function StudioFooter() {
 
         <div className="mt-10 pt-6 border-t border-[var(--rule)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <p className="font-sans text-[0.6875rem] uppercase tracking-[0.18em] text-[var(--ink-muted)]">
-            © {year} QR Studio · A tactile sketchbook for digital links
+            © {year} Mr.QR · A tactile sketchbook for digital links
           </p>
           <p className="font-sans text-[0.6875rem] text-[var(--ink-muted)]">
             Location data is approximate. Never GPS-precise.
