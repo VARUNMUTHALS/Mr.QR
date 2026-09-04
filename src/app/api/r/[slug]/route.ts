@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import {
   parseUserAgent,
-  approximateGeo,
+  extractEdgeGeo,
+  computeVisitorKey,
+  isSuspectedBot,
   hashIp,
   getIp,
   rateLimit,
@@ -18,7 +20,7 @@ export async function GET(
 
   // Light rate limiting on redirects (per IP) to slow abuse.
   const ip = getIp(req);
-  const rl = rateLimit(`r:${ip}`, 60, 60_000);
+  const rl = rateLimit(`r:${ip}`, 120, 60_000);
   if (!rl.ok) {
     return new NextResponse(renderRateLimited(), {
       status: 429,
@@ -26,8 +28,11 @@ export async function GET(
     });
   }
 
-  const qr = await db.qrCode.findUnique({
-    where: { slug },
+  const qr = await db.qrCode.findFirst({
+    where: {
+      OR: [{ slug }, { shortCode: slug }],
+      deletedAt: null,
+    },
     include: { destinations: { where: { isCurrent: true }, take: 1 } },
   });
 
@@ -61,25 +66,34 @@ export async function GET(
   }
 
   // Record scan WITHOUT blocking the redirect. If analytics fails, redirect
-  // still succeeds (hard requirement).
+  // still succeeds (hard invariant). Real edge geo only — never fake data.
   const ua = req.headers.get("user-agent");
   const dev = parseUserAgent(ua);
-  const seed = `${ip}-${qr.slug}`;
-  const geo = approximateGeo(seed);
+  const geo = extractEdgeGeo(req.headers);
+  const visitorKey = computeVisitorKey(ip, ua);
+  const bot = isSuspectedBot(ua);
   const referrer = req.headers.get("referer");
 
-  // fire-and-forget analytics write
+  // non-blocking analytics write
   void recordScan({
     qrId: qr.id,
     deviceType: dev.deviceType,
     os: dev.os,
+    osFamily: dev.os,
     browser: dev.browser,
+    browserFamily: dev.browser,
     country: geo.country,
+    countryCode: geo.countryCode,
     region: geo.region,
+    regionCode: geo.regionCode,
     city: geo.city,
+    visitorKey,
     ipHash: hashIp(ip),
     userAgent: (ua || "").slice(0, 240),
+    referrerDomain: referrer ? new URL(referrer, "https://unknown.domain").hostname : null,
     referrer,
+    suspectedBot: bot,
+    source: "REAL",
   });
 
   return NextResponse.redirect(destination, { status: 302 });
@@ -89,13 +103,21 @@ async function recordScan(input: {
   qrId: string;
   deviceType: string;
   os: string;
+  osFamily: string;
   browser: string;
-  country: string;
-  region: string;
-  city: string;
+  browserFamily: string;
+  country: string | null;
+  countryCode: string | null;
+  region: string | null;
+  regionCode: string | null;
+  city: string | null;
+  visitorKey: string;
   ipHash: string;
   userAgent: string;
+  referrerDomain: string | null;
   referrer: string | null;
+  suspectedBot: boolean;
+  source: string;
 }) {
   try {
     await db.scanEvent.create({ data: input });

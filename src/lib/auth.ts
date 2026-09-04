@@ -18,27 +18,38 @@ export const authOptions: NextAuthOptions = {
         const password = credentials?.password || "";
         if (!email || !password) return null;
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
-        if (password.length < 4) return null;
 
-        // Auto-provision: if the user doesn't exist, create them.
-        // This keeps the studio frictionless — enter any email + password to
-        // start. Passwords are hashed.
-        let user = await db.user.findUnique({ where: { email } });
-        if (!user) {
-          const passwordHash = await bcrypt.hash(password, 10);
-          const name = email.split("@")[0].replace(/[._-]+/g, " ");
-          user = await db.user.create({
-            data: { email, passwordHash, name },
-          });
-        } else {
-          const ok = await bcrypt.compare(password, user.passwordHash);
-          if (!ok) return null;
+        // Production security: Strictly NO auto-provisioning.
+        // User must explicitly register via /api/v1/auth/register.
+        const user = await db.user.findUnique({
+          where: { email },
+          include: {
+            memberships: {
+              include: {
+                organization: true,
+              },
+              take: 1,
+            },
+          },
+        });
+
+        if (!user || !user.passwordHash) {
+          return null;
         }
+
+        const valid = await bcrypt.compare(password, user.passwordHash);
+        if (!valid) {
+          return null;
+        }
+
+        const primaryOrg = user.memberships[0]?.organization;
 
         return {
           id: user.id,
           email: user.email,
           name: user.name || undefined,
+          organizationId: primaryOrg?.id,
+          role: user.memberships[0]?.role || "MEMBER",
         };
       },
     }),
@@ -47,12 +58,19 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = (user as { id: string }).id;
+        token.organizationId = (user as { organizationId?: string }).organizationId;
+        token.role = (user as { role?: string }).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as { id?: string }).id = token.id as string | undefined;
+        (session.user as { id?: string; organizationId?: string; role?: string }).id =
+          token.id as string | undefined;
+        (session.user as { id?: string; organizationId?: string; role?: string }).organizationId =
+          token.organizationId as string | undefined;
+        (session.user as { id?: string; organizationId?: string; role?: string }).role =
+          token.role as string | undefined;
       }
       return session;
     },
