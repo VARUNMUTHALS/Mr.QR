@@ -130,7 +130,7 @@ function Plate({
   tagline: string;
   tagline2: string;
   description: string;
-  features: { icon: React.ComponentType<{ className?: string }>; label: string }[];
+  features: { icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>; label: string }[];
   cta: string;
   onClick: () => void;
   accent: "botanical" | "terracotta";

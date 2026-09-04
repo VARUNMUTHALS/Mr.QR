@@ -163,7 +163,7 @@ export function QrDetailView({
                   ] as const)
                 : ([] as const)),
             ] as const
-          ).map(([value, label, Icon]) => {
+          ).map(([value, label, Icon]: readonly [string, string, any]) => {
             const active = activeTab === value;
             return (
               <button
