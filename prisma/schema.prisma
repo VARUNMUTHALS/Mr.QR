@@ -1,101 +1,302 @@
-// Prisma schema for QR Studio.
-// SQLite is used (project default). JSON-like fields are stored as String
-// and parsed on the server.
+// Prisma schema for Dynamic QR Studio (Production)
+// Target database: PostgreSQL (migrated from SQLite prototype)
+// Adheres strictly to DATABASE.md, ARCHITECTURE.md, and PRD.md
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id           String         @id @default(cuid())
-  email        String         @unique
-  name         String?
-  passwordHash String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  qrCodes      QrCode[]
-  activity     ActivityLog[]
+  id                  String               @id @default(cuid())
+  email               String               @unique
+  emailVerifiedAt     DateTime?
+  name                String?
+  avatarAssetId       String?
+  passwordHash        String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  deletedAt           DateTime?
+
+  memberships         OrganizationMember[]
+  ownedOrganizations  Organization[]       @relation("OrganizationOwner")
+  qrCodes             QrCode[]
+  activity            ActivityLog[]
+
+  @@index([email])
+}
+
+model Organization {
+  id            String               @id @default(cuid())
+  name          String
+  slug          String               @unique
+  ownerUserId   String
+  owner         User                 @relation("OrganizationOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  deletedAt     DateTime?
+
+  members       OrganizationMember[]
+  qrCodes       QrCode[]
+  folders       Folder[]
+  campaigns     Campaign[]
+  landingPages  LandingPage[]
+  assets        Asset[]
+  subscription  Subscription?
+  usageCounters UsageCounter[]
+  activity      ActivityLog[]
+
+  @@index([slug])
+  @@index([ownerUserId])
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String       @default("MEMBER") // OWNER | ADMIN | EDITOR | ANALYST | VIEWER
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@index([organizationId])
 }
 
 model QrCode {
-  id           String          @id @default(cuid())
-  userId       String
-  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type         String          // "STATIC" | "DYNAMIC"
-  name         String
-  slug          String?        @unique // dynamic redirect slug
-  status       String          @default("ACTIVE") // ACTIVE | PAUSED | ARCHIVED
-  content      String?         // static QR encoded content
-  designConfig String          // JSON of QrDesignConfig
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
-  destinations QrDestination[]
-  designs      QrDesign[]
-  scans        ScanEvent[]
-  activity     ActivityLog[]
+  id                      String                 @id @default(cuid())
+  userId                  String
+  user                    User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId          String?
+  organization            Organization?          @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  createdBy               String?
+  type                    String                 // "STATIC" | "DYNAMIC"
+  name                    String
+  slug                    String?                @unique // dynamic redirect slug (legacy /api/r/[slug])
+  shortCode               String?                @unique // public dynamic redirect code (/q/[shortCode])
+  status                  String                 @default("ACTIVE") // ACTIVE | PAUSED | ARCHIVED
+  contentType             String                 @default("URL") // URL | TEXT | VCARD | WIFI | etc.
+  content                 String?                // static QR encoded content
+  staticPayload           String?
+  designConfig            String                 // JSON representation of QrDesignConfig
+  currentDestinationId    String?
+  currentDesignVersionId  String?
+  folderId                String?
+  folder                  Folder?                @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  campaignId              String?
+  campaign                Campaign?              @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  archivedAt              DateTime?
+  deletedAt               DateTime?
+
+  destinations            QrDestination[]
+  designs                 QrDesign[]
+  scans                   ScanEvent[]
+  dailyAggregates         ScanDailyAggregate[]
+  activity                ActivityLog[]
+  landingPages            LandingPage[]
 
   @@index([userId])
+  @@index([organizationId, updatedAt])
+  @@index([organizationId, status])
   @@index([slug])
+  @@index([shortCode])
 }
 
 model QrDestination {
-  id        String   @id @default(cuid())
-  qrId      String
-  qrCode    QrCode   @relation(fields: [qrId], references: [id], onDelete: Cascade)
-  url       String
-  version   Int
-  isCurrent Boolean  @default(false)
-  createdBy String?
-  createdAt DateTime @default(now())
+  id              String    @id @default(cuid())
+  qrId            String
+  qrCode          QrCode    @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  url             String
+  destinationUrl  String?
+  destinationType String    @default("URL")
+  version         Int
+  versionNumber   Int?
+  isCurrent       Boolean   @default(false)
+  landingPageId   String?
+  createdBy       String?
+  changeReason    String?
+  createdAt       DateTime  @default(now())
 
+  @@unique([qrId, version])
   @@index([qrId])
 }
 
 model QrDesign {
-  id        String   @id @default(cuid())
-  qrId      String
-  qrCode    QrCode   @relation(fields: [qrId], references: [id], onDelete: Cascade)
-  config    String   // JSON
-  version   Int
-  createdAt DateTime @default(now())
+  id            String    @id @default(cuid())
+  qrId          String
+  qrCode        QrCode    @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  config        String    // JSON config string
+  version       Int
+  versionNumber Int?
+  logoAssetId   String?
+  createdBy     String?
+  createdAt     DateTime  @default(now())
 
+  @@unique([qrId, version])
   @@index([qrId])
 }
 
 model ScanEvent {
-  id         String   @id @default(cuid())
-  qrId       String
-  qrCode     QrCode   @relation(fields: [qrId], references: [id], onDelete: Cascade)
-  timestamp  DateTime @default(now())
-  country    String?
-  region     String?
-  city       String?
-  deviceType String?
-  os         String?
-  browser    String?
-  referrer   String?
-  ipHash     String?
-  userAgent  String?
-  simulated  Boolean  @default(false)
+  id                  String    @id @default(cuid())
+  qrId                String
+  qrCode              QrCode    @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  timestamp           DateTime  @default(now())
+  occurredAt          DateTime  @default(now())
+  country             String?
+  countryCode         String?
+  region              String?
+  regionCode          String?
+  city                String?
+  deviceType          String?
+  os                  String?
+  osFamily            String?
+  browser             String?
+  browserFamily       String?
+  referrer            String?
+  referrerDomain      String?
+  ipHash              String?
+  visitorKey          String?   // salted HMAC privacy key
+  userAgent           String?
+  simulated           Boolean   @default(false)
+  suspectedBot        Boolean   @default(false)
+  requestId           String?
+  source              String    @default("REAL") // REAL | TEST
+  retentionExpiresAt  DateTime?
 
   @@index([qrId, timestamp])
+  @@index([qrId, occurredAt])
+  @@index([visitorKey])
   @@index([ipHash])
 }
 
+model ScanDailyAggregate {
+  id                      String    @id @default(cuid())
+  qrId                    String
+  qrCode                  QrCode    @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  date                    DateTime
+  scans                   Int       @default(0)
+  estimatedUniqueVisitors Int       @default(0)
+  mobileScans             Int       @default(0)
+  tabletScans             Int       @default(0)
+  desktopScans            Int       @default(0)
+  botScans                Int       @default(0)
+  countryBreakdown        String?   // JSON string
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@unique([qrId, date])
+  @@index([qrId, date])
+}
+
 model ActivityLog {
-  id        String   @id @default(cuid())
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  qrId      String
-  qrCode    QrCode   @relation(fields: [qrId], references: [id], onDelete: Cascade)
-  action    String   // CREATED | DESTINATION_CHANGED | DESIGN_UPDATED | STATUS_CHANGED | VERSION_RESTORED | NAME_CHANGED
-  metadata  String?  // JSON
-  createdAt DateTime @default(now())
+  id              String        @id @default(cuid())
+  userId          String?
+  user            User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  organizationId  String?
+  organization    Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  qrId            String?
+  qrCode          QrCode?       @relation(fields: [qrId], references: [id], onDelete: Cascade)
+  action          String        // CREATED | DESTINATION_CHANGED | DESIGN_UPDATED | STATUS_CHANGED | VERSION_RESTORED | NAME_CHANGED
+  entityType      String?
+  entityId        String?
+  metadata        String?       // JSON
+  createdAt       DateTime      @default(now())
 
   @@index([qrId, createdAt])
+  @@index([organizationId, createdAt])
+}
+
+model Folder {
+  id              String        @id @default(cuid())
+  organizationId  String
+  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name            String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  qrCodes         QrCode[]
+
+  @@index([organizationId])
+}
+
+model Campaign {
+  id                String        @id @default(cuid())
+  organizationId    String
+  organization      Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name              String
+  externalReference String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  qrCodes           QrCode[]
+
+  @@index([organizationId])
+}
+
+model LandingPage {
+  id              String        @id @default(cuid())
+  organizationId  String
+  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  qrId            String?
+  qrCode          QrCode?       @relation(fields: [qrId], references: [id], onDelete: SetNull)
+  slug            String        @unique
+  title           String
+  description     String?
+  content         String?       // JSON string
+  published       Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([organizationId])
+  @@index([slug])
+}
+
+model Asset {
+  id              String        @id @default(cuid())
+  organizationId  String
+  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  storageKey      String
+  mimeType        String
+  sizeBytes       Int
+  checksum        String?
+  createdAt       DateTime      @default(now())
+  deletedAt       DateTime?
+
+  @@index([organizationId])
+}
+
+model Subscription {
+  id                      String        @id @default(cuid())
+  organizationId          String        @unique
+  organization            Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  provider                String        @default("STRIPE")
+  providerCustomerId      String?
+  providerSubscriptionId  String?       @unique
+  plan                    String        @default("FREE") // FREE | PRO | BUSINESS
+  status                  String        @default("ACTIVE")
+  periodStart             DateTime?
+  periodEnd               DateTime?
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+}
+
+model UsageCounter {
+  id              String        @id @default(cuid())
+  organizationId  String
+  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  periodStart     DateTime
+  periodEnd       DateTime
+  dynamicQrCount  Int           @default(0)
+  scanCount       Int           @default(0)
+  storageBytes    BigInt        @default(0)
+  apiRequestCount Int           @default(0)
+  exportCount     Int           @default(0)
+
+  @@unique([organizationId, periodStart, periodEnd])
 }
