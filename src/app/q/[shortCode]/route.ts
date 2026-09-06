@@ -7,8 +7,14 @@ import {
   isSuspectedBot,
   hashIp,
   getIp,
-  rateLimit,
 } from "@/lib/security";
+import {
+  getCachedDestination,
+  setCachedDestination,
+  DestinationCachePayload,
+} from "@/lib/redis";
+import { checkRedirectRateLimit } from "@/lib/rate-limit";
+import { inngest } from "@/../inngest/client";
 
 export const dynamic = "force-dynamic";
 
@@ -17,67 +23,82 @@ export async function GET(
   { params }: { params: Promise<{ shortCode: string }> }
 ) {
   const { shortCode } = await params;
-
-  // Rate limiting per client IP (120 requests/minute)
   const ip = getIp(req);
-  const rl = rateLimit(`q:${ip}`, 120, 60_000);
-  if (!rl.ok) {
+
+  // 1. Distributed Rate Limiting (Upstash Ratelimit with sliding window)
+  const rl = await checkRedirectRateLimit(ip);
+  if (!rl.success) {
     return new NextResponse(renderRateLimited(), {
       status: 429,
       headers: {
         "Content-Type": "text/html",
         "Retry-After": "60",
-        "X-RateLimit-Limit": String(rl.limit),
         "X-RateLimit-Remaining": "0",
-        "X-RateLimit-Reset": String(rl.reset),
       },
     });
   }
 
-  // Lookup active QR by shortCode (or legacy slug fallback)
-  const qr = await db.qrCode.findFirst({
-    where: {
-      OR: [{ shortCode }, { slug: shortCode }],
-      deletedAt: null,
-    },
-    include: {
-      destinations: {
-        where: { isCurrent: true },
-        take: 1,
+  // 2. High-Speed Hot Redis Destination Cache (Sub-5ms lookup)
+  let destinationData: DestinationCachePayload | null = await getCachedDestination(shortCode);
+
+  // 3. Cache Miss: Authoritative lookup
+  if (!destinationData) {
+    const qr = await db.qrCode.findFirst({
+      where: {
+        OR: [{ shortCode }, { slug: shortCode }],
+        deletedAt: null,
       },
-    },
-  });
-
-  if (!qr) {
-    return new NextResponse(renderNotFound(shortCode), {
-      status: 404,
-      headers: { "Content-Type": "text/html" },
+      include: {
+        destinations: {
+          where: { isCurrent: true },
+          take: 1,
+        },
+      },
     });
+
+    if (!qr) {
+      return new NextResponse(renderNotFound(shortCode), {
+        status: 404,
+        headers: { "Content-Type": "text/html" },
+      });
+    }
+
+    const currentUrl = qr.destinations[0]?.url;
+    if (!currentUrl) {
+      return new NextResponse(renderUnavailable(qr.name), {
+        status: 503,
+        headers: { "Content-Type": "text/html" },
+      });
+    }
+
+    destinationData = {
+      qrId: qr.id,
+      organizationId: qr.organizationId || "default-org",
+      name: qr.name,
+      status: qr.status as "ACTIVE" | "PAUSED" | "ARCHIVED",
+      destinationUrl: currentUrl,
+      version: qr.destinations[0]?.version || 1,
+    };
+
+    // Store in Upstash Redis cache (10 minute TTL)
+    await setCachedDestination(shortCode, destinationData, 600);
   }
 
-  // Handle status controls (never leak destination if not active)
-  if (qr.status === "PAUSED") {
-    return new NextResponse(renderPaused(qr.name, qr.id), {
+  // 4. Handle Status Controls (never leak destination if not active)
+  if (destinationData.status === "PAUSED") {
+    return new NextResponse(renderPaused(destinationData.name, destinationData.qrId), {
       status: 200,
       headers: { "Content-Type": "text/html" },
     });
   }
-  if (qr.status === "ARCHIVED") {
-    return new NextResponse(renderArchived(qr.name, qr.id), {
+  if (destinationData.status === "ARCHIVED") {
+    return new NextResponse(renderArchived(destinationData.name, destinationData.qrId), {
       status: 200,
       headers: { "Content-Type": "text/html" },
     });
   }
 
-  const destination = qr.destinations[0]?.url;
-  if (!destination) {
-    return new NextResponse(renderUnavailable(qr.name), {
-      status: 503,
-      headers: { "Content-Type": "text/html" },
-    });
-  }
-
-  // Real scan tracking: Non-blocking write. If analytics fails, redirect still succeeds.
+  // 5. Non-Blocking Scan Ingestion (Redirect never waits for analytics writes)
   const ua = req.headers.get("user-agent");
   const dev = parseUserAgent(ua);
   const geo = extractEdgeGeo(req.headers);
@@ -85,8 +106,9 @@ export async function GET(
   const bot = isSuspectedBot(ua);
   const referrer = req.headers.get("referer");
 
-  void recordScan({
-    qrId: qr.id,
+  const scanPayload = {
+    qrId: destinationData.qrId,
+    organizationId: destinationData.organizationId,
     deviceType: dev.deviceType,
     os: dev.os,
     osFamily: dev.os,
@@ -104,9 +126,18 @@ export async function GET(
     referrer,
     suspectedBot: bot,
     source: "REAL",
-  });
+  };
 
-  return NextResponse.redirect(destination, {
+  // Queue to Inngest background worker and write to database concurrently
+  void inngest.send({
+    name: "qr/scan.recorded",
+    data: scanPayload,
+  }).catch(() => {});
+
+  void recordScan(scanPayload);
+
+  // 6. Return Fast HTTP 302 Redirect
+  return NextResponse.redirect(destinationData.destinationUrl, {
     status: 302,
     headers: {
       "Cache-Control": "private, no-cache, no-store, must-revalidate",
@@ -138,7 +169,7 @@ async function recordScan(input: {
   try {
     await db.scanEvent.create({ data: input });
   } catch {
-    // Hard invariant: analytics failure must never block redirect
+    // Analytics failure must never break the redirect.
   }
 }
 
@@ -193,7 +224,7 @@ function renderArchived(name: string, id: string): string {
     "QR Retired",
     `<span class="eyebrow">Studio · Archive</span>
 <h1>This plate has been <em>retired.</em></h1>
-<p><strong>${escapeHtml(name)}</strong> was archived and is no longer redirecting visitors.</p>
+<p><strong>${escapeHtml(name)}</strong> is no longer active. The owner has archived it and it will no longer redirect.</p>
 <div class="foot"><span>Dynamic QR</span><a href="/api/report?qr=${encodeURIComponent(id)}" class="btn btn-sec">Report</a></div>`
   );
 }
