@@ -98,6 +98,7 @@ This living document tracks every architectural phase, master todo item, code ch
 | **2026-09-04** | Phase 6: Editorial UI | `dynamic-builder-view.tsx`, `qr-detail-view.tsx`, `src/lib/api.ts` | Upgraded dynamic builder to display standard `/q/{shortCode}` URL, updated detail view chips and overview tab. |
 | **2026-09-04** | Phase 6.6: Mr.QR Brand | `public/favicon.svg`, `public/logo.svg`, `public/favicon.ico`, `apple-touch-icon.png`, `layout.tsx`, `header.tsx`, `footer.tsx` | Rebranded application to **Mr.QR**. Generated custom brand emblem, designed SVG logo banner & icon mark, rasterized multi-size favicon suite, and updated all studio UI headers and metadata. |
 | **2026-09-04** | Phase 7: Deployment | `vercel.json`, `render.yaml` | Created Vercel deployment configuration with security headers and Render infrastructure blueprint with managed PostgreSQL. Verified zero frontend secret leaks. |
+| **2026-09-06** | Phase 8: Production Blueprint | `convex/`, `inngest/`, `src/lib/redis/`, `src/lib/rate-limit/`, `src/lib/billing/`, `src/lib/email/`, `tests/unit/` | Implemented production blueprint architecture on `feat/production-backend`: Convex schema & queries, Upstash Redis destination cache & Ratelimit sliding window protection, Inngest durable scan & welcome email workers, Stripe billing & entitlements layer, Resend email client, and Vitest test suite (10/10 passing). Fixed offline local registration/sign-in network error with resilient developer store. |
 
 ---
 
