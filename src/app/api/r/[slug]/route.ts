@@ -7,8 +7,14 @@ import {
   isSuspectedBot,
   hashIp,
   getIp,
-  rateLimit,
 } from "@/lib/security";
+import {
+  getCachedDestination,
+  setCachedDestination,
+  DestinationCachePayload,
+} from "@/lib/redis";
+import { checkRedirectRateLimit } from "@/lib/rate-limit";
+import { convexClient, api } from "@/lib/convex/client";
 
 export const dynamic = "force-dynamic";
 
@@ -17,49 +23,89 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-
-  // Light rate limiting on redirects (per IP) to slow abuse.
   const ip = getIp(req);
-  const rl = rateLimit(`r:${ip}`, 120, 60_000);
-  if (!rl.ok) {
+
+  // 1. Upstash Distributed Rate Limiting (replaces in-memory Map)
+  const rl = await checkRedirectRateLimit(ip);
+  if (!rl.success) {
     return new NextResponse(renderRateLimited(), {
       status: 429,
       headers: { "Content-Type": "text/html", "Retry-After": "60" },
     });
   }
 
-  const qr = await db.qrCode.findFirst({
-    where: {
-      OR: [{ slug }, { shortCode: slug }],
-      deletedAt: null,
-    },
-    include: { destinations: { where: { isCurrent: true }, take: 1 } },
-  });
+  // 2. High-speed Redis destination cache lookup
+  let destinationData: DestinationCachePayload | null = await getCachedDestination(slug);
 
-  if (!qr) {
-    return new NextResponse(renderNotFound(slug), {
-      status: 404,
-      headers: { "Content-Type": "text/html" },
-    });
+  // 3. Multi-tier authoritative lookup on cache miss
+  if (!destinationData) {
+    // 3a. Convex primary
+    try {
+      const convexQr = await convexClient.query(api.qrCodes.getByShortCode, {
+        shortCode: slug,
+      });
+      if (convexQr && convexQr.destinationUrl) {
+        destinationData = {
+          qrId: convexQr.qrId,
+          organizationId: convexQr.organizationId,
+          name: convexQr.name,
+          status: convexQr.status as "ACTIVE" | "PAUSED" | "ARCHIVED",
+          destinationUrl: convexQr.destinationUrl,
+          version: convexQr.version,
+        };
+      }
+    } catch {}
+
+    // 3b. Prisma cutover fallback
+    if (!destinationData) {
+      const qr = await db.qrCode.findFirst({
+        where: {
+          OR: [{ slug }, { shortCode: slug }],
+          deletedAt: null,
+        },
+        include: { destinations: { where: { isCurrent: true }, take: 1 } },
+      });
+
+      if (qr && qr.destinations[0]?.url) {
+        destinationData = {
+          qrId: qr.id,
+          organizationId: qr.organizationId || "default-org",
+          name: qr.name,
+          status: qr.status as "ACTIVE" | "PAUSED" | "ARCHIVED",
+          destinationUrl: qr.destinations[0].url,
+          version: qr.destinations[0].version || 1,
+        };
+      }
+    }
+
+    if (!destinationData) {
+      return new NextResponse(renderNotFound(slug), {
+        status: 404,
+        headers: { "Content-Type": "text/html" },
+      });
+    }
+
+    // Cache in Redis for sub-5ms future lookups
+    await setCachedDestination(slug, destinationData, 600);
   }
 
-  // Non-active states: show editorial fallback page (never leak destination).
-  if (qr.status === "PAUSED") {
-    return new NextResponse(renderPaused(qr.name, qr.id), {
+  // 4. Non-active states: show editorial fallback page (never leak destination).
+  if (destinationData.status === "PAUSED") {
+    return new NextResponse(renderPaused(destinationData.name, destinationData.qrId), {
       status: 200,
       headers: { "Content-Type": "text/html" },
     });
   }
-  if (qr.status === "ARCHIVED") {
-    return new NextResponse(renderArchived(qr.name, qr.id), {
+  if (destinationData.status === "ARCHIVED") {
+    return new NextResponse(renderArchived(destinationData.name, destinationData.qrId), {
       status: 200,
       headers: { "Content-Type": "text/html" },
     });
   }
 
-  const destination = qr.destinations[0]?.url;
+  const destination = destinationData.destinationUrl;
   if (!destination) {
-    return new NextResponse(renderUnavailable(qr.name), {
+    return new NextResponse(renderUnavailable(destinationData.name), {
       status: 503,
       headers: { "Content-Type": "text/html" },
     });

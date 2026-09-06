@@ -29,6 +29,28 @@ export function SignInView({
     }
   }, [isLoaded, isSignedIn, redirectTo, go]);
 
+  if (!isLoaded) {
+    return (
+      <div className="mx-auto max-w-[540px] px-5 py-24 text-center">
+        <BotanicalSprig className="mx-auto mb-3 animate-pulse" />
+        <p className="font-serif italic text-sm text-[var(--ink-muted)]">
+          Verifying studio credentials…
+        </p>
+      </div>
+    );
+  }
+
+  if (isSignedIn) {
+    return (
+      <div className="mx-auto max-w-[540px] px-5 py-24 text-center">
+        <BotanicalSprig className="mx-auto mb-3 animate-pulse" />
+        <p className="font-serif italic text-sm text-[var(--ink-muted)]">
+          Opening dynamic QR studio…
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-[540px] px-5 py-12 sm:py-16">
       <div className="text-center mb-8">
@@ -42,16 +64,16 @@ export function SignInView({
         </p>
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center min-h-[380px]">
         {mode === "signup" ? (
           <SignUp
-            routing="hash"
+            routing="virtual"
             signInUrl="#signin"
             fallbackRedirectUrl="/"
           />
         ) : (
           <SignIn
-            routing="hash"
+            routing="virtual"
             signUpUrl="#signup"
             fallbackRedirectUrl="/"
           />

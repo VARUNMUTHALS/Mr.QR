@@ -15,6 +15,7 @@ import {
 } from "@/lib/redis";
 import { checkRedirectRateLimit } from "@/lib/rate-limit";
 import { inngest } from "@/../inngest/client";
+import { convexClient, api } from "@/lib/convex/client";
 
 export const dynamic = "force-dynamic";
 
@@ -41,44 +42,60 @@ export async function GET(
   // 2. High-Speed Hot Redis Destination Cache (Sub-5ms lookup)
   let destinationData: DestinationCachePayload | null = await getCachedDestination(shortCode);
 
-  // 3. Cache Miss: Authoritative lookup
+  // 3. Cache Miss: Resilient Multi-tier Authoritative lookup (Zero-downtime cutover)
   if (!destinationData) {
-    const qr = await db.qrCode.findFirst({
-      where: {
-        OR: [{ shortCode }, { slug: shortCode }],
-        deletedAt: null,
-      },
-      include: {
-        destinations: {
-          where: { isCurrent: true },
-          take: 1,
-        },
-      },
-    });
+    // 3a. Primary: Query Convex Cloud
+    try {
+      const convexQr = await convexClient.query(api.qrCodes.getByShortCode, {
+        shortCode,
+      });
+      if (convexQr && convexQr.destinationUrl) {
+        destinationData = {
+          qrId: convexQr.qrId,
+          organizationId: convexQr.organizationId,
+          name: convexQr.name,
+          status: convexQr.status as "ACTIVE" | "PAUSED" | "ARCHIVED",
+          destinationUrl: convexQr.destinationUrl,
+          version: convexQr.version,
+        };
+      }
+    } catch (convexErr) {
+      console.warn("[Resolver] Convex lookup error during cutover:", convexErr);
+    }
 
-    if (!qr) {
+    // 3b. Fallback: Query Prisma if Convex has not migrated record yet
+    if (!destinationData) {
+      const qr = await db.qrCode.findFirst({
+        where: {
+          OR: [{ shortCode }, { slug: shortCode }],
+          deletedAt: null,
+        },
+        include: {
+          destinations: {
+            where: { isCurrent: true },
+            take: 1,
+          },
+        },
+      });
+
+      if (qr && qr.destinations[0]?.url) {
+        destinationData = {
+          qrId: qr.id,
+          organizationId: qr.organizationId || "default-org",
+          name: qr.name,
+          status: qr.status as "ACTIVE" | "PAUSED" | "ARCHIVED",
+          destinationUrl: qr.destinations[0].url,
+          version: qr.destinations[0].version || 1,
+        };
+      }
+    }
+
+    if (!destinationData) {
       return new NextResponse(renderNotFound(shortCode), {
         status: 404,
         headers: { "Content-Type": "text/html" },
       });
     }
-
-    const currentUrl = qr.destinations[0]?.url;
-    if (!currentUrl) {
-      return new NextResponse(renderUnavailable(qr.name), {
-        status: 503,
-        headers: { "Content-Type": "text/html" },
-      });
-    }
-
-    destinationData = {
-      qrId: qr.id,
-      organizationId: qr.organizationId || "default-org",
-      name: qr.name,
-      status: qr.status as "ACTIVE" | "PAUSED" | "ARCHIVED",
-      destinationUrl: currentUrl,
-      version: qr.destinations[0]?.version || 1,
-    };
 
     // Store in Upstash Redis cache (10 minute TTL)
     await setCachedDestination(shortCode, destinationData, 600);

@@ -165,7 +165,9 @@ export const getById = query({
     ]);
 
     const qr = await ctx.db.get(args.qrId);
-    if (!qr || qr.deletedAt) return null;
+    if (!qr || qr.deletedAt || qr.organizationId !== args.organizationId) {
+      return null;
+    }
 
     const currentDestination = await ctx.db
       .query("qrDestinations")
@@ -242,6 +244,9 @@ export const updateStatus = mutation({
 
     const qr = await ctx.db.get(args.qrId);
     if (!qr) throw new Error("QR not found");
+    if (qr.organizationId !== args.organizationId) {
+      throw new Error("FORBIDDEN: QR code does not belong to organization");
+    }
 
     await ctx.db.patch(args.qrId, {
       status: args.status,
@@ -271,6 +276,12 @@ export const archive = mutation({
       "OWNER",
       "ADMIN",
     ]);
+
+    const qr = await ctx.db.get(args.qrId);
+    if (!qr) throw new Error("QR not found");
+    if (qr.organizationId !== args.organizationId) {
+      throw new Error("FORBIDDEN: QR code does not belong to organization");
+    }
 
     const now = Date.now();
     await ctx.db.patch(args.qrId, {

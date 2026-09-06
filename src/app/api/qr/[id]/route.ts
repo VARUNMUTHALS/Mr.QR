@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getCurrentUser, json, errorResponse, serializeQr } from "@/lib/api";
 import { db } from "@/lib/db";
+import { invalidateCachedDestination } from "@/lib/redis";
 
 export const dynamic = "force-dynamic";
 
@@ -68,7 +69,10 @@ export async function DELETE(
   const user = await getCurrentUser();
   if (!user) return errorResponse("Unauthorized", 401);
   const { id } = await params;
-  const qr = await db.qrCode.findUnique({ where: { id }, select: { userId: true, name: true } });
+  const qr = await db.qrCode.findUnique({
+    where: { id },
+    select: { userId: true, name: true, shortCode: true, slug: true },
+  });
   if (!qr || qr.userId !== user.id) return errorResponse("Not found", 404);
 
   // Soft-delete: retain historical analytics & audit logs, archive shortCode, hide from lists
@@ -90,6 +94,10 @@ export async function DELETE(
       },
     });
   });
+
+  // Purge cache immediately so scans for soft-deleted QR never use stale cache
+  if (qr.shortCode) await invalidateCachedDestination(qr.shortCode);
+  if (qr.slug) await invalidateCachedDestination(qr.slug);
 
   return json({ ok: true, message: "QR code archived and soft-deleted." });
 }

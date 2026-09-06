@@ -39,7 +39,7 @@ function viewKey(v: ViewState): string {
 export function AppShell() {
   const view = useNav((s) => s.view);
   const history = useNav((s) => s.history);
-  const { isSignedIn } = useUser();
+  const { isLoaded, isSignedIn } = useUser();
 
   // Direction for transitions (forward/back). Tracked via state so it is
   // available during render without touching refs.
@@ -68,7 +68,11 @@ export function AppShell() {
               ease: [0.22, 0.61, 0.36, 1],
             }}
           >
-            <ViewRouter isSignedIn={Boolean(isSignedIn)} view={view} />
+            <ViewRouter
+              isLoaded={Boolean(isLoaded)}
+              isSignedIn={Boolean(isSignedIn)}
+              view={view}
+            />
           </motion.div>
         </AnimatePresence>
       </main>
@@ -79,11 +83,31 @@ export function AppShell() {
 
 function ViewRouter({
   view,
+  isLoaded,
   isSignedIn,
 }: {
   view: ViewState;
+  isLoaded: boolean;
   isSignedIn: boolean;
 }) {
+  const isProtected =
+    view.view === "create-dynamic" ||
+    view.view === "dashboard" ||
+    view.view === "qr-detail";
+
+  if (!isLoaded && isProtected) {
+    return (
+      <div className="mx-auto max-w-[540px] px-5 py-24 text-center">
+        <div className="inline-block animate-pulse">
+          <div className="h-8 w-8 mx-auto rounded-full bg-[var(--botanical)] opacity-30 mb-3" />
+          <p className="font-serif italic text-sm text-[var(--ink-muted)]">
+            Opening studio workspace…
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   switch (view.view) {
     case "home":
       return <HomeView />;

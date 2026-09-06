@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getCurrentUser, json, errorResponse, serializeQr } from "@/lib/api";
 import { db } from "@/lib/db";
+import { invalidateCachedDestination } from "@/lib/redis";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,7 @@ export async function POST(
 
   const qr = await db.qrCode.findUnique({
     where: { id },
-    select: { userId: true, type: true },
+    select: { userId: true, type: true, shortCode: true, slug: true },
   });
   if (!qr || qr.userId !== user.id) return errorResponse("Not found", 404);
   if (qr.type !== "DYNAMIC") return errorResponse("Only dynamic QRs have versions.");
@@ -56,6 +57,10 @@ export async function POST(
       },
     });
   });
+
+  // Purge cache immediately so next scan gets the restored version
+  if (qr.shortCode) await invalidateCachedDestination(qr.shortCode);
+  if (qr.slug) await invalidateCachedDestination(qr.slug);
 
   return json({ qr: await serializeQr(id) });
 }
