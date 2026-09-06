@@ -1,15 +1,24 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 
 export async function getCurrentUser() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) return null;
-  const user = await db.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, email: true, name: true },
-  });
-  return user;
+  try {
+    const { userId } = await auth();
+    if (userId) {
+      const user = await db.user.findFirst({
+        where: { OR: [{ id: userId }, { email: { contains: userId } }] },
+        select: { id: true, email: true, name: true },
+      });
+      if (user) return user;
+      const clerkUser = await currentUser();
+      if (clerkUser) {
+        const email = clerkUser.emailAddresses[0]?.emailAddress || `${userId}@user.clerk`;
+        const name = `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || email;
+        return { id: userId, email, name };
+      }
+    }
+  } catch {}
+  return null;
 }
 
 export function json(body: unknown, init?: ResponseInit) {

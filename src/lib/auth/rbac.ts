@@ -1,3 +1,4 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -31,22 +32,65 @@ export interface AuthContext {
  * Guarantees that client-supplied IDs can NEVER bypass organization authorization.
  */
 export async function getAuthContext(): Promise<AuthContext | null> {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id || !session?.user?.email) {
-    return null;
-  }
+  let clerkUserId: string | null = null;
+  let userEmail: string | null = null;
+  let userName: string | null = null;
 
-  const user = await db.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      memberships: {
-        include: {
-          organization: true,
+  try {
+    const authState = await auth();
+    clerkUserId = authState.userId;
+    if (clerkUserId) {
+      const clerkUser = await currentUser();
+      userEmail = clerkUser?.emailAddresses[0]?.emailAddress || `${clerkUserId}@user.clerk`;
+      userName = `${clerkUser?.firstName || ""} ${clerkUser?.lastName || ""}`.trim() || null;
+    }
+  } catch {}
+
+  let user = null;
+
+  if (clerkUserId) {
+    user = await db.user.findFirst({
+      where: { OR: [{ id: clerkUserId }, { email: userEmail || "" }] },
+      include: {
+        memberships: {
+          include: { organization: true },
+          take: 1,
         },
-        take: 1,
       },
-    },
-  });
+    });
+
+    if (!user && userEmail) {
+      user = await db.user.create({
+        data: {
+          id: clerkUserId,
+          email: userEmail,
+          name: userName || "Studio Creator",
+          passwordHash: "clerk-managed-auth",
+        },
+        include: {
+          memberships: {
+            include: { organization: true },
+            take: 1,
+          },
+        },
+      });
+    }
+  } else {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id || !session?.user?.email) {
+      return null;
+    }
+
+    user = await db.user.findUnique({
+      where: { id: session.user.id },
+      include: {
+        memberships: {
+          include: { organization: true },
+          take: 1,
+        },
+      },
+    });
+  }
 
   if (!user) return null;
 

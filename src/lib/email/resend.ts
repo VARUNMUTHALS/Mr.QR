@@ -9,7 +9,7 @@ export async function sendTransactionalEmail(params: {
   html: string;
   from?: string;
 }): Promise<{ success: boolean; id?: string; error?: string }> {
-  const from = params.from || "Mr.QR Studio <notifications@mr-qr.dev>";
+  const from = params.from || process.env.RESEND_FROM_EMAIL || "Mr.QR <onboarding@resend.dev>";
 
   if (!resend) {
     console.log(

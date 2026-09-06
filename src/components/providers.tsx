@@ -1,9 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ConvexReactClient } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { useAuth } from "@clerk/nextjs";
+
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || "https://majestic-gnat-826.convex.cloud";
+const convex = new ConvexReactClient(convexUrl);
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(
@@ -26,11 +31,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem={false}
       disableTransitionOnChange
     >
-      <SessionProvider>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>
-      </SessionProvider>
+      </ConvexProviderWithClerk>
     </ThemeProvider>
   );
 }

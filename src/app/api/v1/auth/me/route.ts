@@ -1,16 +1,15 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getAuthContext } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
 import { json, errorResponse } from "@/lib/api";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) {
+  const authContext = await getAuthContext();
+  if (!authContext?.user?.id) {
     return errorResponse("Unauthenticated", 401);
   }
 
   const user = await db.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: authContext.user.id },
     select: {
       id: true,
       email: true,

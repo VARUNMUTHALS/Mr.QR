@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNav, type ViewState } from "@/lib/nav";
-import { useSession } from "next-auth/react";
+import { useUser } from "@clerk/nextjs";
 import { HomeView } from "@/components/studio/views/home-view";
 import { StaticBuilderView } from "@/components/studio/views/static-builder-view";
 import { DynamicBuilderView } from "@/components/studio/views/dynamic-builder-view";
@@ -39,7 +39,7 @@ function viewKey(v: ViewState): string {
 export function AppShell() {
   const view = useNav((s) => s.view);
   const history = useNav((s) => s.history);
-  const { status } = useSession();
+  const { isSignedIn } = useUser();
 
   // Direction for transitions (forward/back). Tracked via state so it is
   // available during render without touching refs.
@@ -68,7 +68,7 @@ export function AppShell() {
               ease: [0.22, 0.61, 0.36, 1],
             }}
           >
-            <ViewRouter status={status} view={view} />
+            <ViewRouter isSignedIn={Boolean(isSignedIn)} view={view} />
           </motion.div>
         </AnimatePresence>
       </main>
@@ -79,10 +79,10 @@ export function AppShell() {
 
 function ViewRouter({
   view,
-  status,
+  isSignedIn,
 }: {
   view: ViewState;
-  status: "loading" | "authenticated" | "unauthenticated";
+  isSignedIn: boolean;
 }) {
   switch (view.view) {
     case "home":
@@ -90,15 +90,15 @@ function ViewRouter({
     case "create-static":
       return <StaticBuilderView />;
     case "create-dynamic":
-      if (status !== "authenticated") return <SignInView redirectTo={view} />;
+      if (!isSignedIn) return <SignInView redirectTo={view} />;
       return <DynamicBuilderView />;
     case "sign-in":
       return <SignInView />;
     case "dashboard":
-      if (status !== "authenticated") return <SignInView redirectTo={view} />;
+      if (!isSignedIn) return <SignInView redirectTo={view} />;
       return <DashboardView />;
     case "qr-detail":
-      if (status !== "authenticated") return <SignInView redirectTo={view} />;
+      if (!isSignedIn) return <SignInView redirectTo={view} />;
       return <QrDetailView qrId={view.qrId} tab={view.tab ?? "overview"} />;
     default:
       return <HomeView />;
