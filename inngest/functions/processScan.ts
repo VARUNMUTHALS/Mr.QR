@@ -1,9 +1,9 @@
 import { inngest } from "../client";
 
-export const processScan = inngest.createFunction(
+export const processScan = (inngest as any).createFunction(
   { id: "process-qr-scan", retries: 3 },
   { event: "qr/scan.recorded" },
-  async ({ event, step }) => {
+  async ({ event, step }: any) => {
     const scanData = event.data;
 
     // Step 1: Normalize & Validate Payload

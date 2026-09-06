@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { UserButton, SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
 import { useNav } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 
 export function StudioHeader() {
   const { data: session, status } = useSession();
+  const { isSignedIn: clerkSignedIn } = useUser();
   const go = useNav((s) => s.go);
   const back = useNav((s) => s.back);
   const home = useNav((s) => s.home);
@@ -92,7 +94,20 @@ export function StudioHeader() {
                 <ChevronLeft className="h-3.5 w-3.5" /> Back
               </Button>
             )}
-            {status === "authenticated" ? (
+
+            {clerkSignedIn ? (
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => go({ view: "dashboard" })}
+                  className="font-sans text-xs text-[var(--ink)]"
+                >
+                  <LayoutGrid className="h-3.5 w-3.5 mr-1.5" /> My QR codes
+                </Button>
+                <UserButton />
+              </div>
+            ) : status === "authenticated" ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="flex items-center gap-2 h-9 pl-1 pr-3 rounded-[2px] border border-[var(--rule)] hover:border-[var(--ink)] transition-colors">
@@ -139,14 +154,25 @@ export function StudioHeader() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button
-                onClick={() => go({ view: "sign-in" })}
-                variant="ghost"
-                size="sm"
-                className="font-sans text-xs text-[var(--ink)]"
-              >
-                Sign in
-              </Button>
+              <div className="flex items-center gap-1.5">
+                <SignInButton mode="modal">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="font-sans text-xs text-[var(--ink)]"
+                  >
+                    Sign in
+                  </Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button
+                    size="sm"
+                    className="font-sans text-xs bg-[var(--ink)] text-[var(--paper)] hover:bg-[var(--ink-2)]"
+                  >
+                    Get Started
+                  </Button>
+                </SignUpButton>
+              </div>
             )}
           </div>
         </div>

@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
         // Production security: Strictly NO auto-provisioning.
         // User must explicitly register via /api/v1/auth/register.
         // 1. Try querying primary database
-        let user = null;
+        let user: any = null;
         try {
           user = await db.user.findUnique({
             where: { email },

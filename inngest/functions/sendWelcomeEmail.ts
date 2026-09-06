@@ -1,10 +1,10 @@
 import { inngest } from "../client";
 import { sendTransactionalEmail } from "@/lib/email/resend";
 
-export const sendWelcomeEmail = inngest.createFunction(
+export const sendWelcomeEmail = (inngest as any).createFunction(
   { id: "send-welcome-email", retries: 2 },
   { event: "organization/created" },
-  async ({ event, step }) => {
+  async ({ event, step }: any) => {
     const { email, organizationName } = event.data;
 
     await step.run("send-email-via-resend", async () => {

@@ -1,3 +1,5 @@
+import { ClerkProvider } from "@clerk/nextjs";
+import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { Instrument_Serif, Newsreader, Geist } from "next/font/google";
 import "./globals.css";
@@ -57,8 +59,10 @@ export default function RootLayout({
       <body
         className={`${instrumentSerif.variable} ${newsreader.variable} ${geistSans.variable} font-body antialiased`}
       >
-        <Providers>{children}</Providers>
-        <Toaster />
+        <ClerkProvider appearance={{ theme: shadcn }}>
+          <Providers>{children}</Providers>
+          <Toaster />
+        </ClerkProvider>
       </body>
     </html>
   );
