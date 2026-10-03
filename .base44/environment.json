@@ -1,0 +1,29 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "NEXTAUTH_SECRET",
+      "description": "Random 32+ char secret for NextAuth JWT session signing. Generated for development.",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "ANALYTICS_SALT",
+      "description": "Secure salt for HMAC-SHA256 visitor key hashing. Generated for development.",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+      "description": "Clerk publishable key (pk_test_... or pk_live_...) from https://dashboard.clerk.com → API Keys. Required for the app to render — ClerkProvider and clerkMiddleware both need it.",
+      "requiredAtBoot": true
+    },
+    {
+      "name": "CLERK_SECRET_KEY",
+      "description": "Clerk secret key (sk_test_... or sk_live_...) from https://dashboard.clerk.com → API Keys. Required for the app to render — clerkMiddleware will throw without it.",
+      "requiredAtBoot": true
+    }
+  ]
+}
