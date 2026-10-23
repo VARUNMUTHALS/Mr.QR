@@ -28,7 +28,7 @@ services:
       DATABASE_URL: postgresql://qruser:qrpass@postgres:5432/dynamic_qr?schema=public
       NEXTAUTH_URL: http://localhost:3000
       NEXT_PUBLIC_APP_URL: http://localhost:3000
-      BASE44_PUBLIC_HOST_SUFFIX: ${BASE44_PUBLIC_HOST_SUFFIX}
+      BASE44_PUBLIC_HOST_SUFFIX: ${BASE44_PUBLIC_HOST_SUFFIX:-}
     env_file:
       - ./.env.base44-defaults
       - /run/base44/app.env
@@ -39,7 +39,7 @@ services:
       - sh
       - -ec
       - |
-        npm ci &&
+        npm install --no-audit --no-fund &&
         npx prisma generate &&
         npx prisma db push --accept-data-loss &&
         exec npx next dev -p 3000
